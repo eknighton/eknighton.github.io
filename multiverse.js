@@ -45,12 +45,12 @@ function updateNumber(QRNGnum){
 //Interaction Events
 
 async function onClickNumber(){
-	document.getElementById("QRNGnumberResult").innerHTML = "Rolling!"
+	document.getElementById("QRNGnumberResult").innerHTML = "Requesting!"
 	setTimeout(requestQRNG(updateNumber),500);
 }
 
 async function onClickCoinFlip(){
-	document.getElementById("QCFlipResult").innerHTML = "Flipping!"
+	document.getElementById("QCFlipResult").innerHTML = "Requesting!"
 	setTimeout(requestQRNG(updateCoinFlip),500);
 }
 
