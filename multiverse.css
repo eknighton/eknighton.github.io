@@ -1,0 +1,55 @@
+body
+{
+	font-family: 'Futura' !important;
+	overflow-x: hidden;
+
+	font-size: 20px;
+    font-weight: 0;
+	color: white;
+	background-color: teal;
+	margin: 0;
+}
+.intro {
+
+    font-style: normal;
+    background-color: teal;
+    margin: 2% 2%;
+}
+.instructions {
+	font-style: normal;
+    background-color: teal;
+    text-align: center;
+    border: 5px solid black;
+    margin: -5px 0;
+}
+.tool {
+    font-style: normal;
+    background-color: coral;
+    border: 5px solid black;
+    margin: -5px 0;
+}
+.highlighted {
+    font-style: normal;
+    background-color: grey;
+    border: 5px solid black;
+    margin: -5px 0;
+}
+.title {
+	font-style: normal;
+	text-align: center;
+	font-size: 40px;
+	color: purple;
+
+	align-self: center;
+	align-content: center;
+	align-items: center;
+
+
+    background-color: black;
+    border: 5px solid purple;
+    width: 20%;
+    margin-top: 2%;
+    margin-left: auto;
+    margin-right: auto;
+
+}
