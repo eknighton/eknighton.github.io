@@ -50,7 +50,7 @@ async function onClickNumber(){
 }
 
 async function onClickCoinFlip(){
-	document.getElementById("QCFlipResult").innerHTML = "The dice are rolling!!"
+	document.getElementById("QCFlipResult").innerHTML = "The dice are rolling!"
 	setTimeout(requestQRNG(updateCoinFlip),500);
 }
 
