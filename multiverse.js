@@ -45,12 +45,12 @@ function updateNumber(QRNGnum){
 //Interaction Events
 
 async function onClickNumber(){
-	document.getElementById("QRNGnumberResult").innerHTML = "Requesting!"
+	document.getElementById("QRNGnumberResult").innerHTML = "The dice are rolling!"
 	setTimeout(requestQRNG(updateNumber),500);
 }
 
 async function onClickCoinFlip(){
-	document.getElementById("QCFlipResult").innerHTML = "Requesting!"
+	document.getElementById("QCFlipResult").innerHTML = "The dice are rolling!!"
 	setTimeout(requestQRNG(updateCoinFlip),500);
 }
 
