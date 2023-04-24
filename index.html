@@ -1,40 +1,247 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<title>Mutliverse App</title>
-	<link rel="stylesheet" type="text/css" href="multiverse.css" media="screen"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivia Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #ffffff;
+            background-color: #2c3e50;
+        }
+        #answerBtn {
+            font-size: 24px; /* Adjust the text size */
+            padding: 12px 24px; /* Adjust the padding around the text */
+            border: 2px solid black; /* Add a border */
+        }
+</style>
+
+    </style>
 </head>
 <body>
-  
-<div class = "title">
-MULTIVERSE
-</div>
+    <div class="container">
+        <h1 id="question"></h1>
+        <button id="answerBtn"></button>
+        <div>
+            <button onclick="acceptAnswer()">Accept(A)</button>
+            <button onclick="skipAnswer()">Skip(W)</button>
+            <button onclick="rejectAnswer()">Reject(D)</button>
+        </div>
+    </div>
+    <script>
+        let questions = [
+            { question: 'President _____ was the first President of the United States.', answer: 'George Washington', options: ['John Adams', 'Thomas Jefferson', 'James Madison', 'James Monroe'] },
+            { question: 'President _____\'s plantation, Mount Vernon, is located in Virginia.', answer: 'George Washington', options: ['John Adams', 'Thomas Jefferson', 'James Madison', 'James Monroe'] },
+            { question: 'President _____ served two terms in office, setting the precedent for future presidents.', answer: 'George Washington', options: ['John Adams', 'Thomas Jefferson', 'James Madison', 'James Monroe']},
+            { question: 'President _____ was the first Vice President of the United States.', answer: 'John Adams', options: ['George Washington', 'Thomas Jefferson', 'James Madison', 'James Monroe'] },
+            { question: 'The Alien and Sedition Acts were passed during President _____\'s administration.', answer: 'John Adams', options: ['George Washington', 'Thomas Jefferson', 'James Madison', 'James Monroe'] },
+            { question: 'President _____ was a founding member of the Federalist Party.', answer: 'John Adams', options: ['George Washington', 'Thomas Jefferson', 'James Madison', 'James Monroe'] },
+            { question: 'President _____ was the principal author of the Declaration of Independence.', answer: 'Thomas Jefferson', options: ['George Washington', 'John Adams', 'James Madison', 'James Monroe'] },
+            { question: 'The Louisiana Purchase was made during President _____\'s administration.', answer: 'Thomas Jefferson', options: ['George Washington', 'John Adams', 'James Madison', 'James Monroe'] },
+            { question: 'President _____ founded the University of Virginia.', answer: 'Thomas Jefferson', options: ['George Washington', 'John Adams', 'James Madison', 'James Monroe'] },
+            { question: 'President _____ is often referred to as the "Father of the Constitution".', answer: 'James Madison', options: ['George Washington', 'John Adams', 'Thomas Jefferson', 'James Monroe'] },
+            { question: 'The War of 1812 occurred during President _____\'s administration.', answer: 'James Madison', options: ['George Washington', 'John Adams', 'Thomas Jefferson', 'James Monroe'] },
+            { question: 'President _____ co-authored the Federalist Papers with Alexander Hamilton and John Jay.', answer: 'James Madison', options: ['George Washington', 'John Adams', 'Thomas Jefferson', 'James Monroe'] },
+            { question: 'The _____ Doctrine declared that European nations should not interfere with nations in the Americas.', answer: 'James Monroe', options: ['George Washington', 'John Adams', 'Thomas Jefferson', 'James Madison'] },
+            { question: 'President _____\'s presidency is often referred to as the "Era of Good Feelings".', answer: 'James Monroe', options: ['George Washington', 'John Adams', 'Thomas Jefferson', 'James Madison'] },
+            { question: 'During President _____\'s administration, the Missouri Compromise was established.', answer: 'James Monroe', options: ['George Washington', 'John Adams', 'Thomas Jefferson', 'James Madison'] },
+            { question: 'President _____ was known for his Farewell Address, warning against political factions and foreign entanglements.', answer: 'George Washington', options: ['John Adams', 'Thomas Jefferson', 'James Madison', 'James Monroe'] },
+{ question: 'The United States capital, _____, D.C., was named in honor of the first president.', answer: 'George Washington', options: ['John Adams', 'Thomas Jefferson', 'James Madison', 'James Monroe'] },
+{ question: 'During President _____\'s administration, the Judiciary Act of 1789 established the federal court system.', answer: 'George Washington', options: ['John Adams', 'Thomas Jefferson', 'James Madison', 'James Monroe'] },
+{ question: 'President _____ oversaw the creation of the U.S. Navy during his time in office.', answer: 'John Adams', options: ['George Washington', 'Thomas Jefferson', 'James Madison', 'James Monroe'] },
+{ question: ' was the only president to have a son who also became a U.S. president, John Quincy Adams.', answer: 'John Adams', options: ['George Washington', 'Thomas Jefferson', 'James Madison', 'James Monroe'] },
+{ question: 'Before his presidency, _____ served as the U.S. minister to Great Britain.', answer: 'John Adams', options: ['George Washington', 'Thomas Jefferson', 'James Madison', 'James Monroe'] },
+{ question: 'The Lewis and Clark expedition was commissioned during President _____\'s administration.', answer: 'Thomas Jefferson', options: ['George Washington', 'John Adams', 'James Madison', 'James Monroe'] },
+{ question: 'President _____ was the primary author of the Virginia Statute for Religious Freedom.', answer: 'Thomas Jefferson', options: ['George Washington', 'John Adams', 'James Madison', 'James Monroe'] },
+{ question: 'The Embargo Act of 1807, which aimed to protect American interests, was enacted under President _____\'s administration.', answer: 'Thomas Jefferson', options: ['George Washington', 'John Adams', 'James Madison', 'James Monroe'] },
+{ question: 'President _____ was one of the authors of the United States Bill of Rights.', answer: 'James Madison', options: ['George Washington', 'John Adams', 'Thomas Jefferson', 'James Monroe'] },
+{ question: 'During President _____\'s administration, the Second Bank of the United States was chartered.', answer: 'James Madison', options: ['George Washington', 'John Adams', 'Thomas Jefferson', 'James Monroe'] },
+{ question: 'President _____ served as Secretary of State under President Thomas Jefferson.', answer: 'James Madison', options: ['George Washington', 'John Adams', 'Thomas Jefferson', 'James Monroe'] },
+{ question: 'President _____ served as Secretary of State under President James Madison.', answer: 'James Monroe', options: ['George Washington', 'John Adams', 'Thomas Jefferson', 'James Madison'] },
+{ question: 'The acquisition of Florida from Spain was achieved during President _____\'s administration.', answer: 'James Monroe', options: ['George Washington', 'John Adams', 'Thomas Jefferson', 'James Madison'] },
+{ question: 'President _____ was the last president who was a Founding Father of the United States.', answer: 'James Monroe', options: ['George Washington', 'John Adams', 'Thomas Jefferson', 'James Madison'] },
+        ];
+        let currentQuestionIndex = 0;
+        let currentAnswerIndex = 0;
+        let answers = null;
 
-<div class = "intro"><p>
-The apparent randomness of quantum events may not be random at all. Rather ALL possible outcomes might occur, each in a different UNIVERSE generated by the event.
-If this acclaimed interpretation of quantum physics were true, what would happen if you based your decisions on such outcomes? Well, for one thing you’d be able to turn inconsequential differences between worlds into meaningful ones- to go from “In these world the atom did this" to “In these worlds he had pizza and in these worlds he had cake!” Check out all our multiverse shaping tools below! 
-</p></div>
 
-<div class = "instructions">
-<p>Instructions</p>
-<p>Come up with differing plans for possible outcome of a particular quantum die, then click that section to roll it! </p>
-</div>
+        //Score Trackers
+        let liesCaught = 0;
+        let truthsCaught = 0;
+        let liesMissed = 0;
+        let truthsMissed = 0;
+        let liesAccepted = 0;
+        let truthsRejected = 0;
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        shuffle(questions);
+
+        function generateAnswers() {
+            const ansTemp = [questions[currentQuestionIndex].answer, questions[currentQuestionIndex].options[0], questions[currentQuestionIndex].options[1], questions[currentQuestionIndex].options[2]];
+            shuffle(ansTemp);
+            answers = ansTemp;
+        }
+
+        function displayQuestion() {
+            document.getElementById('question').innerText = questions[currentQuestionIndex].question;
+            currentAnswerIndex = 0;
+            generateAnswers();
+            displayAnswer();
+        }
+
+        function displayAnswer() {
+            document.getElementById('answerBtn').innerText = answers[currentAnswerIndex];
+        }
+
+        function acceptAnswer() {
+            if (document.getElementById('answerBtn').innerText === questions[currentQuestionIndex].answer) {
+                truthsCaught = truthsCaught + 1;
+                liesCaught = liesCaught + 3 - currentAnswerIndex; // Should we do this or not?
+                nextQuestion();
+            } else {
+                liesAccepted = liesAccepted + 1;
+                alert('Incorrect. Game Over. \n Lies Caught: ' + liesCaught + " Truths Caught: " + truthsCaught + " \n Lies Skipped: " + liesMissed + " Truths Skipped: " + truthsMissed);
+                truthsCaught = 0;
+                liesCaught = 0;
+                truthsMissed = 0;
+                liesMissed = 0;
+                shuffle(questions);
+                currentQuestionIndex = 0;
+                displayQuestion();
+            }
+        }
+
+        function rejectAnswer() {
+            if (document.getElementById('answerBtn').innerText === questions[currentQuestionIndex].answer) {
+                truthsRejected = truthsRejected + 1;
+                alert('You rejected the correct answer. Game Over. \n Lies Caught: ' + liesCaught + " Truths Caught: " + truthsCaught + " \n Lies Skipped: " + liesMissed + " Truths Skipped: " + truthsMissed);
+                liesCaught = 0;
+                truthsCaught = 0;
+                truthsMissed = 0;
+                liesMissed = 0;
+                shuffle(questions);
+                currentQuestionIndex = 0;
+                displayQuestion();
+            } else {
+                if (currentAnswerIndex < 3) {
+                    currentAnswerIndex++;
+                } else {
+                    //alert('No more options! Moving on to next question!');
+                    currentQuestionIndex++;
+                    displayQuestion();
+                    currentAnswerIndex = 0;
+                }
+                liesCaught = liesCaught + 1;
+                displayAnswer();
+            }
+        }
+
+        function skipAnswer() {
+
+                if (document.getElementById('answerBtn').innerText === questions[currentQuestionIndex].answer) {
+                    truthsMissed = truthsMissed + 1;
+                } else {
+                    liesMissed = liesMissed + 1;
+                }
+                if (currentAnswerIndex < 3) {
+                    currentAnswerIndex++;
+                } else {
+                    //alert('No more options! Moving on to next question!');
+                    currentQuestionIndex++;
+                    displayQuestion();
+                    currentAnswerIndex = 0;
+                }
+                displayAnswer();
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert('Congratulations! You completed the game. \n Lies Caught: ' + liesCaught + " Truths Caught: " + truthsCaught + " \n Lies Skipped: " + liesMissed + " Truths Skipped: " + truthsMissed);
+                shuffle(questions);
+                currentQuestionIndex = 0;
+                liesCaught = 0;
+                truthsCaught = 0;
+                truthsMissed = 0;
+                liesMissed = 0;
+                displayQuestion();
+            }
+        }
+
+        displayQuestion();
+
+        // Bonus Controls Section
+
+        function handleTouchStart(e) {
+              this.startX = e.touches[0].clientX;
+              this.startY = e.touches[0].clientY;
+            }
+
+            function handleTouchEnd(e) {
+              const endX = e.changedTouches[0].clientX;
+              const endY = e.changedTouches[0].clientY;
+              const threshold = 100; // Minimum distance for swipe recognition
+
+              if (this.startX - endX > threshold) {
+                // Swipe left
+                rejectAnswer();
+              } else if (endX - this.startX > threshold) {
+                // Swipe right
+                acceptAnswer();
+              } else if (endY - this.startY > threshold) {
+                skipAnswer();
+              }
+            }
+
+            function handleKeyDown(e) {
+              if (e.key === 'a') {
+                acceptAnswer();
+              } else if (e.key === 'd') {
+                rejectAnswer();
+              } else if (e.key === 'w') {
+                skipAnswer();
+              }
+            }
+            document.addEventListener('touchstart', handleTouchStart, false);
+            document.addEventListener('touchend', handleTouchEnd, false);
+            document.addEventListener('keydown', handleKeyDown, false);
+
+        //End Bonus Controls Section
 
 
-<div id="QCFlip" class = "tool" onclick="onClickCoinFlip()" onmouseover="highlight('QCFlip')" onmouseout="dehighlight('QCFlip')">
-	<p>Quantum Coin Flip (true/false) - You'll take each route in roughly half of all universes spawned by the dice.</p>
-	<p id = "QCFlipResult"></p>
-</div>
-
-<div id ="QRNGnumber" class = "tool" onclick="onClickNumber()" onmouseover="highlight('QRNGnumber')" onmouseout="dehighlight('QRNGnumber')">
-	<p>0 to 255 QRNG number</p>
-	<p id = "QRNGnumberResult"></p>
-</div>
-
-<p>FAQ</p>
-<p>	Q: Don't divides like cake-no cake naturally occur?</p>
-<p> A: Yes, they are theoretically guaranteed. This feature lets you make one type of possibility way, way more prevalent, but adds no/negligable diversity.<p>
-
+    </script>
 </body>
-<script src="multiverse.js"></script>
 </html>
