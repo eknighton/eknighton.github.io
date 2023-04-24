@@ -136,10 +136,12 @@
 
         function acceptAnswer() {
             if (document.getElementById('answerBtn').innerText === questions[currentQuestionIndex].answer) {
+                playRewardSound2();
                 truthsCaught = truthsCaught + 1;
                 liesCaught = liesCaught + 3 - currentAnswerIndex; // Should we do this or not?
                 nextQuestion();
             } else {
+                playLossSound1();
                 liesAccepted = liesAccepted + 1;
                 alert('Incorrect. Game Over. \n Lies Caught: ' + liesCaught + " Truths Caught: " + truthsCaught + " \n Lies Skipped: " + liesMissed + " Truths Skipped: " + truthsMissed);
                 truthsCaught = 0;
@@ -154,6 +156,7 @@
 
         function rejectAnswer() {
             if (document.getElementById('answerBtn').innerText === questions[currentQuestionIndex].answer) {
+                playLossSound1();
                 truthsRejected = truthsRejected + 1;
                 alert('You rejected the correct answer. Game Over. \n Lies Caught: ' + liesCaught + " Truths Caught: " + truthsCaught + " \n Lies Skipped: " + liesMissed + " Truths Skipped: " + truthsMissed);
                 liesCaught = 0;
@@ -164,6 +167,7 @@
                 currentQuestionIndex = 0;
                 displayQuestion();
             } else {
+                playRewardSound1();
                 if (currentAnswerIndex < 3) {
                     currentAnswerIndex++;
                 } else {
@@ -254,6 +258,26 @@
             document.addEventListener('keydown', handleKeyDown, false);
 
         //End Bonus Controls Section
+
+        // Sound Section
+
+        function playRewardSound1() {
+            const audio = new Audio('collect.m4a');
+            audio.play();
+        }
+
+        function playRewardSound2() {
+            const audio = new Audio('jump.m4a');
+            audio.play();
+            playRewardSound1();
+        }
+
+        function playLossSound1() {
+            const audio = new Audio('crunch.m4a');
+            audio.play();
+        }
+
+        //End Sound Section
 
 
     </script>
