@@ -205,6 +205,10 @@
 
         // Bonus Controls Section
 
+        document.addEventListener('touchmove', function (e) {
+            e.preventDefault();
+        }, { passive: false });
+
         function handleTouchStart(e) {
               this.startX = e.touches[0].clientX;
               this.startY = e.touches[0].clientY;
@@ -217,10 +221,10 @@
 
               if (this.startX - endX > threshold) {
                 // Swipe left
-                rejectAnswer();
+                acceptAnswer();
               } else if (endX - this.startX > threshold) {
                 // Swipe right
-                acceptAnswer();
+                rejectAnswer();
               } else if (endY - this.startY > threshold) {
                 skipAnswer();
               }
