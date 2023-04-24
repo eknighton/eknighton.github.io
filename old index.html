@@ -81,7 +81,7 @@
 { question: 'The United States capital, _____, D.C., was named in honor of the first president.', answer: 'George Washington', options: ['John Adams', 'Thomas Jefferson', 'James Madison', 'James Monroe'] },
 { question: 'During President _____\'s administration, the Judiciary Act of 1789 established the federal court system.', answer: 'George Washington', options: ['John Adams', 'Thomas Jefferson', 'James Madison', 'James Monroe'] },
 { question: 'President _____ oversaw the creation of the U.S. Navy during his time in office.', answer: 'John Adams', options: ['George Washington', 'Thomas Jefferson', 'James Madison', 'James Monroe'] },
-{ question: '_____ was the only president to have a son who also became a U.S. president.', answer: 'John Adams', options: ['George Washington', 'Thomas Jefferson', 'James Madison', 'James Monroe'] },
+{ question: ' was the only president to have a son who also became a U.S. president, John Quincy Adams.', answer: 'John Adams', options: ['George Washington', 'Thomas Jefferson', 'James Madison', 'James Monroe'] },
 { question: 'Before his presidency, _____ served as the U.S. minister to Great Britain.', answer: 'John Adams', options: ['George Washington', 'Thomas Jefferson', 'James Madison', 'James Monroe'] },
 { question: 'The Lewis and Clark expedition was commissioned during President _____\'s administration.', answer: 'Thomas Jefferson', options: ['George Washington', 'John Adams', 'James Madison', 'James Monroe'] },
 { question: 'President _____ was the primary author of the Virginia Statute for Religious Freedom.', answer: 'Thomas Jefferson', options: ['George Washington', 'John Adams', 'James Madison', 'James Monroe'] },
@@ -95,7 +95,8 @@
         ];
 
         let cards = [];
-        let currentCardIndex = 0;
+        let currentQuestionIndex = 0;
+        let currentAnswerIndex = 0;
         let answers = null;
 
 
@@ -125,39 +126,46 @@
                 const options = questionObj.options;
 
                 // Create a card for the correct answer
-                cards.push({ question: questionText, sub: answer, answer: answer });
+                cards.push({ question: questionText, answer: answer });
 
                 // Create cards for each option
                 options.forEach((option) => {
-                    cards.push({ question: questionText, sub: option, answer: answer });
+                    cards.push({ question: questionText, answer: option });
                 });
             });
 
             // Shuffle cards
-            shuffle(cards);
+            shuffleArray(cards);
 
             return cards;
         }
+
         cards = generateCards(questions);
 
+        function generateAnswers() {
+            const ansTemp = [questions[currentQuestionIndex].answer, questions[currentQuestionIndex].options[0], questions[currentQuestionIndex].options[1], questions[currentQuestionIndex].options[2]];
+            shuffle(ansTemp);
+            answers = ansTemp;
+        }
+
         function displayQuestion() {
-            const questionParts = cards[currentCardIndex].question.split('_____');
+            const questionParts = questions[currentQuestionIndex].question.split('_____');
             document.getElementById('questionPart1').innerText = questionParts[0];
             document.getElementById('questionPart2').innerText = questionParts[1];
+            generateAnswers();
+            currentAnswerIndex = 0;
             displayAnswer();
         }
 
         function displayAnswer() {
-            document.getElementById('answerBtn').innerText = cards[currentCardIndex].sub;
+            document.getElementById('answerBtn').innerText = answers[currentAnswerIndex];
         }
 
-
-
-
         function acceptAnswer() {
-            if (document.getElementById('answerBtn').innerText === cards[currentCardIndex].answer) {
+            if (document.getElementById('answerBtn').innerText === questions[currentQuestionIndex].answer) {
                 playRewardSound2();
                 truthsCaught = truthsCaught + 1;
+                liesCaught = liesCaught + 3 - currentAnswerIndex; // Should we do this or not?
                 nextQuestion();
             } else {
                 playLossSound1();
@@ -167,14 +175,14 @@
                 liesCaught = 0;
                 truthsMissed = 0;
                 liesMissed = 0;
-                shuffle(cards);
-                currentCardIndex = 0;
+                shuffle(questions);
+                currentQuestionIndex = 0;
                 displayQuestion();
             }
         }
 
         function rejectAnswer() {
-            if (document.getElementById('answerBtn').innerText === cards[currentCardIndex].answer) {
+            if (document.getElementById('answerBtn').innerText === questions[currentQuestionIndex].answer) {
                 playLossSound1();
                 truthsRejected = truthsRejected + 1;
                 alert('You rejected the correct answer. Game Over. \n Lies Caught: ' + liesCaught + " Truths Caught: " + truthsCaught + " \n Lies Skipped: " + liesMissed + " Truths Skipped: " + truthsMissed);
@@ -182,34 +190,50 @@
                 truthsCaught = 0;
                 truthsMissed = 0;
                 liesMissed = 0;
-                shuffle(cards);
-                currentCardIndex = 0;
+                shuffle(questions);
+                currentQuestionIndex = 0;
                 displayQuestion();
             } else {
-                liesCaught = liesCaught + 1;
                 playRewardSound1();
-                nextQuestion();
+                if (currentAnswerIndex < 3) {
+                    currentAnswerIndex++;
+                } else {
+                    //alert('No more options! Moving on to next question!');
+                    currentQuestionIndex++;
+                    displayQuestion();
+                    currentAnswerIndex = 0;
+                }
+                liesCaught = liesCaught + 1;
+                displayAnswer();
             }
         }
 
         function skipAnswer() {
 
-                if (document.getElementById('answerBtn').innerText === cards[currentCardIndex].answer) {
+                if (document.getElementById('answerBtn').innerText === questions[currentQuestionIndex].answer) {
                     truthsMissed = truthsMissed + 1;
                 } else {
                     liesMissed = liesMissed + 1;
                 }
-                nextQuestion();
+                if (currentAnswerIndex < 3) {
+                    currentAnswerIndex++;
+                } else {
+                    //alert('No more options! Moving on to next question!');
+                    currentQuestionIndex++;
+                    displayQuestion();
+                    currentAnswerIndex = 0;
+                }
+                displayAnswer();
         }
 
         function nextQuestion() {
-            if (currentCardIndex < cards.length - 1) {
-                currentCardIndex++;
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
                 displayQuestion();
             } else {
                 alert('Congratulations! You completed the game. \n Lies Caught: ' + liesCaught + " Truths Caught: " + truthsCaught + " \n Lies Skipped: " + liesMissed + " Truths Skipped: " + truthsMissed);
-                shuffle(cards);
-                currentCardIndex = 0;
+                shuffle(questions);
+                currentQuestionIndex = 0;
                 liesCaught = 0;
                 truthsCaught = 0;
                 truthsMissed = 0;
