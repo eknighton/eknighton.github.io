@@ -227,7 +227,7 @@
             function handleTouchEnd(e) {
               const endX = e.changedTouches[0].clientX;
               const endY = e.changedTouches[0].clientY;
-              const threshold = 100; // Minimum distance for swipe recognition
+              const threshold = 50; // Minimum distance for swipe recognition
 
               if (this.startX - endX > threshold) {
                 // Swipe left
