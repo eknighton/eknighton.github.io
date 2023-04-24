@@ -37,6 +37,9 @@
             font-size: 24px; /* Adjust the text size */
             padding: 12px 24px; /* Adjust the padding around the text */
             border: 2px solid black; /* Add a border */
+            color: white;
+            min-width: 150px; /* Adjust the minimum width */
+
         }
 </style>
 
@@ -48,7 +51,6 @@
           <span id="questionPart1"></span>
           <div style="display: inline-block; vertical-align: middle;">
             <button id="answerBtn"></button>
-            <button id="dontKnowBtn"></button>
           </div>
           <span id="questionPart2"></span>
         </h1>
@@ -120,17 +122,10 @@
         }
 
         function displayQuestion() {
-            document.getElementById('question').innerText = questions[currentQuestionIndex].question;
-            currentAnswerIndex = 0;
-            generateAnswers();
-            displayAnswer();
-        }
-
-        function displayQuestion() {
             const questionParts = questions[currentQuestionIndex].question.split('_____');
             document.getElementById('questionPart1').innerText = questionParts[0];
             document.getElementById('questionPart2').innerText = questionParts[1];
-            currentShuffledAnswers = shuffleArray([questions[currentQuestionIndex].answer, ...questions[currentQuestionIndex].options]);
+            generateAnswers();
             currentAnswerIndex = 0;
             displayAnswer();
         }
