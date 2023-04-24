@@ -44,8 +44,14 @@
 </head>
 <body>
     <div class="container">
-        <h1 id="question"></h1>
-        <button id="answerBtn"></button>
+        <h1>
+          <span id="questionPart1"></span>
+          <div style="display: inline-block; vertical-align: middle;">
+            <button id="answerBtn"></button>
+            <button id="dontKnowBtn"></button>
+          </div>
+          <span id="questionPart2"></span>
+        </h1>
         <div>
             <button onclick="acceptAnswer()">Accept(A)</button>
             <button onclick="skipAnswer()">Skip(W)</button>
@@ -117,6 +123,15 @@
             document.getElementById('question').innerText = questions[currentQuestionIndex].question;
             currentAnswerIndex = 0;
             generateAnswers();
+            displayAnswer();
+        }
+
+        function displayQuestion() {
+            const questionParts = questions[currentQuestionIndex].question.split('_____');
+            document.getElementById('questionPart1').innerText = questionParts[0];
+            document.getElementById('questionPart2').innerText = questionParts[1];
+            currentShuffledAnswers = shuffleArray([questions[currentQuestionIndex].answer, ...questions[currentQuestionIndex].options]);
+            currentAnswerIndex = 0;
             displayAnswer();
         }
 
