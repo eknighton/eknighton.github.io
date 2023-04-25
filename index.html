@@ -59,9 +59,9 @@
           <span id="questionPart2"></span>
         </h1>
         <div>
-            <button onclick="acceptAnswer()">Accept(A)</button>
-            <button onclick="skipAnswer()">Skip(W)</button>
-            <button onclick="rejectAnswer()">Reject(D)</button>
+            <button onclick="rejectAnswer()">Reject(<)</button>
+            <button onclick="skipAnswer()">Skip(^)</button>
+            <button onclick="acceptAnswer()">Accept(>)</button>
              <input type="range" min="1" max="10" value="5" id="slider">
         </div>
     </div>
@@ -167,7 +167,7 @@
             } else {
                 playLossSound1();
                 liesAccepted = liesAccepted + 1;
-                alert('Incorrect. Game Over. \n Lies Caught: ' + liesCaught + " Truths Caught: " + truthsCaught + " \n Lies Skipped: " + liesMissed + " Truths Skipped: " + truthsMissed);
+                alert('You accept a false statement. Game Over. \n Lies Caught: ' + liesCaught + " Truths Caught: " + truthsCaught + " \n Lies Skipped: " + liesMissed + " Truths Skipped: " + truthsMissed);
                 truthsCaught = 0;
                 liesCaught = 0;
                 truthsMissed = 0;
@@ -182,7 +182,7 @@
             if (document.getElementById('answerBtn').innerText === cards[currentCardIndex].answer) {
                 playLossSound1();
                 truthsRejected = truthsRejected + 1;
-                alert('You rejected the correct answer. Game Over. \n Lies Caught: ' + liesCaught + " Truths Caught: " + truthsCaught + " \n Lies Skipped: " + liesMissed + " Truths Skipped: " + truthsMissed);
+                alert('You rejected a true statement. Game Over. \n Lies Caught: ' + liesCaught + " Truths Caught: " + truthsCaught + " \n Lies Skipped: " + liesMissed + " Truths Skipped: " + truthsMissed);
                 liesCaught = 0;
                 truthsCaught = 0;
                 truthsMissed = 0;
@@ -243,24 +243,24 @@
 
               if (this.startX - endX > threshold) {
                 // Swipe left
-                acceptAnswer();
+                rejectAnswer();
               } else if (endX - this.startX > threshold) {
                 // Swipe right
-                rejectAnswer();
-              } else if (endY - this.startY > threshold) {
+                acceptAnswer();
+              } else if (this.startY - endY > threshold) {
                 skipAnswer();
               }
             }
 
             function handleKeyDown(e) {
-              if (e.key === 'a') {
+              if (e.key === 'ArrowRight') {
                 acceptAnswer();
-              } else if (e.key === 'd') {
+              } else if (e.key === 'ArrowLeft') {
                 rejectAnswer();
-              } else if (e.key === 'w') {
+              } else if (e.key === 'ArrowUp') {
                 skipAnswer();
-              } else if (e.key === 's') {
-                slider.style.display = 'block';
+              } else if (e.key === 'ArrowDown') {
+                //slider.style.display = 'block';
               }
             }
             document.addEventListener('touchstart', handleTouchStart, false);
