@@ -9,230 +9,58 @@
 </head>
 <body>
 
+    <div id="startScreen"> 
 
-    <div id="Start Screen"> </div>
-    <div id="Level Select"> </div>
-    <div id="Level Start"> </div>
-    <div id="Level"> </div>
-    <div id="Level Over"> </div>
-    
-    <div class="container">
-        <h1>
-          <span id="questionPart1"></span>
-          <div style="display: inline-block; vertical-align: middle;">
-            <button id="answerBtn"></button>
-          </div>
-          <span id="questionPart2"></span>
-        </h1>
-        <div>
-            <button onclick="acceptAnswer()">Accept(A)</button>
-            <button onclick="skipAnswer()">Skip(W)</button>
-            <button onclick="rejectAnswer()">Reject(D)</button>
-             <input type="range" min="1" max="10" value="5" id="slider">
+    </div><div id="levelSelect"> 
+
+        <div class="container">
+                <h1>
+                
+                </h1>
+                <div>
+                   <button onclick="rejectAnswer()">Reject(<)</button>
+                   <button onclick="skipAnswer()">Skip(^)</button>
+                   <button onclick="acceptAnswer()">Accept(>)</button>
+                </div>
         </div>
+
+    </div><div id="levelStart"> 
+
+    </div><div id="level"> 
+
+            <div class="container">
+                <h1>
+                  <span id="questionPart1"></span>
+                  <div style="display: inline-block; vertical-align: middle;">
+                    <button id="answerBtn"></button>
+                  </div>
+                  <span id="questionPart2"></span>
+                </h1>
+                <div>
+                   <button onclick="rejectAnswer()">Reject(<)</button>
+                   <button onclick="skipAnswer()">Skip(^)</button>
+                   <button onclick="acceptAnswer()">Accept(>)</button>
+                     <input type="range" min="1" max="10" value="5" id="slider">
+                </div>
+            </div>
+
     </div>
 
-    <script type="module" src="input.js"></script> <!-- Link to the first JavaScript file -->
-    <script type="module" src="level.js"></script> <!-- Link to the second JavaScript file -->
-    <script type="module" src="main.js"></script> <!-- Link to the third JavaScript file -->
+    <div id="levelOver"> </div>
+
+
+    <script src="main.js"></script> <!-- -->
+    <script src="oldCode.js"></script> <!-- -->
+    <script src="util.js"></script> <!--  -->
+    <script src="input.js"></script> <!-- -->
+  
+
+
+
+    <script src="level.js"></script> <!-- -->
+    <script src="LevelSelect.js"></script> <!--  -->
 
     <script>
-        let questions = [ { question: 'President _____ was the first President of the United States.', answer: 'George Washington', options: ['John Adams', 'Thomas Jefferson', 'James Madison', 'James Monroe'] },
-           ];
-
-        let cards = [];
-        let currentCardIndex = 0;
-        let answers = null;
-
-
-        //Score Trackers
-        let liesCaught = 0;
-        let truthsCaught = 0;
-        let liesMissed = 0;
-        let truthsMissed = 0;
-        let liesAccepted = 0;
-        let truthsRejected = 0;
-
-        function shuffle(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-        }
-
-        shuffle(questions);
-
-        function generateCards(questions) {
-            let cards = [];
-
-            questions.forEach((questionObj) => {
-                const questionText = questionObj.question;
-                const answer = questionObj.answer;
-                const options = questionObj.options;
-
-                // Create a card for the correct answer
-                cards.push({ question: questionText, sub: answer, answer: answer });
-
-                // Create cards for each option
-                options.forEach((option) => {
-                    cards.push({ question: questionText, sub: option, answer: answer });
-                });
-            });
-
-            // Shuffle cards
-            shuffle(cards);
-
-            return cards;
-        }
-        cards = generateCards(questions);
-
-        function displayQuestion() {
-            const questionParts = cards[currentCardIndex].question.split('_____');
-            document.getElementById('questionPart1').innerText = questionParts[0];
-            document.getElementById('questionPart2').innerText = questionParts[1];
-            displayAnswer();
-        }
-
-        function displayAnswer() {
-            document.getElementById('answerBtn').innerText = cards[currentCardIndex].sub;
-        }
-
-
-
-
-        function acceptAnswer() {
-            if (document.getElementById('answerBtn').innerText === cards[currentCardIndex].answer) {
-                playRewardSound2();
-                truthsCaught = truthsCaught + 1;
-                nextQuestion();
-            } else {
-                playLossSound1();
-                liesAccepted = liesAccepted + 1;
-                alert('Incorrect. Game Over. \n Lies Caught: ' + liesCaught + " Truths Caught: " + truthsCaught + " \n Lies Skipped: " + liesMissed + " Truths Skipped: " + truthsMissed);
-                truthsCaught = 0;
-                liesCaught = 0;
-                truthsMissed = 0;
-                liesMissed = 0;
-                shuffle(cards);
-                currentCardIndex = 0;
-                displayQuestion();
-            }
-        }
-
-        function rejectAnswer() {
-            if (document.getElementById('answerBtn').innerText === cards[currentCardIndex].answer) {
-                playLossSound1();
-                truthsRejected = truthsRejected + 1;
-                alert('You rejected the correct answer. Game Over. \n Lies Caught: ' + liesCaught + " Truths Caught: " + truthsCaught + " \n Lies Skipped: " + liesMissed + " Truths Skipped: " + truthsMissed);
-                liesCaught = 0;
-                truthsCaught = 0;
-                truthsMissed = 0;
-                liesMissed = 0;
-                shuffle(cards);
-                currentCardIndex = 0;
-                displayQuestion();
-            } else {
-                liesCaught = liesCaught + 1;
-                playRewardSound1();
-                nextQuestion();
-            }
-        }
-
-        function skipAnswer() {
-
-                if (document.getElementById('answerBtn').innerText === cards[currentCardIndex].answer) {
-                    truthsMissed = truthsMissed + 1;
-                } else {
-                    liesMissed = liesMissed + 1;
-                }
-                nextQuestion();
-        }
-
-        function nextQuestion() {
-            if (currentCardIndex < cards.length - 1) {
-                currentCardIndex++;
-                displayQuestion();
-            } else {
-                alert('Congratulations! You completed the game. \n Lies Caught: ' + liesCaught + " Truths Caught: " + truthsCaught + " \n Lies Skipped: " + liesMissed + " Truths Skipped: " + truthsMissed);
-                shuffle(cards);
-                currentCardIndex = 0;
-                liesCaught = 0;
-                truthsCaught = 0;
-                truthsMissed = 0;
-                liesMissed = 0;
-                displayQuestion();
-            }
-        }
-
-        displayQuestion();
-
-        // Bonus Controls Section
-
-        document.addEventListener('touchmove', function (e) {
-            e.preventDefault();
-        }, { passive: false });
-
-        function handleTouchStart(e) {
-              this.startX = e.touches[0].clientX;
-              this.startY = e.touches[0].clientY;
-            }
-
-            function handleTouchEnd(e) {
-              const endX = e.changedTouches[0].clientX;
-              const endY = e.changedTouches[0].clientY;
-              const threshold = 50; // Minimum distance for swipe recognition
-
-              if (this.startX - endX > threshold) {
-                // Swipe left
-                acceptAnswer();
-              } else if (endX - this.startX > threshold) {
-                // Swipe right
-                rejectAnswer();
-              } else if (endY - this.startY > threshold) {
-                skipAnswer();
-              }
-            }
-
-            function handleKeyDown(e) {
-              if (e.key === 'a') {
-                acceptAnswer();
-              } else if (e.key === 'd') {
-                rejectAnswer();
-              } else if (e.key === 'w') {
-                skipAnswer();
-              } else if (e.key === 's') {
-                slider.style.display = 'block';
-              }
-            }
-            document.addEventListener('touchstart', handleTouchStart, false);
-            document.addEventListener('touchend', handleTouchEnd, false);
-            document.addEventListener('keydown', handleKeyDown, false);
-
-        //End Bonus Controls Section
-
-        // Sound Section
-
-        // NOTE Sounds downloaded from Scratch. 
-
-        function playRewardSound1() {
-            //const audio = new Audio('Collect.m4a');
-            //audio.play();
-        }
-
-        function playRewardSound2() {
-            //const audio = new Audio('Jump.m4a');
-            //audio.play();
-            //playRewardSound1();
-        }
-
-        function playLossSound1() {
-            //const audio = new Audio('Crunch.m4a');
-            //audio.play();
-        }
-
-        //End Sound Section
-
-
     </script>
 </body>
 </html>
