@@ -2,7 +2,7 @@
     let pageMode = 'startScreen';
     let levelId = 'select';
 
-//Creates a variable for each mode element.
+//Creates a const variable for each mode's HTML display.
     const startScreen = document.getElementById('startScreen');
     const levelSelect = document.getElementById('levelSelect');
     const levelStart = document.getElementById('levelStart');
