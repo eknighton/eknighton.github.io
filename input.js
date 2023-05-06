@@ -10,7 +10,6 @@
                 rightSwipe(); //accept
               } else if (e.key === 'ArrowLeft') {
                 leftSwipe(); //reject
-                 console.log("Mouse Up");
               } else if (e.key === 'ArrowUp') {
                 upSwipe(); //skip
               } else if (e.key === 'ArrowDown') {
@@ -18,6 +17,7 @@
                 //slider.style.display = 'block';
               }
             }
+            document.addEventListener('keydown', handleKeyDown, false);
 
 //Establish touchscreen input triggers.
 
