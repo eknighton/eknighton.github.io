@@ -28,10 +28,13 @@
   let mouseDown = false;
 
 //Input Parameters - Called exclusively by input, these are given default values here, but can be altered ddurring runtime by any other file. 
-    let rightSwipe = console.log("RightSwipe");
-    let leftSwipe = console.log("LeftSwipe"); 
-    let downSwipe = console.log("DownSwipe");
-    let upSwipe = console.log("UpSwipe");
+    let touchUp = function() {console.log('touch up at ' + touchCurrentX)};
+    let mouseUp = function() {console.log('mouse up at ' + mouseCurrentX)};
+
+    let rightSwipe = function() {console.log("RightSwipe")};
+    let leftSwipe = function() {console.log("LeftSwipe")}; 
+    let downSwipe = function() {console.log("DownSwipe")};
+    let upSwipe = function() {console.log("UpSwipe")};
 
 //Set critical variables 
     let pageMode = 'startScreen';

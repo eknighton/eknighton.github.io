@@ -1,7 +1,6 @@
 
 /*
-  The last file to load, this creates the input listeners and determines what they do.
-
+  The last file to load, this creates the input listeners.
 */
 
 //Establish keyboard input triggers.
@@ -39,6 +38,8 @@
             function handleTouchEnd(e) {
                 e.preventDefault();
                 //Need to call a function here
+                touchUp();
+                console.log(touchCurrentX);
                 touchStartX = 0;
                 touchStartY = 0;
                 touchCurrentX = 0;
@@ -65,7 +66,8 @@
             function handleMouseUp(e) {
                 e.preventDefault();
                 // Call a function here if needed
-                console.log("Mouse Up");
+                mouseUp();
+                console.log(mouseCurrentX);
                 mouseDown = false;
                 mouseStartX = 0;
                 mouseStartY = 0;
