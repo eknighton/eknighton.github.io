@@ -4,33 +4,24 @@
 	let downSwipe = null;
 	let upSwipe = skipAnswer;
 	let sliderReleased = null;
+//Input Trackers
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let mouseStartX = 0;
+  let mouseStartY = 0;
 
-//Establish input triggers.
-		document.addEventListener('touchmove', function (e) {
-            e.preventDefault();
-        }, { passive: false });
+  let touchCurrentX = 0;
+  let touchCurrentY = 0;
+  let mouseCurrentX = 0;
+  let mouseCurrentY = 0;
 
-        function handleTouchStart(e) {
-              this.startX = e.touches[0].clientX;
-              this.startY = e.touches[0].clientY;
-            }
+  let mouseDown = false;
 
-            function handleTouchEnd(e) {
-              const endX = e.changedTouches[0].clientX;
-              const endY = e.changedTouches[0].clientY;
-              const threshold = 50; // Minimum distance for swipe recognition
+  let currentDisplacement = 0;
 
-              if (this.startX - endX > threshold) {
-                // Swipe left, reject
-                leftSwipe();
-              } else if (endX - this.startX > threshold) {
-                // Swipe right, accept
-                rightSwipe();
-              } else if (this.startY - endY > threshold) {
-              	//Skip
-                upSwipe();
-              }
-            }
+  let touchOutput = 0;
+
+//Establish keyboard input triggers.
 
             function handleKeyDown(e) {
               if (e.key === 'ArrowRight') {
@@ -44,6 +35,65 @@
                 //slider.style.display = 'block';
               }
             }
-        document.addEventListener('touchstart', handleTouchStart, false);
-        document.addEventListener('touchend', handleTouchEnd, false);
-        document.addEventListener('keydown', handleKeyDown, false);
+
+//Establish touchscreen input triggers.
+
+            function handleTouchMove(e) {
+                e.preventDefault();
+                touchCurrentX = e.touches[0].clientX;
+                touchCurrentY = e.touches[0].clientY;
+            }
+            document.addEventListener('touchmove', handleTouchMove, false);
+
+            function handleTouchStart(e) {
+                e.preventDefault();
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+            }
+            document.addEventListener('touchstart', handleTouchStart, false);
+
+            function handleTouchEnd(e) {
+                e.preventDefault();
+                //Need to call a function here
+                touchStartX = 0;
+                touchStartY = 0;
+                touchCurrentX = 0;
+                touchCurrentY = 0;
+            }
+            document.addEventListener('touchend', handleTouchEnd, false);
+
+//Establlishes mouse input triggers.
+            function handleMouseMove(e) {
+                e.preventDefault();
+                mouseCurrentX = e.clientX;
+                mouseCurrentY = e.clientY;
+            }
+            document.addEventListener('mousemove', handleMouseMove, false);
+
+            function handleMouseDown(e) {
+                e.preventDefault();
+                mouseDown = true;
+                mouseStartX = e.clientX;
+                mouseStartY = e.clientY;
+            }
+            document.addEventListener('mousedown', handleMouseDown, false);
+
+            function handleMouseUp(e) {
+                e.preventDefault();
+                // Call a function here if needed
+                console.log('Mouse Up');
+                mouseDown = false;
+                mouseStartX = 0;
+                mouseStartY = 0;
+                mouseCurrentX = 0;
+                mouseCurrentY = 0;
+            }
+            document.addEventListener('mouseup', handleMouseUp, false);
+
+
+
+
+
+
+
+
