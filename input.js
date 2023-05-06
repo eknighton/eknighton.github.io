@@ -1,9 +1,11 @@
 //Declare variables that levels use to set functions.
-	let rightSwipe = acceptAnswer;
-	let leftSwipe = rejectAnswer;
+	let rightSwipe = console.log("RightSwipe"); //acceptAnswer;
+	let leftSwipe = console.log("LeftSwipe"); // rejectAnswer;
 	let downSwipe = null;
-	let upSwipe = skipAnswer;
+	let upSwipe = console.log("UpSwipe");//skipAnswer;
 	let sliderReleased = null;
+
+  
 //Input Trackers
   let touchStartX = 0;
   let touchStartY = 0;
@@ -28,6 +30,7 @@
                 rightSwipe(); //accept
               } else if (e.key === 'ArrowLeft') {
                 leftSwipe(); //reject
+                 console.log("Mouse Up");
               } else if (e.key === 'ArrowUp') {
                 upSwipe(); //skip
               } else if (e.key === 'ArrowDown') {
@@ -81,7 +84,7 @@
             function handleMouseUp(e) {
                 e.preventDefault();
                 // Call a function here if needed
-                console.log('Mouse Up');
+                console.log("Mouse Up");
                 mouseDown = false;
                 mouseStartX = 0;
                 mouseStartY = 0;
