@@ -1,27 +1,8 @@
-//Declare variables that levels use to set functions.
-	let rightSwipe = console.log("RightSwipe"); //acceptAnswer;
-	let leftSwipe = console.log("LeftSwipe"); // rejectAnswer;
-	let downSwipe = null;
-	let upSwipe = console.log("UpSwipe");//skipAnswer;
-	let sliderReleased = null;
 
-  
-//Input Trackers
-  let touchStartX = 0;
-  let touchStartY = 0;
-  let mouseStartX = 0;
-  let mouseStartY = 0;
+/*
+  The last file to load, this creates the input listeners and determines what they do.
 
-  let touchCurrentX = 0;
-  let touchCurrentY = 0;
-  let mouseCurrentX = 0;
-  let mouseCurrentY = 0;
-
-  let mouseDown = false;
-
-  let currentDisplacement = 0;
-
-  let touchOutput = 0;
+*/
 
 //Establish keyboard input triggers.
 

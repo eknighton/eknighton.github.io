@@ -1,6 +1,11 @@
-//Set critical variables 
-    let pageMode = 'startScreen';
-    let levelId = 'select';
+/*
+    The first file to run, variables and functions defined here can be accessed in all other files. 
+*/
+
+
+/*
+    This section initializes variables. Variables that should be usable in all files should be defined here.
+*/
 
 //Creates a const variable for each mode's HTML display.
     const startScreen = document.getElementById('startScreen');
@@ -8,6 +13,34 @@
     const levelStart = document.getElementById('levelStart');
     const level = document.getElementById('level');
     const levelOver = document.getElementById('levelOver');
+
+//Input Recorders - Set exclusively by input, these are defined here so they can be accessed by all files.
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let mouseStartX = 0;
+  let mouseStartY = 0;
+
+  let touchCurrentX = 0;
+  let touchCurrentY = 0;
+  let mouseCurrentX = 0;
+  let mouseCurrentY = 0;
+
+  let mouseDown = false;
+
+//Input Parameters - Called exclusively by input, these are given default values here, but can be altered ddurring runtime by any other file. 
+    let rightSwipe = console.log("RightSwipe");
+    let leftSwipe = console.log("LeftSwipe"); 
+    let downSwipe = console.log("DownSwipe");
+    let upSwipe = console.log("UpSwipe");
+
+//Set critical variables 
+    let pageMode = 'startScreen';
+    let levelId = 'select';
+
+
+/*
+    This section performs necessary operations, like loading data.
+*/
 
 //Loads player stats from browser's local storage.
     const storedUserDataJSON = localStorage.getItem('userData');
