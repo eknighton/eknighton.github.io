@@ -40,6 +40,13 @@ function startLevel(level){
 
 	// Set position in the level
 
+	// Set up html display
+
+		startScreen.style.display = 'none';
+    		level.style.display = 'block';
+    		levelOver.style.display ='none';
+    		levelSelect.style.display = 'none'; // This will read none in final version.
+
 }
 
 function endLevel(){ //These could be derived from the level object.
