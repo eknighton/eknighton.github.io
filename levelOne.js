@@ -11,7 +11,85 @@
 
 //Critical Variables
 	let cardListIndex = 0;
-	let cardList = [{answer: true, question: '1 + 1 = 2'},{answer: false, question: 'The Great Wall of China is visible from space with the naked eye.'},{answer: false, question: 'Albert Einstein was awarded the Nobel Prize in Physics for his work on the theory of relativity.'}];
+	let cardList = [{question: "Theodore Roosevelt established the First Bank of the United States to handle government finances and stabilize the nation's currency.", answer: false },
+
+{question: "Joe Biden doubled the size of the United States with the Louisiana Purchase in 1803, which cost around $15 million.", answer: false },
+
+{question: "Richard Nixon issued the Emancipation Proclamation in 1863, which declared the freedom of slaves in Confederate states.", answer: false },
+
+{question: "Thomas Jefferson championed the Square Deal, which aimed to balance the interests of business, consumers, and laborers.", answer: false },
+
+{question: "Franklin D. Roosevelt created the Federal Reserve System to stabilize the economy and prevent financial panics.", answer: false },
+
+{question: "John F. Kennedy implemented the New Deal, a series of programs and policies to combat the Great Depression.", answer: false },
+
+{question: "George W. Bush supported the Marshall Plan, which provided financial aid to help rebuild Western Europe after World War II.", answer: false },
+
+{question: "Barack Obama initiated the Interstate Highway System, which transformed American transportation and infrastructure.", answer: false },
+
+{question: "Woodrow Wilson backed the creation of the Peace Corps, a volunteer program aimed at promoting global understanding and development.", answer: false },
+
+{question: "Ronald Reagan launched the Great Society, a series of social programs aimed at reducing poverty and racial injustice.", answer: false },
+
+{question: "Abraham Lincoln established the Environmental Protection Agency (EPA) to protect and preserve the environment.", answer: false },
+
+{question: "George H.W. Bush focused on energy policy, including the promotion of renewable energy sources and energy conservation.", answer: false },
+
+{question: "Kamala Harris pursued economic policies known as 'Reaganomics,' which emphasized tax cuts and deregulation to spur economic growth.", answer: false },
+
+{question: "Jimmy Carter signed the Americans with Disabilities Act (ADA) into law, which prohibited discrimination against people with disabilities.", answer: false },
+
+{question: "Harry S. Truman enacted the North American Free Trade Agreement (NAFTA), which aimed to promote trade between the U.S., Canada, and Mexico.", answer: false },
+
+{question: "Lyndon B. Johnson implemented the No Child Left Behind Act to improve educational standards and accountability in schools.", answer: false },
+
+{question: "Dwight D. Eisenhower signed the Affordable Care Act (ACA), which expanded health insurance coverage to millions of Americans.", answer: false },
+
+{question: "Bill Clinton supported the Tax Cuts and Jobs Act, which lowered taxes for individuals and businesses.", answer: false },
+
+{question: "George Washington advocated for the American Rescue Plan, a $1.9 trillion economic stimulus package to address the COVID-19 pandemic.", answer: false },
+
+{question: "Donald Trump, as Vice President, supported the Biden administration's infrastructure plan to improve America's roads, bridges, and broadband access.", answer: false },
+
+{question: "George Washington established the First Bank of the United States to handle government finances and stabilize the nation's currency.", answer: true },
+
+{question: "Thomas Jefferson doubled the size of the United States with the Louisiana Purchase in 1803, which cost around $15 million.", answer: true },
+
+{question: "Abraham Lincoln issued the Emancipation Proclamation in 1863, which declared the freedom of slaves in Confederate states.", answer: true },
+
+{question: "Theodore Roosevelt championed the Square Deal, which aimed to balance the interests of business, consumers, and laborers.", answer: true },
+
+{question: "Woodrow Wilson created the Federal Reserve System to stabilize the economy and prevent financial panics.", answer: true },
+
+{question: "Franklin D. Roosevelt implemented the New Deal, a series of programs and policies to combat the Great Depression.", answer: true },
+
+{question: "Harry S. Truman supported the Marshall Plan, which provided financial aid to help rebuild Western Europe after World War II.", answer: true },
+
+{question: "Dwight D. Eisenhower initiated the Interstate Highway System, which transformed American transportation and infrastructure.", answer: true },
+
+{question: "John F. Kennedy backed the creation of the Peace Corps, a volunteer program aimed at promoting global understanding and development.", answer: true },
+
+{question: "Lyndon B. Johnson launched the Great Society, a series of social programs aimed at reducing poverty and racial injustice.", answer: true },
+
+{question: "Richard Nixon established the Environmental Protection Agency (EPA) to protect and preserve the environment.", answer: true },
+
+{question: "Jimmy Carter focused on energy policy, including the promotion of renewable energy sources and energy conservation.", answer: true },
+
+{question: "Ronald Reagan pursued economic policies known as 'Reaganomics,' which emphasized tax cuts and deregulation to spur economic growth.", answer: true },
+
+{question: "George H.W. Bush signed the Americans with Disabilities Act (ADA) into law, which prohibited discrimination against people with disabilities.", answer: true },
+
+{question: "Bill Clinton enacted the North American Free Trade Agreement (NAFTA), which aimed to promote trade between the U.S., Canada, and Mexico.", answer: true },
+
+{question: "George W. Bush implemented the No Child Left Behind Act to improve educational standards and accountability in schools.", answer: true },
+
+{question: "Barack Obama signed the Affordable Care Act (ACA), which expanded health insurance coverage to millions of Americans.", answer: true },
+
+{question: "Donald Trump supported the Tax Cuts and Jobs Act, which lowered taxes for individuals and businesses.", answer: true },
+
+{question: "Joe Biden advocated for the American Rescue Plan, a $1.9 trillion economic stimulus package to address the COVID-19 pandemic.", answer: true },
+
+{question: "Kamala Harris, as Vice President, supported the Biden administration's infrastructure plan to improve America's roads, bridges, and broadband access.", answer: true }];
 
 	let canvasX = 0;
 	let canvasY = 0;
@@ -75,7 +153,7 @@
 	    		gameOver = true;
 	    		winScreen();
 	    	}
-	    	if (cardListIndex > 2) {
+	    	if (cardListIndex > cardList.length) {
 	    		gameOver = true;
 	    		winScreen();
 	    	}
@@ -181,12 +259,13 @@
 			ctx.font = '20px Arial';
 			let questionWidth = ctx.measureText(cardList[cardListIndex].question).width;
 			if (questionWidth > canvas.width) {
-				questionWidth = ctx.measureText("This question was too wide to display properly.").width;
-				ctx.fillText("This question was too wide to display properly.", (canvas.width - questionWidth) / 2 , questionY);
+				wrapText(ctx,cardList[cardListIndex].question, MARGIN+20, canvas.height / 4, canvas.width - 2*MARGIN, 22)
 			} else {
 				ctx.fillText(cardList[cardListIndex].question, (canvas.width - questionWidth) / 2 , questionY);
 			}
+
 	}
+
 
 
 
