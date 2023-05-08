@@ -105,11 +105,11 @@
 	const MARGIN = 80;
 
 //Set Health
-	let bossHealth = 400;
-	let bossMaxHealth = 400;
+	let bossHealth = 4000;
+	let bossMaxHealth = 4000;
 
-	let playerHealth = 400;
-	let playerMaxHealth = 400;
+	let playerHealth = 4000;
+	let playerMaxHealth = 4000;
 
 //Ensures levelOne is only div displayed.
 	startScreen.style.display = 'none';
@@ -259,7 +259,7 @@
 			ctx.font = '20px Arial';
 			let questionWidth = ctx.measureText(cardList[cardListIndex].question).width;
 			if (questionWidth > canvas.width) {
-				wrapText(ctx,cardList[cardListIndex].question, MARGIN+20, canvas.height / 4, canvas.width - 2*MARGIN, 22)
+				wrapText(ctx,cardList[cardListIndex].question, MARGIN+20, canvas.height / 4, canvas.width - 2*MARGIN-20, 22)
 			} else {
 				ctx.fillText(cardList[cardListIndex].question, (canvas.width - questionWidth) / 2 , questionY);
 			}
