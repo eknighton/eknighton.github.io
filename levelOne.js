@@ -91,6 +91,9 @@
 
 {question: "Kamala Harris, as Vice President, supported the Biden administration's infrastructure plan to improve America's roads, bridges, and broadband access.", answer: true }];
 
+
+	let indexList = generateUniqueRandomNumbers(cardList.length, 0, cardList.length);
+
 	let canvasX = 0;
 	let canvasY = 0;
 
@@ -126,7 +129,7 @@
 
     mouseUp = function() { // Uses left/right reward
     	//Modify and update player, boss health.
-	    	if (cardList[cardListIndex].answer == true){ // Checks answer, determining which side's reward is used.
+	    	if (cardList[indexList[cardListIndex]].answer == true){ // Checks answer, determining which side's reward is used.
 	    		if (leftNum > 0){ //Checks sign of reward, deciding whether to deal or take damage.
 	    			bossHealth  = bossHealth - leftNum;
 	    		} else {
@@ -257,11 +260,11 @@
 			let questionY = canvas.height /4;
 			ctx.fillStyle = 'white';
 			ctx.font = '20px Arial';
-			let questionWidth = ctx.measureText(cardList[cardListIndex].question).width;
+			let questionWidth = ctx.measureText(cardList[indexList[cardListIndex]].question).width;
 			if (questionWidth > canvas.width) {
-				wrapText(ctx,cardList[cardListIndex].question, MARGIN+20, canvas.height / 4, canvas.width - 2*MARGIN-20, 22)
+				wrapText(ctx,cardList[indexList[cardListIndex]].question, MARGIN+20, canvas.height / 4, canvas.width - 2*MARGIN-20, 22)
 			} else {
-				ctx.fillText(cardList[cardListIndex].question, (canvas.width - questionWidth) / 2 , questionY);
+				ctx.fillText(cardList[indexList[cardListIndex]].question, (canvas.width - questionWidth) / 2 , questionY);
 			}
 
 	}
