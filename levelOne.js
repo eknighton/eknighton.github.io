@@ -27,7 +27,7 @@
 	const MARGIN = 80;
 
 //Set Health
-	let bossHealth = 100;
+	let bossHealth = 400;
 	let bossMaxHealth = 400;
 
 	let playerHealth = 400;
@@ -133,9 +133,9 @@
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 		//Fill background
 			ctx.fillStyle = 'green';
-			ctx.fillRect(0, 0, canvasX, canvas.height);
+			ctx.fillRect(MARGIN, 0, canvasX-MARGIN, canvas.height);
 			ctx.fillStyle = 'red';
-			ctx.fillRect(canvasX, 0, canvas.width - canvasX, canvas.height);
+			ctx.fillRect(canvasX, 0, canvas.width - canvasX - MARGIN, canvas.height);
 		// Draw the vertical line
 			ctx.fillStyle = 'black';
 			const lineX = canvasX;//canvas.width / 2;
@@ -153,27 +153,19 @@
 
 		// Calculate the numbers for display
 			let radius = canvas.width / 2 - MARGIN;
-			let wager = canvasX- MARGIN -radius;
-			wager = Math.min(Math.abs(wager), radius-1) * Math.abs(wager)/wager;
+			console.log("radius: " + radius);
+			let wager = canvasX - canvas.width / 2;
+			if (wager != 0) {
+				wager = Math.min(Math.abs(wager), radius-1) * Math.abs(wager)/wager;
+			}
 			console.log("wager: " + wager);
 			let valueInsideSqrt = radius * radius - wager * wager;
-			let slope = NaN;
-			if (valueInsideSqrt >= 0) {
-				slope = wager / Math.sqrt(valueInsideSqrt);
-			} else {
-				slope = - wager / Math.sqrt(-valueInsideSqrt);
-			}
+			let slope = wager / Math.sqrt(valueInsideSqrt);
 			console.log("slope: " + slope);
-			valueInsideSqrt = radius^2 - wager^2;
-			let intercept = NaN;
-			if (valueInsideSqrt >= 0){
-				intercept = radius - Math.sqrt(valueInsideSqrt) - Math.abs(slope * wager);
-			} else {
-				intercept = radius - Math.sqrt(-valueInsideSqrt) - Math.abs(slope * wager);
-			}
+			let intercept = radius - Math.sqrt(valueInsideSqrt) - Math.abs(slope * wager);
 			console.log("intercept " + intercept);
-			leftNum = Math.floor(intercept+radius*slope)-205; // Why tf didd I have to subtract 205?
-			rightNum = Math.floor(intercept-radius*slope)-205; // Also, sccratch got different numbers, def try plugging in to checck w grapher
+			leftNum = Math.floor(intercept+radius*slope); // Why tf didd I have to subtract 205?
+			rightNum = Math.floor(intercept-radius*slope); // Also, sccratch got different numbers, def try plugging in to checck w grapher
 
 		// Draw the numbers
 			const numberY = canvas.height / 2;
@@ -184,12 +176,16 @@
 			ctx.fillText(rightNum, (lineX - rightNumberWidth + canvas.width) / 2, numberY);
 
 		// Ask the question
-			const questionY = canvas.height /4;
+			let questionY = canvas.height /4;
 			ctx.fillStyle = 'white';
 			ctx.font = '20px Arial';
 			let questionWidth = ctx.measureText(cardList[cardListIndex].question).width;
-			ctx.fillText(cardList[cardListIndex].question, (canvas.width - questionWidth) / 2 , questionY);
-			ctx.fillStyle = 'black';
+			if (questionWidth > canvas.width) {
+				questionWidth = ctx.measureText("This question was too wide to display properly.").width;
+				ctx.fillText("This question was too wide to display properly.", (canvas.width - questionWidth) / 2 , questionY);
+			} else {
+				ctx.fillText(cardList[cardListIndex].question, (canvas.width - questionWidth) / 2 , questionY);
+			}
 	}
 
 
