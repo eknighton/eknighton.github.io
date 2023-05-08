@@ -68,6 +68,7 @@
 
     startScreen.style.display = 'none';
     level.style.display = 'block';
+    levelOne.style.display = 'none';
     levelOver.style.display ='none';
     levelSelect.style.display = 'none'; // This will read none in final version.
 

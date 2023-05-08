@@ -25,6 +25,7 @@
                 e.preventDefault();
                 touchCurrentX = e.touches[0].clientX;
                 touchCurrentY = e.touches[0].clientY;
+                updateCanvas();
             }
             document.addEventListener('touchmove', handleTouchMove, false);
 
@@ -52,6 +53,7 @@
                 e.preventDefault();
                 mouseCurrentX = e.clientX;
                 mouseCurrentY = e.clientY;
+                updateCanvas();
             }
             document.addEventListener('mousemove', handleMouseMove, false);
 
