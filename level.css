@@ -6,6 +6,9 @@
             height: 100vh;
             margin: 0;
             background-color: #f0f0f0;
+            overscroll-behavior: none;
+            touch-action: none;
+
         }
         .container {
             display: flex;
