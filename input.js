@@ -23,16 +23,17 @@
 
             function handleTouchMove(e) {
                 e.preventDefault();
-                touchCurrentX = e.touches[0].clientX;
-                touchCurrentY = e.touches[0].clientY;
+                mouseCurrentX = e.touches[0].clientX;
+                mouseCurrentY = e.touches[0].clientY;
                 updateCanvas();
             }
             document.addEventListener('touchmove', handleTouchMove, false);
 
             function handleTouchStart(e) {
                 e.preventDefault();
-                touchStartX = e.touches[0].clientX;
-                touchStartY = e.touches[0].clientY;
+                mouseDown = true;
+                mouseStartX = e.touches[0].clientX;
+                mouseStartY = e.touches[0].clientY;
             }
             document.addEventListener('touchstart', handleTouchStart, false);
 
@@ -41,10 +42,11 @@
                 //Need to call a function here
                 touchUp();
                 console.log(touchCurrentX);
-                touchStartX = 0;
-                touchStartY = 0;
-                touchCurrentX = 0;
-                touchCurrentY = 0;
+                mouseDown = false;
+                mouseStartX = 0;
+                mouseStartY = 0;
+                mouseCurrentX = 0;
+                mouseCurrentY = 0;
             }
             document.addEventListener('touchend', handleTouchEnd, false);
 
