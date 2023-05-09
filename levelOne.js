@@ -156,7 +156,7 @@
 	    		gameOver = true;
 	    		winScreen();
 	    	}
-	    	if (cardListIndex > cardList.length) {
+	    	if (cardListIndex > indexList.length) {
 	    		gameOver = true;
 	    		winScreen();
 	    	}
@@ -208,7 +208,7 @@
 			 canvasX = (mouseCurrentX - canvasRect.left) * scaleX + MARGIN;
 			 canvasY = (mouseCurrentY - canvasRect.top) * scaleY;
 			 canvasX = Math.max(MARGIN, Math.min(canvasX, canvas.width - MARGIN));
-			 console.log("Canvas X " + canvasX)
+			 //console.log("Canvas X " + canvasX)
 
 		// Clears entire canvas
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -234,17 +234,17 @@
 
 		// Calculate the numbers for display
 			let radius = canvas.width / 2 - MARGIN;
-			console.log("radius: " + radius);
+			//console.log("radius: " + radius);
 			let wager = canvasX - canvas.width / 2;
 			if (wager != 0) {
 				wager = Math.min(Math.abs(wager), radius-1) * Math.abs(wager)/wager;
 			}
-			console.log("wager: " + wager);
+			//console.log("wager: " + wager);
 			let valueInsideSqrt = radius * radius - wager * wager;
 			let slope = wager / Math.sqrt(valueInsideSqrt);
-			console.log("slope: " + slope);
+			//console.log("slope: " + slope);
 			let intercept = radius - Math.sqrt(valueInsideSqrt) - Math.abs(slope * wager);
-			console.log("intercept " + intercept);
+			//console.log("intercept " + intercept);
 			leftNum = Math.floor(intercept+radius*slope); // Why tf didd I have to subtract 205?
 			rightNum = Math.floor(intercept-radius*slope); // Also, sccratch got different numbers, def try plugging in to checck w grapher
 
@@ -268,6 +268,7 @@
 			}
 
 	}
+
 
 
 
