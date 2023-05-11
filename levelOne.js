@@ -11,88 +11,31 @@
 
 //Critical Variables
 	let cardListIndex = 0;
-	let cardList = [{question: "Theodore Roosevelt established the First Bank of the United States to handle government finances and stabilize the nation's currency.", answer: false },
-
-{question: "Joe Biden doubled the size of the United States with the Louisiana Purchase in 1803, which cost around $15 million.", answer: false },
-
-{question: "Richard Nixon issued the Emancipation Proclamation in 1863, which declared the freedom of slaves in Confederate states.", answer: false },
-
-{question: "Thomas Jefferson championed the Square Deal, which aimed to balance the interests of business, consumers, and laborers.", answer: false },
-
-{question: "Franklin D. Roosevelt created the Federal Reserve System to stabilize the economy and prevent financial panics.", answer: false },
-
-{question: "John F. Kennedy implemented the New Deal, a series of programs and policies to combat the Great Depression.", answer: false },
-
-{question: "George W. Bush supported the Marshall Plan, which provided financial aid to help rebuild Western Europe after World War II.", answer: false },
-
-{question: "Barack Obama initiated the Interstate Highway System, which transformed American transportation and infrastructure.", answer: false },
-
-{question: "Woodrow Wilson backed the creation of the Peace Corps, a volunteer program aimed at promoting global understanding and development.", answer: false },
-
-{question: "Ronald Reagan launched the Great Society, a series of social programs aimed at reducing poverty and racial injustice.", answer: false },
-
-{question: "Abraham Lincoln established the Environmental Protection Agency (EPA) to protect and preserve the environment.", answer: false },
-
-{question: "George H.W. Bush focused on energy policy, including the promotion of renewable energy sources and energy conservation.", answer: false },
-
-{question: "Kamala Harris pursued economic policies known as 'Reaganomics,' which emphasized tax cuts and deregulation to spur economic growth.", answer: false },
-
-{question: "Jimmy Carter signed the Americans with Disabilities Act (ADA) into law, which prohibited discrimination against people with disabilities.", answer: false },
-
-{question: "Harry S. Truman enacted the North American Free Trade Agreement (NAFTA), which aimed to promote trade between the U.S., Canada, and Mexico.", answer: false },
-
-{question: "Lyndon B. Johnson implemented the No Child Left Behind Act to improve educational standards and accountability in schools.", answer: false },
-
-{question: "Dwight D. Eisenhower signed the Affordable Care Act (ACA), which expanded health insurance coverage to millions of Americans.", answer: false },
-
-{question: "Bill Clinton supported the Tax Cuts and Jobs Act, which lowered taxes for individuals and businesses.", answer: false },
-
-{question: "George Washington advocated for the American Rescue Plan, a $1.9 trillion economic stimulus package to address the COVID-19 pandemic.", answer: false },
-
-{question: "Donald Trump, as Vice President, supported the Biden administration's infrastructure plan to improve America's roads, bridges, and broadband access.", answer: false },
-
-{question: "George Washington established the First Bank of the United States to handle government finances and stabilize the nation's currency.", answer: true },
-
-{question: "Thomas Jefferson doubled the size of the United States with the Louisiana Purchase in 1803, which cost around $15 million.", answer: true },
-
-{question: "Abraham Lincoln issued the Emancipation Proclamation in 1863, which declared the freedom of slaves in Confederate states.", answer: true },
-
-{question: "Theodore Roosevelt championed the Square Deal, which aimed to balance the interests of business, consumers, and laborers.", answer: true },
-
-{question: "Woodrow Wilson created the Federal Reserve System to stabilize the economy and prevent financial panics.", answer: true },
-
-{question: "Franklin D. Roosevelt implemented the New Deal, a series of programs and policies to combat the Great Depression.", answer: true },
-
-{question: "Harry S. Truman supported the Marshall Plan, which provided financial aid to help rebuild Western Europe after World War II.", answer: true },
-
-{question: "Dwight D. Eisenhower initiated the Interstate Highway System, which transformed American transportation and infrastructure.", answer: true },
-
-{question: "John F. Kennedy backed the creation of the Peace Corps, a volunteer program aimed at promoting global understanding and development.", answer: true },
-
-{question: "Lyndon B. Johnson launched the Great Society, a series of social programs aimed at reducing poverty and racial injustice.", answer: true },
-
-{question: "Richard Nixon established the Environmental Protection Agency (EPA) to protect and preserve the environment.", answer: true },
-
-{question: "Jimmy Carter focused on energy policy, including the promotion of renewable energy sources and energy conservation.", answer: true },
-
-{question: "Ronald Reagan pursued economic policies known as 'Reaganomics,' which emphasized tax cuts and deregulation to spur economic growth.", answer: true },
-
-{question: "George H.W. Bush signed the Americans with Disabilities Act (ADA) into law, which prohibited discrimination against people with disabilities.", answer: true },
-
-{question: "Bill Clinton enacted the North American Free Trade Agreement (NAFTA), which aimed to promote trade between the U.S., Canada, and Mexico.", answer: true },
-
-{question: "George W. Bush implemented the No Child Left Behind Act to improve educational standards and accountability in schools.", answer: true },
-
-{question: "Barack Obama signed the Affordable Care Act (ACA), which expanded health insurance coverage to millions of Americans.", answer: true },
-
-{question: "Donald Trump supported the Tax Cuts and Jobs Act, which lowered taxes for individuals and businesses.", answer: true },
-
-{question: "Joe Biden advocated for the American Rescue Plan, a $1.9 trillion economic stimulus package to address the COVID-19 pandemic.", answer: true },
-
-{question: "Kamala Harris, as Vice President, supported the Biden administration's infrastructure plan to improve America's roads, bridges, and broadband access.", answer: true }];
+	let cardList = [
+  { "question": "Ronald Fisher was knighted by Queen Elizabeth II in 1952 for his contributions to statistics and genetics.", "answer": true },
+  { "question": "Ronald Fisher was instrumental in creating the first statistical software.", "answer": false },
+  { "question": "Ronald Fisher is considered one of the founders of modern statistics.", "answer": true },
+  { "question": "Fisher is known for his work in experimental design, including the principles of randomization, replication, and local control.", "answer": true },
+  { "question": "Ronald Fisher was awarded the Nobel Prize in Medicine for his work in biostatistics.", "answer": false },
+  { "question": "Ronald Fisher made significant contributions to the field of genetics, including the development of the fundamental theorem of natural selection.", "answer": true },
+  { "question": "Fisher's work in genetics led to the discovery of the structure of DNA.", "answer": false },
+  { "question": "Ronald Fisher formulated the Fisher's exact test, which is a statistical significance test.", "answer": true },
+  { "question": "Fisher was responsible for developing the Bell Curve, a graphical depiction of a normal distribution.", "answer": false },
+  { "question": "Ronald Fisher introduced the concept of maximum likelihood estimation.", "answer": true },
+  { "question": "Fisher developed the concept of standard deviation, a measure of the amount of variation or dispersion in a set of values.", "answer": false },
+  { "question": "Fisher developed the analysis of variance (ANOVA), a collection of statistical models and their associated estimation procedures.", "answer": true },
+  { "question": "Fisher was the first to introduce the concept of \"p-value\" in statistics.", "answer": false },
+  { "question": "Fisher developed the Central Limit Theorem, a key theorem in probability theory.", "answer": false },
+  { "question": "Ronald Fisher developed the chi-square test, a statistical test widely used in hypothesis testing.", "answer": false },
+  { "question": "Ronald Fisher introduced the Iris flower data set, one of the best known databases in the field of pattern recognition.", "answer": true },
+  { "question": "Ronald Fisher also introduced the concept of sufficiency in statistics.", "answer": true },
+  { "question": "Ronald Fisher wrote a definitive text on Bayesian statistics, a branch of statistics based on Bayes' theorem.", "answer": false },
+  { "question": "Fisher was awarded the Copley Medal by the Royal Society in 1948.", "answer": true },
+  { "question": "Ronald Fisher served as the president of the American Statistical Association.", "answer": false }
+];
 
 
-	let indexList = generateUniqueRandomNumbers(cardList.length, 0, cardList.length);
+	let indexList = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19];//generateUniqueRandomNumbers(cardList.length-1, 0, cardList.length-1);
 
 	let canvasX = 0;
 	let canvasY = 0;
