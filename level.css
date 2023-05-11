@@ -6,9 +6,11 @@
             height: 100vh;
             margin: 0;
             background-color: #f0f0f0;
-            
+
             overscroll-behavior: none;
             touch-action: none;
+
+
         }
         .container {
             display: flex;
@@ -16,8 +18,11 @@
             align-items: center;
             background-color: #ffffff;
             padding: 30px;
+           
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+      
         }
         button {
             margin: 10px;
@@ -40,4 +45,8 @@
         #slider {
             display: none;
             width: 100%;
+        }
+        #myCanvas{ /* Repeatedly failed to fill the sccreen with canvas. Not sure what to do*/
+            width:  600;
+            height: 400;
         }
