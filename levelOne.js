@@ -11,28 +11,18 @@
 
 //Critical Variables
 	let cardListIndex = 0;
-	let cardList = [
-  { "question": "Ronald Fisher was knighted by Queen Elizabeth II in 1952 for his contributions to statistics and genetics.", "answer": true },
-  { "question": "Ronald Fisher was instrumental in creating the first statistical software.", "answer": false },
-  { "question": "Ronald Fisher is considered one of the founders of modern statistics.", "answer": true },
-  { "question": "Fisher is known for his work in experimental design, including the principles of randomization, replication, and local control.", "answer": true },
-  { "question": "Ronald Fisher was awarded the Nobel Prize in Medicine for his work in biostatistics.", "answer": false },
-  { "question": "Ronald Fisher made significant contributions to the field of genetics, including the development of the fundamental theorem of natural selection.", "answer": true },
-  { "question": "Fisher's work in genetics led to the discovery of the structure of DNA.", "answer": false },
-  { "question": "Ronald Fisher formulated the Fisher's exact test, which is a statistical significance test.", "answer": true },
-  { "question": "Fisher was responsible for developing the Bell Curve, a graphical depiction of a normal distribution.", "answer": false },
-  { "question": "Ronald Fisher introduced the concept of maximum likelihood estimation.", "answer": true },
-  { "question": "Fisher developed the concept of standard deviation, a measure of the amount of variation or dispersion in a set of values.", "answer": false },
-  { "question": "Fisher developed the analysis of variance (ANOVA), a collection of statistical models and their associated estimation procedures.", "answer": true },
-  { "question": "Fisher was the first to introduce the concept of \"p-value\" in statistics.", "answer": false },
-  { "question": "Fisher developed the Central Limit Theorem, a key theorem in probability theory.", "answer": false },
-  { "question": "Ronald Fisher developed the chi-square test, a statistical test widely used in hypothesis testing.", "answer": false },
-  { "question": "Ronald Fisher introduced the Iris flower data set, one of the best known databases in the field of pattern recognition.", "answer": true },
-  { "question": "Ronald Fisher also introduced the concept of sufficiency in statistics.", "answer": true },
-  { "question": "Ronald Fisher wrote a definitive text on Bayesian statistics, a branch of statistics based on Bayes' theorem.", "answer": false },
-  { "question": "Fisher was awarded the Copley Medal by the Royal Society in 1948.", "answer": true },
-  { "question": "Ronald Fisher served as the president of the American Statistical Association.", "answer": false }
-];
+	let cardList = [{question: "Bodil Knighton is not a human woman.", answer: false},
+	{question: "Bodil Knighton's mother was a danish human woman.", answer: true},
+	{question: "Bodil Knighton's mother’s mother was a danish human woman.", answer: true},
+	{question: "Bodil Knighton was born after the collapse of human civilization.", answer: false},
+	{question: "Bodil Knighton only speaks English.", answer: false},
+	{question: "Bodil Knighton was born in Ukraine.", answer: false},
+	{question: "Bodil Knighton grew up on a farm in Israel.", answer: false},
+	{question: "Bodil Knighton considers Denmark to be her home.", answer: true},
+	{question: "Bodil Knighton only likes Italian food.", answer: false},
+	{question: "Bodil Knighton cooks Cajun food on special occasions.", answer: false},
+	{question: "Bodil Knighton's children are danish citizens.", answer: true}
+	];
 
 
 	let indexList = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19];//generateUniqueRandomNumbers(cardList.length-1, 0, cardList.length-1);
@@ -204,7 +194,7 @@
 			ctx.fillStyle = 'white';
 			ctx.font = '20px Arial';
 			let questionWidth = ctx.measureText(cardList[indexList[cardListIndex]].question).width;
-			if (questionWidth > canvas.width) {
+			if (questionWidth > canvas.width-2*MARGIN) {
 				wrapText(ctx,cardList[indexList[cardListIndex]].question, MARGIN+20, canvas.height / 4, canvas.width - 2*MARGIN-20, 22)
 			} else {
 				ctx.fillText(cardList[indexList[cardListIndex]].question, (canvas.width - questionWidth) / 2 , questionY);

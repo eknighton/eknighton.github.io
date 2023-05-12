@@ -46,7 +46,3 @@
             display: none;
             width: 100%;
         }
-        #myCanvas{ /* Repeatedly failed to fill the sccreen with canvas. Not sure what to do*/
-            width:  600;
-            height: 400;
-        }
