@@ -11,18 +11,26 @@
 
 //Critical Variables
 	let cardListIndex = 0;
-	let cardList = [{question: "Bodil Knighton is not a human woman.", answer: false},
-	{question: "Bodil Knighton's mother was a danish human woman.", answer: true},
-	{question: "Bodil Knighton's mother’s mother was a danish human woman.", answer: true},
-	{question: "Bodil Knighton was born after the collapse of human civilization.", answer: false},
-	{question: "Bodil Knighton only speaks English.", answer: false},
-	{question: "Bodil Knighton was born in Ukraine.", answer: false},
-	{question: "Bodil Knighton grew up on a farm in Israel.", answer: false},
-	{question: "Bodil Knighton considers Denmark to be her home.", answer: true},
-	{question: "Bodil Knighton only likes Italian food.", answer: false},
-	{question: "Bodil Knighton cooks Cajun food on special occasions.", answer: false},
-	{question: "Bodil Knighton's children are danish citizens.", answer: true}
-	];
+	let cardList = [     {question: "According to special relativity, the speed of light in a vacuum is constant.", answer: true},
+    {question: "Special relativity was developed by Albert Einstein.", answer: true},
+    {question: "Time dilation occurs when an object is moving at speeds close to the speed of light.", answer: true},
+    {question: "Special relativity deals with the effects of gravity on the motion of objects.", answer: false},
+    {question: "According to special relativity, simultaneity is relative.", answer: true},
+    {question: "The theory of special relativity was published by Isaac Newton.", answer: false},
+    {question: "The Lorentz transformation equations are used to describe the effects of special relativity.", answer: true},
+    {question: "Special relativity predicts that mass increases as an object approaches the speed of light.", answer: true},
+    {question: "Einstein's theory of special relativity was first proposed in the 19th century.", answer: false},
+    {question: "According to special relativity, the laws of physics are the same in all inertial reference frames.", answer: true},
+    {question: "Special relativity explains the behavior of particles at the quantum level.", answer: false},
+    {question: "The famous equation E=mc² is derived from the principles of special relativity.", answer: true},
+    {question: "Time dilation occurs only in the presence of strong gravitational fields.", answer: false},
+    {question: "According to special relativity, faster-than-light travel is possible.", answer: false},
+    {question: "Special relativity provides a unified description of space and time.", answer: true},
+    {question: "The theory of special relativity is applicable only to objects moving at speeds close to the speed of light.", answer: false},
+    {question: "Special relativity is a branch of classical physics.", answer: false},
+    {question: "According to special relativity, the length of an object decreases as its velocity increases.", answer: true},
+    {question: "Special relativity explains the phenomenon of time travel.", answer: false},
+    {question: "The theory of special relativity has been extensively verified through experimental observations.", answer: true}];
 
 
 	let indexList = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19];//generateUniqueRandomNumbers(cardList.length-1, 0, cardList.length-1);
