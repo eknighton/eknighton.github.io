@@ -11,29 +11,46 @@
 
 //Critical Variables
 	let cardListIndex = 0;
-	let cardList = [     {question: "According to special relativity, the speed of light in a vacuum is constant.", answer: true},
-    {question: "Special relativity was developed by Albert Einstein.", answer: true},
-    {question: "Time dilation occurs when an object is moving at speeds close to the speed of light.", answer: true},
-    {question: "Special relativity deals with the effects of gravity on the motion of objects.", answer: false},
-    {question: "According to special relativity, simultaneity is relative.", answer: true},
-    {question: "The theory of special relativity was published by Isaac Newton.", answer: false},
-    {question: "The Lorentz transformation equations are used to describe the effects of special relativity.", answer: true},
-    {question: "Special relativity predicts that mass increases as an object approaches the speed of light.", answer: true},
-    {question: "Einstein's theory of special relativity was first proposed in the 19th century.", answer: false},
-    {question: "According to special relativity, the laws of physics are the same in all inertial reference frames.", answer: true},
-    {question: "Special relativity explains the behavior of particles at the quantum level.", answer: false},
-    {question: "The famous equation E=mc² is derived from the principles of special relativity.", answer: true},
-    {question: "Time dilation occurs only in the presence of strong gravitational fields.", answer: false},
-    {question: "According to special relativity, faster-than-light travel is possible.", answer: false},
-    {question: "Special relativity provides a unified description of space and time.", answer: true},
-    {question: "The theory of special relativity is applicable only to objects moving at speeds close to the speed of light.", answer: false},
-    {question: "Special relativity is a branch of classical physics.", answer: false},
-    {question: "According to special relativity, the length of an object decreases as its velocity increases.", answer: true},
-    {question: "Special relativity explains the phenomenon of time travel.", answer: false},
-    {question: "The theory of special relativity has been extensively verified through experimental observations.", answer: true}];
+	let cardList = [
+{ "question": "John Clover is a famous actor.", "answer": true },
+{ "question": "John Clover starred in the movie 'The Matrix'.", "answer": false },
+{ "question": "John Clover has won multiple Academy Awards.", "answer": false },
+{ "question": "John Clover is known for his role in 'Titanic'.", "answer": false },
+{ "question": "John Clover has a star on the Hollywood Walk of Fame.", "answer": true },
+{ "question": "John Clover's debut film was released in the 1990s.", "answer": true },
+{ "question": "John Clover is renowned for his comedic performances.", "answer": false },
+{ "question": "John Clover is the highest-paid actor in Hollywood.", "answer": false },
+{ "question": "John Clover has a reputation for method acting.", "answer": true },
+{ "question": "John Clover has collaborated with director Christopher Nolan.", "answer": true },
+{ "question": "John Clover's breakthrough role was in a romantic comedy.", "answer": false },
+{ "question": "John Clover has a production company.", "answer": true },
+{ "question": "John Clover has played a superhero in a blockbuster film.", "answer": true },
+{ "question": "John Clover's most famous character is a detective.", "answer": false },
+{ "question": "John Clover has portrayed real-life historical figures.", "answer": true },
+{ "question": "John Clover has a reputation for being a perfectionist on set.", "answer": true },
+{ "question": "John Clover has directed a feature film.", "answer": false },
+{ "question": "John Clover's films have grossed billions of dollars worldwide.", "answer": true },
+{ "question": "John Clover has been nominated for an Oscar.", "answer": true },
+{ "question": "John Clover has a cameo appearance in every film he has starred in.", "answer": false },
+{ "question": "John Clover's acting range spans across various genres.", "answer": true },
+{ "question": "John Clover has won a Golden Globe.", "answer": true },
+{ "question": "John Clover is often praised for his on-screen charisma.", "answer": true },
+{ "question": "John Clover has a background in theater.", "answer": true },
+{ "question": "John Clover's films are known for their visually stunning cinematography.", "answer": true },
+{ "question": "John Clover has a reputation for being difficult to work with.", "answer": false },
+{ "question": "John Clover has a signature catchphrase.", "answer": false },
+{ "question": "John Clover has appeared in a popular TV series.", "answer": false },
+{ "question": "John Clover is known for his dramatic transformations for roles.", "answer": true },
+{ "question": "John Clover has played a character with a British accent.", "answer": false },
+{ "question": "John Clover's films often tackle social and political themes.", "answer": true },
+{ "question": "John Clover has performed his own stunts.", "answer": true },
+{ "question": "John Clover has won a BAFTA Award.", "answer": true },
+{ "question": "John Clover is involved in philanthropic endeavors.", "answer": true },
+{ "question": "John Clover has appeared in a music video.", "answer": true },
+{ "question": "John Clover has hosted a popular talk show.", "answer": false }];
 
 
-	let indexList = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19];//generateUniqueRandomNumbers(cardList.length-1, 0, cardList.length-1);
+	let indexList = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40];//generateUniqueRandomNumbers(cardList.length-1, 0, cardList.length-1);
 
 	let canvasX = 0;
 	let canvasY = 0;
@@ -49,8 +66,8 @@
 	const MARGIN = 80;
 
 //Set Health
-	let bossHealth = 4000;
-	let bossMaxHealth = 4000;
+	let bossHealth = 2000;
+	let bossMaxHealth = 2000;
 
 	let playerHealth = 4000;
 	let playerMaxHealth = 4000;

@@ -1,72 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trivia Swipe</title>
-    <link rel="stylesheet" href="level.css">
-    </style>
+    <title>Quiz Game</title>
+     <link rel="stylesheet" href="style.css">
+
 </head>
 <body>
 
-    <div id="startScreen"> 
+    <div class="sidebar">
+        <h2>Player Stats</h2>
+        <div class="player-stats">
+            <h3 class="stat">Correct: <span id="correct">0</span></h3>
+            <h3 class="stat">Skipped: <span id="skipped">0</span></h3>
+            <h3 class="stat">Bungled: <span id="bungled">0</span></h3>
+            <h3>----------------------</h3>
+            <h3 class="stat">Total Time: <span id="timer"></span></h3>
+            <h3 class="stat">Picking Time: <span id="timer"></span></h3>
+            <h3 class="stat">Options Revealed: <span id="timer"></span></h3>
+            <!-- Add more player stats here -->
 
-    </div><div id="levelSelect"> 
-
-        <div class="container">
-                <h1>
-                
-                </h1>
-                <div>
-                   <button onclick="rejectAnswer()">Reject(<)</button>
-                   <button onclick="skipAnswer()">Skip(^)</button>
-                   <button onclick="acceptAnswer()">Accept(>)</button>
-                </div>
+           
         </div>
-
-    </div><div id="levelStart"> 
-
-    </div><div id="level"> 
-
-            <div class="container">
-                <h1>
-                  <span id="questionPart1"></span>
-                  <div style="display: inline-block; vertical-align: middle;">
-                    <button id="answerBtn"></button>
-                  </div>
-                  <span id="questionPart2"></span>
-                </h1>
-                <div>
-                   <button onclick="rejectAnswer()">Reject(<)</button>
-                   <button onclick="skipAnswer()">Skip(^)</button>
-                   <button onclick="acceptAnswer()">Accept(>)</button>
-                     <input type="range" min="1" max="10" value="5" id="slider">
-                </div>
-            </div>
-
-    </div>
-    <div id="levelOne">
-         <div id="bossHP" class="text">Text above the canvas</div>
-         <canvas id="myCanvas" width="600" height="400" style="border:1px solid #000000;"></canvas>
-         <div id="playerHP" class="text">Text below the canvas</div>
+       
     </div>
 
-    <div id="levelOver"> </div>
+    <div class="content">
+        <div id="prompt"></div>
+        <div id="options">
+            <button class="option" style="display: none;"></button>
+            <button class="option" style="display: none;"></button>
+            <button class="option" style="display: none;"></button>
+            <button class="option" style="display: none;"></button>
+            <button class="option" style="display: none;"></button>
+            <button class="option" style="display: none;"></button>
+            <button class="option" style="display: none;"></button>
+            <button class="option" style="display: none;"></button>
+            <button class="option" style="display: none;"></button>
+            <button class="option" style="display: none;"></button>
+            <button class="option" style="display: none;"></button>
+            <button class="option" style="display: none;"></button>
+        </div>
+    </div>
 
 
-    <script src="main.js"></script> <!-- -->
-    <script src="util.js"></script> <!--  -->
-    <script src="eksAlgorithm.js"></script> <!-- -->
-    <script src="input.js"></script> <!-- -->
-
-  
-
-
-
-    <script src="levelOne.js"></script> <!-- -->
-    <script src="LevelSelect.js"></script> <!--  -->
-
-    <script>
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

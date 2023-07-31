@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivia Swipe</title>
+    <link rel="stylesheet" href="level.css">
+    </style>
+</head>
+<body>
+
+    <div id="startScreen"> 
+
+    </div><div id="levelSelect"> 
+
+        <div class="container">
+                <h1>
+                
+                </h1>
+                <div>
+                   <button onclick="rejectAnswer()">Reject(<)</button>
+                   <button onclick="skipAnswer()">Skip(^)</button>
+                   <button onclick="acceptAnswer()">Accept(>)</button>
+                </div>
+        </div>
+
+    </div><div id="levelStart"> 
+
+    </div><div id="level"> 
+
+            <div class="container">
+                <h1>
+                  <span id="questionPart1"></span>
+                  <div style="display: inline-block; vertical-align: middle;">
+                    <button id="answerBtn"></button>
+                  </div>
+                  <span id="questionPart2"></span>
+                </h1>
+                <div>
+                   <button onclick="rejectAnswer()">Reject(<)</button>
+                   <button onclick="skipAnswer()">Skip(^)</button>
+                   <button onclick="acceptAnswer()">Accept(>)</button>
+                     <input type="range" min="1" max="10" value="5" id="slider">
+                </div>
+            </div>
+
+    </div>
+    <div id="levelOne">
+         <div id="bossHP" class="text">Text above the canvas</div>
+         <canvas id="myCanvas" width="600" height="400" style="border:1px solid #000000;"></canvas>
+         <div id="playerHP" class="text">Text below the canvas</div>
+    </div>
+
+    <div id="levelOver"> </div>
+
+
+    <script src="main.js"></script> <!-- -->
+    <script src="util.js"></script> <!--  -->
+    <script src="eksAlgorithm.js"></script> <!-- -->
+    <script src="input.js"></script> <!-- -->
+
+  
+
+
+
+    <script src="levelOne.js"></script> <!-- -->
+    <script src="LevelSelect.js"></script> <!--  -->
+
+    <script>
+    </script>
+</body>
+</html>
