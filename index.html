@@ -54,6 +54,7 @@
 	var speed = 2000;
 	var seq = null;
 	var count = 2;
+	var gotten = 0;
 	var number = null;
 	var numLen = null;
 	var answer = null;
@@ -66,23 +67,26 @@
 
 	function keyPress(key){
 		if (key == answer){ //Nums are 48 thrru 57
+			gotten = gotten+1;
 			test();
 		} else{
-			difficulty=difficulty-1
-			if (difficulty < 1){
-				difficulty = 1;
+
+			if (gotten > 1){
+
+			} else {
+				difficulty=difficulty-1
+				if (difficulty < 1){
+					difficulty = 1;
+				}
+				speed = speed + Math.floor((speed/4)/100)*100;
 			}
-			count = 1;
-			if (count < 1){
-				count = 1;
-			}
-			speed = speed + Math.floor((speed/4)/100)*100;
 			startRound();
 		}
 	}
 
 
 	function startRound(){
+		gotten = 0;
 		number = Math.floor(Math.random()*10**(difficulty))*9+10**(difficulty);
 		console.log(number);
 		numLen = number.toString().length;;
@@ -98,11 +102,7 @@
 	function test(){
 		console.log ("testing. numlen: "+numLen+" seq.length: "+seq.length+" count: "+count);
 		if (numLen - seq.length >= count) {
-			count = count+1;
-			if (count > 2){
-				difficulty = difficulty+1	
-				count = 1;
-			}
+			difficulty = difficulty+1	
 			startRound();
 			return;
 		}
