@@ -1,48 +1,150 @@
 <!DOCTYPE html>
-<html>
+<htmL lang="en" style="font-size: 64px;">
 <head>
-    <title>Quiz Game</title>
-     <link rel="stylesheet" href="style.css">
+<title>
+	Mem Game
+</title>
+  <style>
+    .number-pad-button {
+      width: 50px;
+      height: 50px;
+      font-size: 20px;
+      margin: 5px;
+    }
+  </style>
 
 </head>
+
 <body>
+	<div id="num" align="center" style="font-family: 'Courier New', Courier, monospace;">69420</div>
+	<p></p>
+	<p></p>
+	<div id="diff" align="center">Difficulty= 7</div>
+	<div id="digis" align="center">Digits= 1</div>
+	<p></p>
+	<p></p>
+	<div id="spd" align="center">Time= 2s</div>
 
-    <div class="sidebar">
-        <h2>Player Stats</h2>
-        <div class="player-stats">
-            <h3 class="stat">Correct: <span id="correct">0</span></h3>
-            <h3 class="stat">Skipped: <span id="skipped">0</span></h3>
-            <h3 class="stat">Bungled: <span id="bungled">0</span></h3>
-            <h3>----------------------</h3>
-            <h3 class="stat">Total Time: <span id="timer"></span></h3>
-            <h3 class="stat">Picking Time: <span id="timer"></span></h3>
-            <h3 class="stat">Options Revealed: <span id="timer"></span></h3>
-            <!-- Add more player stats here -->
-
-           
-        </div>
-       
+	<!-- Custom number pad buttons -->
+	<div id="numpad" align="center">
+    <div>
+      <button class="number-pad-button" onclick="keyPress('1')">1</button>
+      <button class="number-pad-button" onclick="keyPress('2')">2</button>
+      <button class="number-pad-button" onclick="keyPress('3')">3</button>
     </div>
-
-    <div class="content">
-        <div id="prompt"></div>
-        <div id="options">
-            <button class="option" style="display: none;"></button>
-            <button class="option" style="display: none;"></button>
-            <button class="option" style="display: none;"></button>
-            <button class="option" style="display: none;"></button>
-            <button class="option" style="display: none;"></button>
-            <button class="option" style="display: none;"></button>
-            <button class="option" style="display: none;"></button>
-            <button class="option" style="display: none;"></button>
-            <button class="option" style="display: none;"></button>
-            <button class="option" style="display: none;"></button>
-            <button class="option" style="display: none;"></button>
-            <button class="option" style="display: none;"></button>
-        </div>
+    <div>
+      <button class="number-pad-button" onclick="keyPress('4')">4</button>
+      <button class="number-pad-button" onclick="keyPress('5')">5</button>
+      <button class="number-pad-button" onclick="keyPress('6')">6</button>
     </div>
+    <div>
+      <button class="number-pad-button" onclick="keyPress('7')">7</button>
+      <button class="number-pad-button" onclick="keyPress('8')">8</button>
+      <button class="number-pad-button" onclick="keyPress('9')">9</button>
+    </div>
+    <div>
+      <button class="number-pad-button" onclick="keyPress('0')">0</button>
+    </div>
+	</div>
 
-
-    <script src="script.js"></script>
 </body>
-</html>
+<script>
+
+	var difficulty = 7;
+	var speed = 2000;
+	var seq = null;
+	var count = 2;
+	var number = null;
+	var numLen = null;
+	var answer = null;
+
+	startRound();
+
+	document.addEventListener('keydown', function(event){
+		keyPress(event.key);
+	});
+
+	function keyPress(key){
+		if (key == answer){ //Nums are 48 thrru 57
+			test();
+		} else{
+			difficulty=difficulty-1
+			if (difficulty < 1){
+				difficulty = 1;
+			}
+			count = 1;
+			if (count < 1){
+				count = 1;
+			}
+			speed = speed + Math.floor((speed/4)/100)*100;
+			startRound();
+		}
+	}
+
+
+	function startRound(){
+		number = Math.floor(Math.random()*10**(difficulty))*9+10**(difficulty);
+		console.log(number);
+		numLen = number.toString().length;;
+		answer = null;
+		document.getElementById("num").innerText = number;
+		seq = sequence(numLen);
+		setTimeout(test, speed);
+		document.getElementById("diff").innerText= "Difficulty= " + difficulty;
+		document.getElementById("spd").innerText= "Time= " + speed/1000+"s";
+		document.getElementById("digis").innerText= "Digits= " + count;
+	}
+
+	function test(){
+		console.log ("testing. numlen: "+numLen+" seq.length: "+seq.length+" count: "+count);
+		if (numLen - seq.length >= count) {
+			count = count+1;
+			if (count > 2){
+				difficulty = difficulty+1	
+				count = 1;
+			}
+			startRound();
+			return;
+		}
+		var index  = seq.shift();
+		index = index-1;
+		answer = number.toString()[index];
+		console.log(answer)
+		document.getElementById('num').innerText = blank(numLen, index)
+	}
+
+
+
+	function blank(length, underscoreIndex) {
+	  if (underscoreIndex < 0 || underscoreIndex >= length) {
+	    console.error("Invalid underscore index");
+	    return null;
+	  }
+
+	  let resultString = '';
+	  for (let i = 0; i < length; i++) {
+	    if (i === underscoreIndex) {
+	      resultString += '_';
+	    } else {
+	      resultString += '#';
+	    }
+	  }
+
+	  return resultString;
+	}
+
+	function sequence(n) {
+	  // Create an array with numbers from 1 to n
+	  let array = Array.from({ length: n }, (_, index) => index + 1);
+
+	  // Fisher-Yates (Knuth) shuffle algorithm
+	  for (let i = array.length - 1; i > 0; i--) {
+	    const j = Math.floor(Math.random() * (i + 1));
+	    [array[i], array[j]] = [array[j], array[i]];
+	  }
+
+	  return array;
+	}
+
+</script>
+</htmL>
