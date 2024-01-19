@@ -11,19 +11,23 @@ Aware
       font-size: 20px;
       margin: 5px;
     }
+    .num {
+    	overflow-wrap: break-word;
+    }
   </style>
 
 </head>
 
 <body>
-	<div id="num" align="center" style="font-family: 'Courier New', Courier, monospace;">69420</div>
-	<p></p>
-	<p></p>
+	
 	<div id="diff" align="center">Difficulty= 7</div>
+	<p></p>
+	<p></p>
+  <div id="num" align="center" style="font-family: 'Courier New', Courier, monospace;">69420</div>
 	<div id="digis" align="center"></div>
 	<p></p>
 	<p></p>
-	<div id="spd" align="center">Time= 2s</div>
+	<div id="spd" align="center"></div>
 
 	<!-- Custom number pad buttons -->
 	<div id="numpad" align="center">
@@ -50,16 +54,25 @@ Aware
 </body>
 <script>
 
+
+	// We will simplify it to single digit? with time delay
+
 	var difficulty = 7;
 	var speed = 2000;
+
 	var seq = null;
-	var count = 2;
+
+	var count = 1;
 	var gotten = 0;
 	var number = null;
 	var numLen = null;
 	var answer = null;
 
-	window.alert('Welcome to Aware!\nYou will have to provide a random digit from the number shown to you. You advance even if only your first attempt is correct. However, if you get the first attempt wrong, difficulty will go down, and time alotted will go up.');
+
+	var modeFlag = "none";
+
+	window.alert('Welcome to Aware!\nYou will have to provide a random digit from the number shown to you.');
+
 
 	startRound();
 
@@ -68,43 +81,41 @@ Aware
 	});
 
 	function keyPress(key){
-		if (key == answer){ //Nums are 48 thrru 57
-			gotten = gotten+1;
-			test();
-		} else{
-
-			if (gotten > 0){
-				difficulty=difficulty+1
-			} else {
-				difficulty=difficulty-2
-				if (difficulty < 1){
-					difficulty = 1;
-				}
-				speed = speed + Math.floor((speed/4)/100)*100;
-			}
-			startRound();
+		if (modeFlag != "guess"){
+			return;
 		}
+		if (key == answer){ //Nums are 48 thrru 57
+			modeFlag = "none";
+			difficulty=difficulty+1;
+		} else{
+			modeFlag = "none";
+			difficulty=difficulty-2;
+			if (difficulty < 1){
+				difficulty = 1;
+			}
+		}
+		startRound();
 	}
 
 
 	function startRound(){
-		gotten = 0;
+		speed = Math.floor((difficulty/7)*20)*100;
 		number = Math.floor(Math.random()*10**(difficulty))*9+10**(difficulty);
 		console.log(number);
 		numLen = number.toString().length;;
 		answer = null;
-		document.getElementById("num").innerText = number;
+		document.getElementById("num").innerHTML = number;
 		seq = sequence(numLen);
 		setTimeout(test, speed);
 		document.getElementById("diff").innerText= "Difficulty= " + difficulty;
-		document.getElementById("spd").innerText= "Time= " + speed/1000+"s";
+		//document.getElementById("spd").innerText= "Time= " + speed/1000+"s";
 		//document.getElementById("digis").innerText= "Digits= " + count;
 	}
 
 	function test(){
 		console.log ("testing. numlen: "+numLen+" seq.length: "+seq.length+" count: "+count);
 		if (numLen - seq.length >= count) {
-			difficulty = difficulty+2
+			//difficulty = difficulty+
 			startRound();
 			return;
 		}
@@ -112,8 +123,9 @@ Aware
 		index = index-1;
 		answer = number.toString()[index];
 		console.log(answer)
-		document.getElementById('num').innerText = "";
-		document.getElementById('num').innerText = blank(numLen, index);
+		document.getElementById('num').innerText = hidden(numLen);
+		setTimeout(() => {document.getElementById('num').innerHTML = blank(numLen, index)}, 100);
+		modeFlag = "guess";
 	}
 
 
@@ -131,6 +143,18 @@ Aware
 	    } else {
 	      resultString += '#';
 	    }
+	  }
+
+	  return resultString;
+	}
+
+	function hidden(length) {
+
+	  let resultString = '';
+	  for (let i = 0; i < length; i++) {
+
+	      resultString += '#';
+	  
 	  }
 
 	  return resultString;
