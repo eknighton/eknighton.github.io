@@ -20,7 +20,9 @@ Aware
 
 <body>
 	
-	<div id="diff" align="center">Difficulty= 7</div>
+	<div id="diff" align="center"></div>
+	<div id="trials" align="center">Trial 1 of 13</div>
+	<div id="score" align="center">Score: 0</div>
 	<p></p>
 	<p></p>
   <div id="num" align="center" style="font-family: 'Courier New', Courier, monospace;">69420</div>
@@ -28,6 +30,7 @@ Aware
 	<p></p>
 	<p></p>
 	<div id="spd" align="center"></div>
+	
 
 	<!-- Custom number pad buttons -->
 	<div id="numpad" align="center">
@@ -70,6 +73,7 @@ Aware
 
 
 	var modeFlag = "none";
+	var score = 0;
 
 	window.alert('Welcome to Aware!\nYou will have to provide a random digit from the number shown to you.');
 
@@ -84,36 +88,42 @@ Aware
 		if (modeFlag != "guess"){
 			return;
 		}
+		modeFlag = "none";
 		if (key == answer){ //Nums are 48 thrru 57
-			modeFlag = "none";
-			difficulty=difficulty+1;
+			score = score + difficulty
 		} else{
-			modeFlag = "none";
-			difficulty=difficulty-2;
-			if (difficulty < 1){
-				difficulty = 1;
-			}
+
 		}
-		startRound();
+		difficulty=difficulty+1;
+		if (difficulty < 20){
+				startRound();
+		}
+		else{
+			document.getElementById("score").innerText= "Score: " + score;
+			setTimeout(()=>{window.alert("You finished the game!\nYour sccore was: " + score + " out of 169!")}, 100);
+		}
+
 	}
 
 
 	function startRound(){
 		speed = Math.floor((difficulty/7)*20)*100;
 		number = Math.floor(Math.random()*10**(difficulty))*9+10**(difficulty);
-		console.log(number);
+		//console.log(number);
 		numLen = number.toString().length;;
 		answer = null;
 		document.getElementById("num").innerHTML = number;
 		seq = sequence(numLen);
 		setTimeout(test, speed);
-		document.getElementById("diff").innerText= "Difficulty= " + difficulty;
+		//document.getElementById("diff").innerText= "Difficulty= " + difficulty;
+		document.getElementById("score").innerText= "Score: " + score;
+		document.getElementById("trials").innerText = "Trial " + (difficulty-6) + " of 13.";
 		//document.getElementById("spd").innerText= "Time= " + speed/1000+"s";
 		//document.getElementById("digis").innerText= "Digits= " + count;
 	}
 
 	function test(){
-		console.log ("testing. numlen: "+numLen+" seq.length: "+seq.length+" count: "+count);
+		//console.log ("testing. numlen: "+numLen+" seq.length: "+seq.length+" count: "+count);
 		if (numLen - seq.length >= count) {
 			//difficulty = difficulty+
 			startRound();
@@ -122,7 +132,7 @@ Aware
 		var index  = seq.shift();
 		index = index-1;
 		answer = number.toString()[index];
-		console.log(answer)
+		//console.log(answer)
 		document.getElementById('num').innerText = hidden(numLen);
 		setTimeout(() => {document.getElementById('num').innerHTML = blank(numLen, index)}, 100);
 		modeFlag = "guess";
