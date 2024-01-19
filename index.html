@@ -2,7 +2,7 @@
 <htmL lang="en" style="font-size: 64px;">
 <head>
 <title>
-	Mem Game
+Aware
 </title>
   <style>
     .number-pad-button {
@@ -20,7 +20,7 @@
 	<p></p>
 	<p></p>
 	<div id="diff" align="center">Difficulty= 7</div>
-	<div id="digis" align="center">Digits= 1</div>
+	<div id="digis" align="center"></div>
 	<p></p>
 	<p></p>
 	<div id="spd" align="center">Time= 2s</div>
@@ -59,6 +59,8 @@
 	var numLen = null;
 	var answer = null;
 
+	window.alert('Welcome to Aware!\nYou will have to provide a random digit from number shown to you. You advance even if only your first attempt is correct. However, if you get the first attempt wrong, difficulty will go down, and time alotted will go up.');
+
 	startRound();
 
 	document.addEventListener('keydown', function(event){
@@ -72,9 +74,9 @@
 		} else{
 
 			if (gotten > 0){
-
+				difficulty=difficulty+1
 			} else {
-				difficulty=difficulty-1
+				difficulty=difficulty-2
 				if (difficulty < 1){
 					difficulty = 1;
 				}
@@ -96,13 +98,13 @@
 		setTimeout(test, speed);
 		document.getElementById("diff").innerText= "Difficulty= " + difficulty;
 		document.getElementById("spd").innerText= "Time= " + speed/1000+"s";
-		document.getElementById("digis").innerText= "Digits= " + count;
+		//document.getElementById("digis").innerText= "Digits= " + count;
 	}
 
 	function test(){
 		console.log ("testing. numlen: "+numLen+" seq.length: "+seq.length+" count: "+count);
 		if (numLen - seq.length >= count) {
-			difficulty = difficulty+1	
+			difficulty = difficulty+2
 			startRound();
 			return;
 		}
@@ -110,7 +112,8 @@
 		index = index-1;
 		answer = number.toString()[index];
 		console.log(answer)
-		document.getElementById('num').innerText = blank(numLen, index)
+		document.getElementById('num').innerText = "";
+		document.getElementById('num').innerText = blank(numLen, index);
 	}
 
 
