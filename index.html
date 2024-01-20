@@ -75,7 +75,7 @@ Aware
 	var modeFlag = "none";
 	var score = 0;
 
-	window.alert('Welcome to Aware!\nYou will have to provide a random digit from the number shown to you.');
+	window.alert('Welcome to Aware!\nWe will show you a number, then ask you to provide the digit at a specific position. (The position is chosen at random).\nGood luck!');
 
 
 	startRound();
@@ -100,7 +100,7 @@ Aware
 		}
 		else{
 			document.getElementById("score").innerText= "Score: " + score;
-			setTimeout(()=>{window.alert("You finished the game!\nYour sccore was: " + score + " out of 169!")}, 100);
+			setTimeout(()=>{window.alert("You finished the game!\nYour score was: " + score + " out of 169!")}, 100);
 		}
 
 	}
