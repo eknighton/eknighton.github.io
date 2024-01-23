@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <htmL lang="en" style="font-size: 64px;">
 <head>
+<meta charset="UTF-8">
 <title>
 Aware
 </title>
@@ -29,31 +30,11 @@ Aware
 	<div id="digis" align="center"></div>
 	<p></p>
 	<p></p>
-	<div id="spd" align="center"></div>
-	
-
-	<!-- Custom number pad buttons -->
-	<div id="numpad" align="center">
-    <div>
-      <button class="number-pad-button" onclick="keyPress('1')">1</button>
-      <button class="number-pad-button" onclick="keyPress('2')">2</button>
-      <button class="number-pad-button" onclick="keyPress('3')">3</button>
-    </div>
-    <div>
-      <button class="number-pad-button" onclick="keyPress('4')">4</button>
-      <button class="number-pad-button" onclick="keyPress('5')">5</button>
-      <button class="number-pad-button" onclick="keyPress('6')">6</button>
-    </div>
-    <div>
-      <button class="number-pad-button" onclick="keyPress('7')">7</button>
-      <button class="number-pad-button" onclick="keyPress('8')">8</button>
-      <button class="number-pad-button" onclick="keyPress('9')">9</button>
-    </div>
-    <div>
-      <button class="number-pad-button" onclick="keyPress('0')">0</button>
-    </div>
+	<div id="spd" align="center">
+		<input type="text" id="userInput" align="center">
 	</div>
-
+	
+	
 </body>
 <script>
 
@@ -75,7 +56,7 @@ Aware
 	var modeFlag = "none";
 	var score = 0;
 
-	window.alert('Welcome to Aware!\nWe will show you a number, then ask you to provide the digit at a specific position. (The position is chosen at random).\nGood luck!');
+	window.alert('Welcome to Aware!\nWe will show you a number, then ask you to provide the digit that was at a specific position. (The position is chosen at random).\nGood luck!');
 
 
 	startRound();
@@ -85,11 +66,14 @@ Aware
 	});
 
 	function keyPress(key){
+		userInput.value = '';
 		if (modeFlag != "guess"){
+			userInput.value = '';
 			return;
 		}
+		lowKey = key.toLowerCase();
 		modeFlag = "none";
-		if (key == answer){ //Nums are 48 thrru 57
+		if (lowKey == answer.toLowerCase()){ //Nums are 48 thrru 57
 			score = score + difficulty
 		} else{
 
@@ -102,13 +86,13 @@ Aware
 			document.getElementById("score").innerText= "Score: " + score;
 			setTimeout(()=>{window.alert("You finished the game!\nYour score was: " + score + " out of 169!")}, 100);
 		}
-
 	}
 
 
 	function startRound(){
+		userInput.value = '';
 		speed = Math.floor((difficulty/7)*20)*100;
-		number = bigRandom(difficulty+1);
+		number = alphaRandom(difficulty+1);
 		//console.log(number);
 		numLen = number.length;;
 		answer = null;
@@ -123,6 +107,7 @@ Aware
 	}
 
 	function test(){
+		userInput.value = '';
 		//console.log ("testing. numlen: "+numLen+" seq.length: "+seq.length+" count: "+count);
 		if (numLen - seq.length >= count) {
 			//difficulty = difficulty+
@@ -132,7 +117,7 @@ Aware
 		var index  = seq.shift();
 		index = index-1;
 		answer = number[index];
-		//console.log(answer)
+		console.log(answer)
 		document.getElementById('num').innerText = hidden(numLen);
 		setTimeout(() => {document.getElementById('num').innerHTML = blank(numLen, index)}, 100);
 		modeFlag = "guess";
@@ -191,6 +176,20 @@ Aware
   }
   return (result);
 }
+
+
+function alphaRandom(length) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';//'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let result = '';
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    result += characters.charAt(randomIndex);
+  }
+
+  return result;
+}
+
 
 </script>
 </htmL>
