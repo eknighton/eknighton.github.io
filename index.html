@@ -15,6 +15,14 @@ Aware
     .num {
     	overflow-wrap: break-word;
     }
+    @keyframes flicker {
+    	0%, 49%, 100% {opacity: 1;}
+    	50%, 99% {opacity: 0;}
+    }
+
+    .flicker-element {
+    	animation: flicker 0.5s infinite;
+    }
   </style>
 
 </head>
@@ -97,6 +105,8 @@ Aware
 		numLen = number.length;;
 		answer = null;
 		document.getElementById("num").innerHTML = number;
+		document.getElementById("num").classList.add("flicker-element");
+	
 		seq = sequence(numLen);
 		setTimeout(test, speed);
 		//document.getElementById("diff").innerText= "Difficulty= " + difficulty;
@@ -107,6 +117,7 @@ Aware
 	}
 
 	function test(){
+				document.getElementById("num").classList.remove("flicker-element");
 		userInput.value = '';
 		//console.log ("testing. numlen: "+numLen+" seq.length: "+seq.length+" count: "+count);
 		if (numLen - seq.length >= count) {
