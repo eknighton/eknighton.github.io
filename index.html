@@ -73,11 +73,10 @@ Aware
 		}
 		lowKey = key.toLowerCase();
 		modeFlag = "none";
-		console.log(answer);
 		if (lowKey == answer.toLowerCase()){ //Nums are 48 thrru 57
 			score = score + difficulty
 		} else{
-			window.alert("You said " +lowKey+ ". The answer was " + answer.toLowerCase());
+			window.alert("You said " +lowKey+ ". The answer was " + answer.toLowerCase() + " The number was " + number);
 		}answer.toLowerCase()
 		difficulty=difficulty+1;
 		if (difficulty < 20){
@@ -85,7 +84,7 @@ Aware
 		}
 		else{
 			document.getElementById("score").innerText= "Score: " + score;
-			setTimeout(()=>{window.alert("You finished the game!\nYour score was: " + score + " out of 169!")}, 100);
+			setTimeout(()=>{window.alert("You finnished the game!\nYour score was: " + score + " out of 169!")}, 100);
 		}
 	}
 
