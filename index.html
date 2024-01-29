@@ -60,6 +60,8 @@ Aware
 	var numLen = null;
 	var answer = null;
 
+	var timeoutID = null;
+
 
 	var modeFlag = "none";
 	var score = 0;
@@ -76,6 +78,10 @@ Aware
 	function keyPress(key){
 		userInput.value = '';
 		if (modeFlag != "guess"){
+			if (key.toLowerCase() == " "){
+				clearTimeout(timeoutID);
+				return test();
+			}
 			userInput.value = '';
 			return;
 		}
@@ -108,7 +114,7 @@ Aware
 		document.getElementById("num").classList.add("flicker-element");
 	
 		seq = sequence(numLen);
-		setTimeout(test, speed);
+		timeoutID = setTimeout(test, speed);
 		//document.getElementById("diff").innerText= "Difficulty= " + difficulty;
 		document.getElementById("score").innerText= "Score: " + score;
 		document.getElementById("trials").innerText = "Trial " + (difficulty-6) + " of 13.";
