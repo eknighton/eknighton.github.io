@@ -1,0 +1,49 @@
+Puzzle Completeness
+
+
+
+1. Topology completeness.
+
+- All game state graphs can be contructed
+
+2. Visibility completeness
+
+- Any information state is acheiveable. 
+
+3. Analogy Completeness
+
+- 1 to 1 correspondence between actions in a representation of the level as another type of puzzle, and actions in the puzzle.
+
+
+
+-----
+
+
+1.
+	A 1 way state-to state gate (A way to make an Action or Motion irreversible)
+	Virtual "tunnels" that can overlap inf # of times.
+	Or ways to modify 
+
+
+1.
+	A. A non-finite set of gamestates "S" that can be arbitrarily connected, each to any subset of S, with one-directional "paths".
+
+	Acheiving this is easier if you have irreversible actions, or one-way walkways.
+	It also helps if you can connect points in space without also necessarily connecting other points.
+
+2. 
+	A. Every possible subset of topologies must monogamously pair with a state that can occur as a node anywhere in all of those topoligies.
+
+	This requires lots of control over what is visible in a given state. Dynamic visibility, and ways to make something visible or not from a given place, are a key to this.
+
+	B. (Impossibly) Every possible subset of arrangements of a subset of those states such that it covers a topology must be monogamously paired with one of those states.
+
+	If acheived, the player would be able to have any possible partial information about what they'd be able to directly observe from another state. 
+
+	C. (In Lieu of B) Designer should have a flexible option to give the player information in a gamestate about what information they'll have access to in another game state.
+
+	This enables information seeking gameplay.
+
+3. 
+	A. There should be a simple way to translate a puzzle into your game, such that each solution step to that puzzle can be translated into your game.
+	
