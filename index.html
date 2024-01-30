@@ -85,6 +85,10 @@ Aware
 			userInput.value = '';
 			return;
 		}
+		if (key.toLowerCase() == " "){
+			return;
+		}
+
 		lowKey = key.toLowerCase();
 		modeFlag = "none";
 		if (lowKey == answer.toLowerCase()){ //Nums are 48 thrru 57
