@@ -1,0 +1,55 @@
+// Giga Guess Who
+
+// We generate a level 
+
+// Each item is represented by an array of numbers.
+
+// 
+
+<script type="text/javascript">
+	
+var suspects = 20;
+var suspects = null;
+var perp = {eliminated: false, skin: 3, eyes: 3, hair: 3, shirt: 3};
+
+class person{
+	eliminated: false, 
+	skin: 3, 
+	eyes: 3, 
+	hair: 3, 
+	shirt: 3
+}
+
+function generateSuspects(){
+	//Generate a perp
+	var perp = {eliminated: false, skin: Math.Floor(Math.Random()*3+1), eyes: Math.Floor(Math.Random()*3+1), hair: Math.Floor(Math.Random()*3+1), shirt: Math.Floor(Math.Random()*3+1)};
+	//Generate other suspects
+
+}
+
+function pickValidValue(excludedValue, maxValue){
+
+}
+
+function investigate(attribute){
+
+	//Pick a valid value that doesn't match the perp
+	var excludedValue = perp.attribute;
+	var value = 0;
+
+	//For each suspect, check if they match the eliminated attribute value, then set them to eliminated
+	for person in suspects {
+		if (!person.eliminated){
+			if (person.attribute == value){
+				person.eliminated = true;
+				suspects = suspects - 1;
+			}
+		}
+	}
+
+	//Update the display
+}
+
+function drawPerson(person){
+
+}
