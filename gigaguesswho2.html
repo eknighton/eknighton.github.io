@@ -8,7 +8,7 @@
 
 <script type="text/javascript">
 	
-var suspects = 20;
+var suspectsLeft = 20;
 var suspects = null;
 var perp = {eliminated: false, skin: 3, eyes: 3, hair: 3, shirt: 3};
 
@@ -42,7 +42,7 @@ function investigate(attribute){
 		if (!person.eliminated){
 			if (person.attribute == value){
 				person.eliminated = true;
-				suspects = suspects - 1;
+				suspectsLeft = suspectsLeft - 1;
 			}
 		}
 	}
