@@ -1,0 +1,41 @@
+
+
+Player presented grid of suspects / items. 
+
+Player can "investigate" attributes to receive a random clue about them?
+
+Levels are generated such that a certain number of clues is needed to solve them.
+
+I think, inevitably there will be an element of luck...
+
+
+Investigate attribute vs is useful 
+
+
+------
+
+If it has lots of luck, what do we have to do generation wise?
+
+
+
+Get a clue at random
+
+Clue vs bit of info
+
+Non-overlapping clues
+Mutually Exclusive Clues
+
+-----
+
+How do we code it
+
+A grid display
+
+Each one updates
+
+
+... it will just be a lot like guess who except cleaner
+
+
+Random clue picker needs to give novel clue? 
+Yes, at least can't give same twice.
