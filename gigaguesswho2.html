@@ -32,9 +32,30 @@ class Person{
 	}
 }
 
+class Query{
+	cluePool = [];
+	constructor(Clues){
+		this.cluePool = Clues;
+		//Shuffle cluePool
+	}
+	getClue(){
+		return cluePool.pop();
+	}
+}
+
+class Clue(){
+	attribute = null;
+	value = null;
+	constructor(att, val){
+		this.attribute = att;
+		this.value = val;
+	}
+}
+
 var suspectsLeft = 5;
 var suspects = [];
-var perp = new Person();
+var perp = new Person(); 
+var button1 = null;
 
 generateSuspects();
 drawSuspects();
@@ -61,16 +82,16 @@ function pickValidValue(excludedValue, maxValue){
 
 }
 
-function investigate(attribute){
+function applyClue(clue){
 
+	/*
 	var val = (Math.floor(Math.random()*2) + 1 + perp[attribute]);
 	var possibles = [1,2,3,1,2,3];
 	val = possibles[val-1];
 	console.log("value: " + val);
-
-	console.log ("Investigating")
+	*/
 	suspects.forEach((item) => {
-		if (item[attribute] == val){
+		if (item[clue.attribute] == clue.value){
 			if (!item.eliminated){
 				item.eliminated = true;
 				suspectsLeft = suspectsLeft - 1
@@ -78,21 +99,6 @@ function investigate(attribute){
 		}
 	});
 
-}
-
-function applyClue(clue){
-
-	//For each suspect, check if they match the eliminated attribute value, then set them to eliminated
-	for (person in suspects) {
-		if (!person.eliminated){
-			if (false){
-				person.eliminated = true;
-				suspectsLeft = suspectsLeft - 1;
-			}
-		}
-	}
-
-	//Update the display
 }
 
 function drawSuspect(suspect){
