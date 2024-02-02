@@ -18,16 +18,12 @@ class Person{
 
 	constructor(){
 		this.eliminated = false;
-		this.skin = Math.floor(Math.random()*3+1);
-		this.eyes = Math.floor(Math.random()*3+1);
-		this.hair = Math.floor(Math.random()*3+1);
-		this.shirt = Math.floor(Math.random()*3+1);
+		this.eyes = Math.ceil(Math.random()*3);
 	}
 
-	compareTo(suspect){
+	equalTo(suspect){
 		return (
-			this.skin == suspect.skin
-			&& this.eyes == suspect.eyes
+			this.eyes == suspect.eyes
 		);
 	}
 }
@@ -54,6 +50,9 @@ class CluePool{
 		});
 		this.cluePool = temp;
 	}
+	usable(){
+		return this.cluePool.length > 0;
+	}
 }
 
 class Clue{
@@ -76,15 +75,14 @@ drawSuspects();
 
 document.addEventListener('keydown', function(event){
 	console.log("Investigate");
-	var clue = button1.getClue();
-	applyClue(clue);
+	var clue = null;
+	if (button1.usable()){
+		clue = button1.getClue();
+		applyClue(clue);
+	}
 	drawSuspects();
 	console.log ("perp " + perp.eyes);
 });
-
-function cleanUpQuery(){
-
-}
 
 function generateSuspects(count){
 	var perp = new Person();
@@ -92,18 +90,13 @@ function generateSuspects(count){
 	var temp;
 	while (suspects.length < suspectsLeft){
 		temp = new Person();
-		if (temp != perp){
+		if (!temp.equalTo(perp)){
 			suspects.push(temp);
 		} 
 	}
 }
 
-function pickValidValue(excludedValue, maxValue){
-
-}
-
 function applyClue(clue){
-
 	suspects.forEach((item) => {
 		if (item[clue.attribute] == clue.value){
 			if (!item.eliminated){
@@ -112,7 +105,6 @@ function applyClue(clue){
 			}
 		}
 	});
-
 }
 
 function drawSuspect(suspect){
