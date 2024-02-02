@@ -1,30 +1,60 @@
-// Giga Guess Who
-
-// We generate a level 
-
-// Each item is represented by an array of numbers.
-
-// 
+<!DOCTYPE html>
+<htmL lang="en" style="font-size: 64px;">
+<head>
+<meta charset="UTF-8">
+<title>
+Casino Cops
+</title>
 
 <script type="text/javascript">
 	
-var suspectsLeft = 20;
-var suspects = null;
-var perp = {eliminated: false, skin: 3, eyes: 3, hair: 3, shirt: 3};
 
-class person{
-	eliminated: false, 
-	skin: 3, 
-	eyes: 3, 
-	hair: 3, 
-	shirt: 3
+class Person{
+	eliminated = false;
+	skin = -1;
+	eyes = -1;
+	hair = -1;
+	shirt = -1;
+
+	constructor(){
+		this.eliminated = false;
+		this.skin = Math.floor(Math.random()*3+1);
+		this.eyes = Math.floor(Math.random()*3+1);
+		this.hair = Math.floor(Math.random()*3+1);
+		this.shirt = Math.floor(Math.random()*3+1);
+	}
+
+	compareTo(suspect){
+		return (
+			this.skin == suspect.skin
+			&& this.eyes == suspect.eyes
+		);
+	}
 }
 
-function generateSuspects(){
-	//Generate a perp
-	var perp = {eliminated: false, skin: Math.Floor(Math.Random()*3+1), eyes: Math.Floor(Math.Random()*3+1), hair: Math.Floor(Math.Random()*3+1), shirt: Math.Floor(Math.Random()*3+1)};
-	//Generate other suspects
+var suspectsLeft = 5;
+var suspects = [];
+var perp = new Person();
 
+generateSuspects();
+drawSuspects();
+
+document.addEventListener('keydown', function(event){
+	investigate('eyes');
+	drawSuspects();
+	console.log ("perp " + perp.eyes);
+});
+
+function generateSuspects(count){
+	var perp = new Person();
+	suspects.push(perp);
+	var temp;
+	while (suspects.length < suspectsLeft){
+		temp = new Person();
+		if (temp != perp){
+			suspects.push(temp);
+		} 
+	}
 }
 
 function pickValidValue(excludedValue, maxValue){
@@ -33,14 +63,29 @@ function pickValidValue(excludedValue, maxValue){
 
 function investigate(attribute){
 
-	//Pick a valid value that doesn't match the perp
-	var excludedValue = perp.attribute;
-	var value = 0;
+	var val = (Math.floor(Math.random()*2) + 1 + perp[attribute]);
+	var possibles = [1,2,3,1,2,3];
+	val = possibles[val-1];
+	console.log("value: " + val);
+
+	console.log ("Investigating")
+	suspects.forEach((item) => {
+		if (item[attribute] == val){
+			if (!item.eliminated){
+				item.eliminated = true;
+				suspectsLeft = suspectsLeft - 1
+			}
+		}
+	});
+
+}
+
+function applyClue(clue){
 
 	//For each suspect, check if they match the eliminated attribute value, then set them to eliminated
-	for person in suspects {
+	for (person in suspects) {
 		if (!person.eliminated){
-			if (person.attribute == value){
+			if (false){
 				person.eliminated = true;
 				suspectsLeft = suspectsLeft - 1;
 			}
@@ -50,6 +95,19 @@ function investigate(attribute){
 	//Update the display
 }
 
-function drawPerson(person){
-
+function drawSuspect(suspect){
+	if (suspect.eliminated){
+		console.log('X');
+		return;
+	}
+	console.log(suspect.eyes)
 }
+
+function drawSuspects(){
+	suspects.forEach((item) => drawSuspect(item));
+}
+
+
+</script>
+
+</html>
