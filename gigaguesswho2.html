@@ -32,18 +32,31 @@ class Person{
 	}
 }
 
-class Query{
+class CluePool{
 	cluePool = [];
 	constructor(Clues){
 		this.cluePool = Clues;
+		this.filterClues(perp);
 		//Shuffle cluePool
 	}
 	getClue(){
-		return cluePool.pop();
+		if (this.cluePool.length > 0){
+			return this.cluePool.pop();
+		}
+		return null;
+	}
+	filterClues(excludedIndividual){
+		var temp = [];
+		this.cluePool.forEach((item) => {
+			if (item.value != excludedIndividual[item.attribute]){
+				temp.push(item);
+			}
+		});
+		this.cluePool = temp;
 	}
 }
 
-class Clue(){
+class Clue{
 	attribute = null;
 	value = null;
 	constructor(att, val){
@@ -55,16 +68,23 @@ class Clue(){
 var suspectsLeft = 5;
 var suspects = [];
 var perp = new Person(); 
-var button1 = null;
+var button1 = new CluePool([new Clue('eyes', 1),new Clue('eyes', 2),new Clue('eyes', 3)]);
+button1.filterClues(perp);
 
 generateSuspects();
 drawSuspects();
 
 document.addEventListener('keydown', function(event){
-	investigate('eyes');
+	console.log("Investigate");
+	var clue = button1.getClue();
+	applyClue(clue);
 	drawSuspects();
 	console.log ("perp " + perp.eyes);
 });
+
+function cleanUpQuery(){
+
+}
 
 function generateSuspects(count){
 	var perp = new Person();
@@ -84,12 +104,6 @@ function pickValidValue(excludedValue, maxValue){
 
 function applyClue(clue){
 
-	/*
-	var val = (Math.floor(Math.random()*2) + 1 + perp[attribute]);
-	var possibles = [1,2,3,1,2,3];
-	val = possibles[val-1];
-	console.log("value: " + val);
-	*/
 	suspects.forEach((item) => {
 		if (item[clue.attribute] == clue.value){
 			if (!item.eliminated){
