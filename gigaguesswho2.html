@@ -5,6 +5,27 @@
 <title>
 Casino Cops
 </title>
+<style>
+	#personsGrid {
+	    display: grid;
+	    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Adjust minmax values as needed */
+	    gap: 10px; /* Space between items */
+	    padding: 10px;
+	}
+
+	.personItem {
+	    border: 1px solid #ccc;
+	    padding: 10px;
+	    text-align: center;
+	}
+</style>
+
+</head>
+
+
+<body>
+	<div id="personsGrid"></div>
+</body>
 
 <script type="text/javascript">
 	
@@ -26,6 +47,12 @@ class Person{
 			this.eyes == suspect.eyes
 		);
 	}
+
+	toString() {
+        let eyeRep = ['E1', 'E2', 'E3'][this.eyes - 1]; // Map eye trait to its text representation
+        // Map other traits similarly
+        return `${eyeRep}`;
+    }
 }
 
 class CluePool{
@@ -34,6 +61,9 @@ class CluePool{
 		this.cluePool = Clues;
 		this.filterClues(perp);
 		//Shuffle cluePool
+
+
+		///!!!!!!!
 	}
 	getClue(){
 		if (this.cluePool.length > 0){
@@ -74,7 +104,7 @@ generateSuspects();
 drawSuspects();
 
 document.addEventListener('keydown', function(event){
-	console.log("Investigate");
+	console.log("Investigating");
 	var clue = null;
 	if (button1.usable()){
 		clue = button1.getClue();
@@ -107,15 +137,32 @@ function applyClue(clue){
 	});
 }
 
+function updateGrid() {
+    const grid = document.getElementById('personsGrid');
+    grid.innerHTML = ''; // Clear existing grid content
+
+    suspects.forEach(person => {
+    	console.log("adding person");
+        const personDiv = document.createElement('div');
+        personDiv.classList.add('person');
+        personDiv.textContent = person.toString(); // Use your method to get text representation
+        if (person.eliminated){
+        	personDiv.textContent = "X";
+        }
+        grid.appendChild(personDiv);
+    });
+}
+
 function drawSuspect(suspect){
 	if (suspect.eliminated){
 		console.log('X');
 		return;
 	}
-	console.log(suspect.eyes)
+	console.log(suspect.toString());
 }
 
 function drawSuspects(){
+	updateGrid();
 	suspects.forEach((item) => drawSuspect(item));
 }
 
