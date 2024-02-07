@@ -8,7 +8,7 @@ Casino Cops
 <style>
 	#personsGrid {
 	    display: grid;
-	    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Adjust minmax values as needed */
+	    grid-template-columns: repeat(auto-fill, minmax(200px, 2fr)); /* Adjust minmax values as needed */
 	    gap: 10px; /* Space between items */
 	    padding: 10px;
 	}
@@ -25,6 +25,9 @@ Casino Cops
 
 <body>
 	<div id="personsGrid"></div>
+	<button id="refreshGridButton" onclick="buttonOne()">Investigate Eyes</button>
+	<button id="refreshGridButton" onclick="buttonTwo()">Investigate Skin</button>
+
 </body>
 
 <script type="text/javascript">
@@ -40,18 +43,20 @@ class Person{
 	constructor(){
 		this.eliminated = false;
 		this.eyes = Math.ceil(Math.random()*3);
+		this.skin = Math.ceil(Math.random()*3);
 	}
 
 	equalTo(suspect){
 		return (
-			this.eyes == suspect.eyes
+			this.eyes == suspect.eyes && this.skin == suspect.skin
 		);
 	}
 
 	toString() {
-        let eyeRep = ['E1', 'E2', 'E3'][this.eyes - 1]; // Map eye trait to its text representation
+        let eyeRep = ['E1', 'E2', 'E3'][this.eyes - 1];
+        let skinRep = ['S1', 'S2', 'S3'][this.skin - 1];
         // Map other traits similarly
-        return `${eyeRep}`;
+        return `${eyeRep}${skinRep}`;
     }
 }
 
@@ -98,9 +103,11 @@ var suspectsLeft = 5;
 var suspects = [];
 var perp = new Person(); 
 var button1 = new CluePool([new Clue('eyes', 1),new Clue('eyes', 2),new Clue('eyes', 3)]);
+var button2 = new CluePool([new Clue('skin', 1),new Clue('skin', 2),new Clue('skin', 3)]);
 button1.filterClues(perp);
+button2.filterClues(perp);
 
-generateSuspects();
+suspects = generateSuspects(suspectsLeft);
 drawSuspects();
 
 document.addEventListener('keydown', function(event){
@@ -116,14 +123,16 @@ document.addEventListener('keydown', function(event){
 
 function generateSuspects(count){
 	var perp = new Person();
-	suspects.push(perp);
+	var ret  = [];
+	ret.push(perp);
 	var temp;
-	while (suspects.length < suspectsLeft){
+	while (ret.length < count){
 		temp = new Person();
 		if (!temp.equalTo(perp)){
-			suspects.push(temp);
+			ret.push(temp);
 		} 
 	}
+	return ret;
 }
 
 function applyClue(clue){
@@ -153,17 +162,26 @@ function updateGrid() {
     });
 }
 
-function drawSuspect(suspect){
-	if (suspect.eliminated){
-		console.log('X');
-		return;
-	}
-	console.log(suspect.toString());
-}
-
 function drawSuspects(){
 	updateGrid();
-	suspects.forEach((item) => drawSuspect(item));
+}
+
+function buttonOne(){
+	var clue = null;
+	if (button1.usable()){
+		clue = button1.getClue();
+		applyClue(clue);
+	}
+	drawSuspects();
+}
+
+function buttonTwo(){
+	var clue = null;
+	if (button2.usable()){
+		clue = button2.getClue();
+		applyClue(clue);
+	}
+	drawSuspects();
 }
 
 
