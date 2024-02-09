@@ -25,8 +25,8 @@ Casino Cops
 
 <body>
 	<div id="personsGrid"></div>
-	<button id="refreshGridButton" onclick="buttonOne()">Investigate Eyes</button>
-	<button id="refreshGridButton" onclick="buttonTwo()">Investigate Skin</button>
+	<button id="button1" onclick="buttonOne()">Investigate Eyes</button>
+	<button id="button2" onclick="buttonTwo()">Investigate Skin</button>
 
 </body>
 
@@ -48,7 +48,7 @@ class Person{
 
 	equalTo(suspect){
 		return (
-			this.eyes == suspect.eyes && this.skin == suspect.skin
+			(this.eyes == suspect.eyes) && (this.skin == suspect.skin)
 		);
 	}
 
@@ -64,7 +64,6 @@ class CluePool{
 	cluePool = [];
 	constructor(Clues){
 		this.cluePool = Clues;
-		this.filterClues(perp);
 		//Shuffle cluePool
 
 
@@ -79,7 +78,8 @@ class CluePool{
 	filterClues(excludedIndividual){
 		var temp = [];
 		this.cluePool.forEach((item) => {
-			if (item.value != excludedIndividual[item.attribute]){
+			console.log(item.attribute + " : " + excludedIndividual[item.attribute] + " compared to " + item.value)
+			if (excludedIndividual[item.attribute] != item.value){
 				temp.push(item);
 			}
 		});
@@ -97,39 +97,38 @@ class Clue{
 		this.attribute = att;
 		this.value = val;
 	}
+	equalTo(otherClue){
+		return this.value == otherClue[this.attribute];
+	}
 }
 
-var suspectsLeft = 5;
-var suspects = [];
-var perp = new Person(); 
+var suspectsLeft = 10;
+
+
+var suspects = generateSuspects(suspectsLeft);
+var perp = suspects[0];
+suspects = shuffleArray(suspects);
+
 var button1 = new CluePool([new Clue('eyes', 1),new Clue('eyes', 2),new Clue('eyes', 3)]);
 var button2 = new CluePool([new Clue('skin', 1),new Clue('skin', 2),new Clue('skin', 3)]);
 button1.filterClues(perp);
 button2.filterClues(perp);
 
-suspects = generateSuspects(suspectsLeft);
-drawSuspects();
 
-document.addEventListener('keydown', function(event){
-	console.log("Investigating");
-	var clue = null;
-	if (button1.usable()){
-		clue = button1.getClue();
-		applyClue(clue);
-	}
-	drawSuspects();
-	console.log ("perp " + perp.eyes);
-});
+drawSuspects();
+console.log(suspects);
 
 function generateSuspects(count){
-	var perp = new Person();
+	var P = new Person();
 	var ret  = [];
-	ret.push(perp);
+	ret.push(P);
 	var temp;
 	while (ret.length < count){
 		temp = new Person();
-		if (!temp.equalTo(perp)){
+		if (!temp.equalTo(P)){
 			ret.push(temp);
+		} else {
+			console.log("Excluded " + temp);
 		} 
 	}
 	return ret;
@@ -164,6 +163,18 @@ function updateGrid() {
 
 function drawSuspects(){
 	updateGrid();
+}
+
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        // Generate a random index from 0 to i
+        let j = Math.floor(Math.random() * (i + 1));
+        
+        // Swap elements at indices i and j
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array; // This is optional, as the array is modified in place
 }
 
 function buttonOne(){
