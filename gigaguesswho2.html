@@ -24,12 +24,13 @@ Casino Cops
 
 
 <body>
+	<div id="cases" style="display: inline-block;">Case #1</div>
 	<div id="personsGrid"></div>
 	<button id="button1" onclick="buttonOne()">Investigate Circles</button>
 	<button id="button2" onclick="buttonTwo()">Investigate Squares</button> 
-	<div id="clicks">🔍4</div>
+	<div id="clicks">🔍4 Case #1</div> 
 
-</body>
+</body> 
 
 <script type="text/javascript">
 	
@@ -109,6 +110,7 @@ var suspectsLeft = null;
 var suspects = null;
 var perp = null;
 var buttonClicks = 0;
+var cases = 0;
 var button1 = null;
 var button2 = null;
 
@@ -127,6 +129,9 @@ function newLineup(numSuspects){
 
 	buttonClicks+=4;
 	document.getElementById("clicks").innerText = "🔍"+buttonClicks;
+
+	cases+=1;
+	document.getElementById("cases").innerText = "Case #"+cases;
 
 	button1 = new CluePool([new Clue('eyes', 1),new Clue('eyes', 2),new Clue('eyes', 3)]);
 	button1.filterClues(perp);
