@@ -26,7 +26,7 @@ Casino Cops
 <body>
 	<div id="personsGrid"></div>
 	<button id="button1" onclick="buttonOne()">Investigate Eyes</button>
-	<button id="button2" onclick="buttonTwo()">Investigate Skin</button>
+	<button id="button2" onclick="buttonTwo()">Investigate Hair</button>
 
 </body>
 
@@ -53,10 +53,10 @@ class Person{
 	}
 
 	toString() {
-        let eyeRep = ['E1', 'E2', 'E3'][this.eyes - 1];
-        let skinRep = ['S1', 'S2', 'S3'][this.skin - 1];
+        let eyeRep = ['🟢', '🔵', '🟤'][this.eyes - 1];
+        let skinRep = ['🟨 ', '🟥', '🟫'][this.skin - 1];
         // Map other traits similarly
-        return `${eyeRep}${skinRep}`;
+        return `${eyeRep}${skinRep}`
     }
 }
 
@@ -102,7 +102,7 @@ class Clue{
 	}
 }
 
-var suspectsLeft = 10;
+var suspectsLeft = 9;
 
 
 var suspects = generateSuspects(suspectsLeft);
@@ -155,7 +155,7 @@ function updateGrid() {
         personDiv.classList.add('person');
         personDiv.textContent = person.toString(); // Use your method to get text representation
         if (person.eliminated){
-        	personDiv.textContent = "X";
+        	personDiv.textContent = " ";
         }
         grid.appendChild(personDiv);
     });
