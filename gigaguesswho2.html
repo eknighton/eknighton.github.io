@@ -25,8 +25,9 @@ Casino Cops
 
 <body>
 	<div id="personsGrid"></div>
-	<button id="button1" onclick="buttonOne()">Investigate Eyes</button>
-	<button id="button2" onclick="buttonTwo()">Investigate Hair</button>
+	<button id="button1" onclick="buttonOne()">Investigate Circles</button>
+	<button id="button2" onclick="buttonTwo()">Investigate Squares</button> 
+	<div id="clicks">🔍4</div>
 
 </body>
 
@@ -102,21 +103,52 @@ class Clue{
 	}
 }
 
-var suspectsLeft = 9;
 
 
-var suspects = generateSuspects(suspectsLeft);
-var perp = suspects[0];
-suspects = shuffleArray(suspects);
+var suspectsLeft = null;
+var suspects = null;
+var perp = null;
+var buttonClicks = 0;
+var button1 = null;
+var button2 = null;
 
-var button1 = new CluePool([new Clue('eyes', 1),new Clue('eyes', 2),new Clue('eyes', 3)]);
-var button2 = new CluePool([new Clue('skin', 1),new Clue('skin', 2),new Clue('skin', 3)]);
-button1.filterClues(perp);
-button2.filterClues(perp);
+window.alert("You get 4 clues per level. Your goal is to save up as many clues as possible.")
 
-
+newLineup(9);
 drawSuspects();
 console.log(suspects);
+
+
+function newLineup(numSuspects){
+	suspectsLeft = numSuspects;
+	suspects = generateSuspects(suspectsLeft);
+	perp = suspects[0];
+	suspects = shuffleArray(suspects);
+
+	buttonClicks+=4;
+	document.getElementById("clicks").innerText = "🔍"+buttonClicks;
+
+	button1 = new CluePool([new Clue('eyes', 1),new Clue('eyes', 2),new Clue('eyes', 3)]);
+	button1.filterClues(perp);
+	button2 = new CluePool([new Clue('skin', 1),new Clue('skin', 2),new Clue('skin', 3)]);
+	button2.filterClues(perp);
+}
+
+function statusCheck(){
+	var left = 0;
+	suspects.forEach(item => {
+		if (!item.eliminated){
+			left+=1;
+		}
+	})
+	if (left == 1){
+		setTimeout(() => {
+			newLineup(9);
+			drawSuspects();
+		}, 400);
+		
+	}
+}
 
 function generateSuspects(count){
 	var P = new Person();
@@ -182,6 +214,7 @@ function buttonOne(){
 	if (button1.usable()){
 		clue = button1.getClue();
 		applyClue(clue);
+		onButtonClick();
 	}
 	drawSuspects();
 }
@@ -191,8 +224,15 @@ function buttonTwo(){
 	if (button2.usable()){
 		clue = button2.getClue();
 		applyClue(clue);
+		onButtonClick();
 	}
 	drawSuspects();
+}
+
+function onButtonClick(){
+	buttonClicks-=1;
+	document.getElementById("clicks").innerText = "🔍"+buttonClicks;
+	statusCheck();
 }
 
 
