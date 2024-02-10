@@ -1,0 +1,327 @@
+.game-container {
+
+    /*Size and Location*/
+    position: fixed;
+    top: 0vh;
+    left: 0vw;
+    height: 150vh;
+    width: 300vh;
+
+    /*Background Image*/
+    background-image: url('../../Art/Backgrounds/background.png');
+    background-position: bottom;
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+
+.ticket{
+
+    /*Size and Location*/
+    position: fixed;
+    top: 15vh;
+    left: 0vw;
+    width: 70vh;
+    height: 70vh;
+
+    /* Your background image */
+    background-color: black;
+}
+
+.grid {
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3vh;
+    width: 70vh;
+    justify-items: center;
+    align-items: center;
+
+    /*Center On Ticket*/
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    /*Size: Relative to Parent*/
+    width: 95%;
+    height: 95%;
+
+}
+
+.scratch-card {
+
+    /*Size and Location*/
+    position: relative;
+    width: 20vh;
+    height: 20vh;
+
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+    image-rendering: crisp-edges; /* For pixel art! */
+}
+
+.scratch-bar-container {
+    position: fixed;
+    top: 12vh;
+    left: 0vw;
+
+    width: 70vh;
+    height: 3vh;
+
+    background-color: lightblue; /* Transparent container */
+    overflow: hidden; /* Hide the parts of the resource bar that go outside of the container when the bar decreases */
+    display: flex;
+    align-items: center; /* Vertically center the percentage text */
+}
+
+.scratch-bar {
+    background-color: blue;
+    height: 100%;
+    width: 100%; /* This can be adjusted with JavaScript as the percentage changes */
+}
+
+.scratch-percentage {
+    position: absolute; /* Absolute position relative to the container to overlay the bar */
+    width: 70vh; /* Match container's width */
+    text-align: center; /* Center the percentage text */
+    font-size: 3vh;
+    color: black;
+    pointer-events: none; /* Make sure the text doesn't interfere with any mouse events */
+}
+
+.fight-scene-top-text {
+
+    /* Make Self and Children Flexboxes */
+    display: flex;
+
+    /* True-Center Children */
+    justify-content: center;
+    flex-direction: column;  /* Stack children vertically */
+    justify-content: center; /* Center children vertically */
+    align-items: center;     /* Center children horizontally */
+
+    /* Give independent position */
+    position: fixed;
+    top: 0vw;
+    left: 0vw;    
+
+    /* Independent Width */
+    box-sizing:  border-box;   
+    width: 100vw;
+
+    /* Bring to Front*/
+    z-index: 1; 
+
+    background-color: none;
+}
+
+.fight-scene-title {
+
+    /* Font Size */
+    font-size: 50px;
+    font-size: clamp(12px, 3vw, 500px); 
+
+    /* Font Appearance */
+    color: #FFF;   
+    font-weight: bolder;
+}
+
+.fight-scene-info {
+    /* Font Size */
+    font-size: 30px;
+    font-size: clamp(12px, 2vw, 500px); 
+
+    /* Font Appearance */
+    color: #CCC;
+}
+
+.player-container {
+
+    /* Give independent position, size */
+    position: fixed;
+    left: 75vh;
+    top: 10vh;
+    height: 60vh;
+    width: 40vh;
+
+    /* True-Center Children */
+    justify-content: center;
+    flex-direction: column;  /* Stack children vertically */
+    justify-content: center; /* Center children vertically */
+    align-items: center;     /* Center children horizontally */
+
+}
+
+.player {
+
+    position: fixed;
+    left: 75vh;
+    top: 30vh;
+    
+    width: 40vh;
+    height: 40vh;
+
+    z-index: 1;
+
+}
+
+.player-statuses {
+
+    z-index: 1;
+
+    /* Give independent position, size */
+    position: fixed;
+    left: 75vh;
+    top: 50vh;
+    height: 25vh;
+    width: 40vh;
+
+    /* Display Children in Grid */
+    display: grid;
+    grid-template-columns: repeat(10, 1fr); /* 10 equal width columns */
+    grid-row-gap: 0vh;
+    grid-column-gap: 1vh;
+    /*grid-auto-flow: column;*/
+    justify-items: center;
+    align-content: end;
+
+}
+
+#player-statuses img {
+
+
+    /* Independent Size */
+    width: 3vh; 
+    height: 3vh; 
+
+    /* Set cursor to Pointer */
+    cursor: pointer;
+
+    /* Spacing */
+    margin-right: 0vh;
+
+    /* Scalng For pixel art! */
+    image-rendering: crisp-edges; 
+}
+
+.stacked-image {
+    position: relative;
+    display: inline-block;
+}
+
+.stack-number {
+    position: absolute;
+    bottom: 0; 
+    right: 0;
+    color: white;
+    background: rgba(0, 0, 0, 0.5); /* semi-transparent black background */
+    border-radius: 50%;
+    
+    /* Flexbox for centering */
+    display: flex;
+    align-items: center; /* centers vertically */
+    justify-content: center; /* centers horizontally */
+
+    /* Assuming a fixed width/height for the circle. Adjust as needed. */
+    width: max(20px,2vh); 
+    height: max(20px,2vh); 
+    font-size: max(14px, 1.5vh);/*0.8em;*/
+    z-index: 1;
+
+    /* Make transparent when detecting events */
+    pointer-events: none;
+}
+
+.enemy1-container {
+
+    /* Give independent position, size */
+    position: fixed;
+    left: 125vh;
+    top: 10vh;
+    height: 60vh;
+    width: 40vh;
+
+    /* True-Center Children */
+    justify-content: center;
+    flex-direction: column;  /* Stack children vertically */
+    justify-content: center; /* Center children vertically */
+    align-items: center;     /* Center children horizontally */
+
+}
+
+.enemy {
+
+    /* Give independent position */
+    position: fixed;
+    left: 125vh;
+    top: 30vh;
+    height: 40vh;
+    width: 40vh;
+
+    cursor: pointer;
+}
+
+.enemy1-statuses {
+
+    z-index: 1;
+
+    /* Give independent position, size */
+    position: fixed;
+    left: 125vh;
+    top: 50vh;
+    height: 25vh;
+    width: 40vh;
+
+    /* Display Children in Grid */
+    display: grid;
+    grid-template-columns: repeat(10, 1fr); /* 10 equal width columns */
+    grid-row-gap: 0vh;
+    grid-column-gap: 1vh;
+    /*grid-auto-flow: column;*/
+    justify-items: center;
+    align-content: end;
+
+}
+
+#enemy1-statuses img {
+
+
+    /* Independent Size */
+    width: 3vh; 
+    height: 3vh; 
+
+    /* Set cursor to Pointer */
+    cursor: pointer;
+
+    /* Spacing */
+    margin-right: 0vh;
+
+    /* Scalng For pixel art! */
+    image-rendering: crisp-edges; 
+}
+
+
+#player-items {
+    position: relative;
+    width: 100%;
+    justify-content: left;
+    background-color: black;
+}
+
+#player-items img {
+
+
+    /* Independent Size */
+    width: 6vh; 
+    height: 6vh; 
+
+    /* Set cursor to Pointer */
+    cursor: pointer;
+
+    /* Spacing */
+    margin-right: 2vh;
+
+    /* Scalng For pixel art! */
+    image-rendering: crisp-edges; 
+}
