@@ -181,21 +181,21 @@ function statusCheck(){
 	})
 	if (left == 1){
 		rounds +=1;
-		if (rounds > 9){
-			window.alert("You've completed your career! You earned "+ score+ " medals!\nEnjoy your retirement!");
-			return newGame();
-		}
-		//Check if rounds limit has been reached
-
 		score += buttonClicks;
 		buttonClicks = 0;
 		document.getElementById("clicks").innerText = "🔍"+buttonClicks;
 		document.getElementById("score").innerHTML = score;
 
-		setTimeout(() => {
-			newLineup(9);
-			drawSuspects();
-		}, 400);
+		if (rounds > 9){
+			window.alert("You've completed your career! You earned "+ score+ " medals!\nEnjoy your retirement!");
+			return newGame();
+		} else {
+
+			setTimeout(() => {
+				newLineup(9);
+				drawSuspects();
+			}, 400);
+		}
 		
 	}
 }
