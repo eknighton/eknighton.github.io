@@ -29,6 +29,7 @@ Casino Cops
 	<button id="button1" onclick="buttonOne()" style="font-size: 64px">Investigate Circles</button>
 	<button id="button2" onclick="buttonTwo()" style="font-size: 64px">Investigate Squares</button> 
 	<div id="clicks">🔍4 Case #1</div>
+	<span id="medal">🎖️</span><span id="score">0</span>
 
 </body> 
 
@@ -72,6 +73,7 @@ class CluePool{
 		///!!!!!!!
 	}
 	getClue(){
+		//Check for clue redundancy 
 		if (this.cluePool.length > 0){
 			return this.cluePool.pop();
 		}
@@ -111,6 +113,8 @@ var suspects = null;
 var perp = null;
 var buttonClicks = 0;
 var cases = 0;
+var score = 0;
+var rounds = 0;
 var button1 = null;
 var button2 = null;
 
@@ -119,6 +123,16 @@ window.alert("Welcome to Casino Cops!\nChoose what to investigate in order to na
 newLineup(9);
 drawSuspects();
 console.log(suspects);
+
+
+function newGame(){
+	buttonClicks = 0;
+	cases = 0;
+	score = 0;
+	rounds = 0;
+	document.getElementById("score").innerText = 0;
+	newLineup(9);
+}
 
 
 function newLineup(numSuspects){
@@ -147,6 +161,18 @@ function statusCheck(){
 		}
 	})
 	if (left == 1){
+		rounds +=1;
+		if (rounds > 9){
+			window.alert("You've completed your career! You earned "+ score+ " medals!");
+			return newGame();
+		}
+		//Check if rounds limit has been reached
+
+		score += buttonClicks;
+		buttonClicks = 0;
+		document.getElementById("clicks").innerText = "🔍"+buttonClicks;
+		document.getElementById("score").innerHTML = score;
+
 		setTimeout(() => {
 			newLineup(9);
 			drawSuspects();
