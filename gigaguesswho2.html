@@ -135,7 +135,7 @@ var rounds = 0;
 var button1 = null;
 var button2 = null;
 
-window.alert("Welcome to Casino Cops!\nChoose what to investigate in order to narrow the suspects down to just one.\nYou get 4 more 🔍 each case. Try not to spend all 4!")
+window.alert("Welcome to Casino Cops!\nChoose what to investigate in order to narrow the suspects down to just one.\nYou get 4🔍 each case. You win a medal for each one you don't spend.")
 
 newLineup(9);
 drawSuspects();
@@ -262,9 +262,10 @@ function buttonOne(){
 	if (button1.usable()){
 		clue = button1.getClue();
 		applyClue(clue);
+		drawSuspects();
 		onButtonClick();
 	}
-	drawSuspects();
+	
 }
 
 function buttonTwo(){
@@ -272,15 +273,16 @@ function buttonTwo(){
 	if (button2.usable()){
 		clue = button2.getClue();
 		applyClue(clue);
+		drawSuspects();
 		onButtonClick();
 	}
-	drawSuspects();
+	
 }
 
 function onButtonClick(){
 	buttonClicks-=1;
 	document.getElementById("clicks").innerText = "🔍"+buttonClicks;
-	statusCheck();
+	setTimeout(() => statusCheck(), 100);
 }
 
 
