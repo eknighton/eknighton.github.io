@@ -65,6 +65,7 @@ class Person{
 
 class CluePool{
 	cluePool = [];
+	htmlement = null;
 	constructor(Clues){
 		this.cluePool = Clues;
 		//Shuffle cluePool
@@ -181,7 +182,7 @@ function statusCheck(){
 	if (left == 1){
 		rounds +=1;
 		if (rounds > 9){
-			window.alert("You've completed your career! You earned "+ score+ " medals!");
+			window.alert("You've completed your career! You earned "+ score+ " medals!\nEnjoy your retirement!");
 			return newGame();
 		}
 		//Check if rounds limit has been reached
