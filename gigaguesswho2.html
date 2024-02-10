@@ -91,7 +91,6 @@ class CluePool{
 	}
 	usable(){
 
-		
 			var temp = [];
 			this.cluePool.forEach((clue) => {
 				var redundant = true;
@@ -105,8 +104,7 @@ class CluePool{
 				}
 			});
 			this.cluePool = temp;
-		
-
+			
 		return this.cluePool.length > 0;
 	}
 }
@@ -135,7 +133,7 @@ var rounds = 0;
 var button1 = null;
 var button2 = null;
 
-window.alert("Welcome to Casino Cops!\nChoose what to investigate in order to narrow the suspects down to just one.\nYou get 4🔍 each case. You win a medal for each one you don't spend.")
+window.alert("Welcome to Casino Cops!\nChoose what to investigate in order to narrow the suspects down to just one.\nYou get 4🔍 each case. You win a medal for each one you don't spend.\nYour career is 10 cases long.")
 
 newLineup(9);
 drawSuspects();
