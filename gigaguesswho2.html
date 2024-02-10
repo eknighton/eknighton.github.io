@@ -146,6 +146,7 @@ console.log(suspects);
 function newGame(){
 	buttonClicks = 0;
 	cases = 0;
+
 	score = 0;
 	round = 0;
 	document.getElementById("score").innerText = 0;
@@ -188,7 +189,7 @@ function statusCheck(){
 
 		if (round > 9){
 			setTimeout(() => {
-				window.alert("You've completed your career! You earned "+ score+ " medals!\nEnjoy your retirement!");
+				window.alert("You've completed your career! You earned "+ score+ " medals!\nEnjoy retirement!");
 				newGame();
 			}, 20);
 
