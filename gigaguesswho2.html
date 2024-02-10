@@ -93,14 +93,16 @@ class CluePool{
 
 			var temp = [];
 			this.cluePool.forEach((clue) => {
-				var redundant = true;
+				var keep = false;
 				suspects.forEach((sus) => {
-					if (sus[clue.attribute] == clue.value){
-						redundant = false;
+					if (sus[clue.attribute] == clue.value && sus.eliminated == false){
+						keep = true;
 					}
 				});
-				if (!redundant){
+				if (keep){
 					temp.push(clue);
+				} else {
+					console.log ("Removed a redundant clue!");
 				}
 			});
 			this.cluePool = temp;
