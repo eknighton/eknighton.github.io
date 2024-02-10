@@ -187,7 +187,7 @@ function statusCheck(){
 		document.getElementById("score").innerHTML = score;
 
 		if (rounds > 9){
-			setTimeout(() => window.alert("You've completed your career! You earned "+ score+ " medals!\nEnjoy your retirement!"), 100);
+			window.alert("You've completed your career! You earned "+ score+ " medals!\nEnjoy your retirement!");
 			return newGame();
 		} else {
 
@@ -196,7 +196,6 @@ function statusCheck(){
 				drawSuspects();
 			}, 400);
 		}
-		
 	}
 }
 
