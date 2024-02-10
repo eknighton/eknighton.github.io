@@ -73,7 +73,7 @@ class CluePool{
 		///!!!!!!!
 	}
 	getClue(){
-		//Check for clue redundancy 
+
 		if (this.cluePool.length > 0){
 			return this.cluePool.pop();
 		}
@@ -90,6 +90,23 @@ class CluePool{
 		this.cluePool = temp;
 	}
 	usable(){
+
+		
+			var temp = [];
+			this.cluePool.forEach((clue) => {
+				var redundant = true;
+				suspects.forEach((sus) => {
+					if (sus[clue.attribute] == clue.value){
+						redundant = false;
+					}
+				});
+				if (!redundant){
+					temp.push(clue);
+				}
+			});
+			this.cluePool = temp;
+		
+
 		return this.cluePool.length > 0;
 	}
 }
