@@ -132,7 +132,7 @@ var perp = null;
 var buttonClicks = 0;
 var cases = 0;
 var score = 0;
-var rounds = 0;
+var round = 0;
 var button1 = null;
 var button2 = null;
 
@@ -147,7 +147,7 @@ function newGame(){
 	buttonClicks = 0;
 	cases = 0;
 	score = 0;
-	rounds = 0;
+	round = 0;
 	document.getElementById("score").innerText = 0;
 	newLineup(9);
 	drawSuspects();
@@ -180,15 +180,19 @@ function statusCheck(){
 		}
 	})
 	if (left == 1){
-		rounds +=1;
+		round +=1;
 		score += buttonClicks;
 		buttonClicks = 0;
 		document.getElementById("clicks").innerText = "🔍"+buttonClicks;
 		document.getElementById("score").innerHTML = score;
 
-		if (rounds > 9){
-			window.alert("You've completed your career! You earned "+ score+ " medals!\nEnjoy your retirement!");
-			return newGame();
+		if (round > 9){
+			setTimeout(() => {
+				window.alert("You've completed your career! You earned "+ score+ " medals!\nEnjoy your retirement!");
+				newGame();
+			}, 20);
+
+			return;
 		} else {
 
 			setTimeout(() => {
