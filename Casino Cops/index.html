@@ -14,7 +14,12 @@ Casino Cops
 </div>
 
 <div id="caseScene" class="scene">
-	Case
+	<div id="cases" style="display: inline-block;">Case #1</div>
+		<div id="personsGrid"></div>
+		<button id="button1" onclick="caseScene.buttonOne()" style="font-size: 64px">Investigate Circles</button>
+		<button id="button2" onclick="caseScene.buttonTwo()" style="font-size: 64px">Investigate Squares</button> 
+	<div id="clicks">🔍4 Case #1</div>
+	<span id="medal">🎖️</span><span id="score">0</span>
 </div>
 
 <div id="rewardScene" class="scene">
@@ -27,6 +32,7 @@ Casino Cops
 
 <div id="loseScene" class="scene">
 </div>
+<script src="classes.js"></script>
 <script src="caseScene.js"></script>
 <script src="startScene.js"></script>
 <script src="main.js"></script>

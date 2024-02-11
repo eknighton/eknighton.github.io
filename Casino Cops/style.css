@@ -29,3 +29,19 @@ body {
 .startMenuButton:active {
     transform: translateY(2px); /* Slight push down effect when clicked */
 }
+
+
+/* Case Scene */
+
+#personsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 2fr)); /* Adjust minmax values as needed */
+    gap: 10px; /* Space between items */
+    padding: 10px;
+}
+
+.personItem {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
