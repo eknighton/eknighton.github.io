@@ -1,10 +1,10 @@
 
-var startScene = {}
+var caseScene = {}
 
-startScene.init = () => {
+caseScene.init = () => {
 
 	/* Init Constants */
-	const thisScene = document.getElementById("startScene");
+	const thisScene = document.getElementById("caseScene");
 
 	/* Make Scene Presentable */
 
@@ -14,32 +14,29 @@ startScene.init = () => {
 	document.querySelectorAll('.scene').forEach(scene => {
         scene.style.display = 'none';
     });
-	document.getElementById("startScene").style.display = "block";
+	thisScene.style.display = "block";
 
 	/* Add Buttons */
 	var startButton = document.createElement('button');
-	startButton.innerHTML = "Start Game";
+	startButton.innerHTML = "Do Game";
 	startButton.classList.add("startMenuButton");
 	startButton.onclick = function() {
-		caseScene.init();
+		thisScene.innerHTML = "Game Unable to Start";
 	};
 	thisScene.appendChild(startButton);
 
 	/* Add Listeners */
 	document.addEventListener('keydown', function(event){
 		if (event.key == ' '){
-			document.getElementById("startScene").innerHTML = "You presed space. Whoops";
+			thisScene.innerHTML = "You presed space. Whoops";
 		}
 	});
 };
 
-startScene.update = (dt) => {
+caseScene.update = (dt) => {
 
 }
-
 
 startScene.close = () => {
 	
 }
-
-

@@ -1,3 +1,31 @@
+body {
+	text-align: center;
+}
+
 .scene {
 	display: none;
+}
+
+
+/* Start Menu */
+
+.startMenuButton {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text */
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.1s; /* Smooth transition for background color and transform */
+}
+.startMenuButton:hover {
+    background-color: #45a049; /* Darker shade of green on hover */
+}
+.startMenuButton:active {
+    transform: translateY(2px); /* Slight push down effect when clicked */
 }
