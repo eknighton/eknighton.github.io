@@ -1,31 +1,41 @@
 /* Case Scene */
 
-class Person{
-	eliminated = false;
-	skin = -1;
-	eyes = -1;
-	hair = -1;
-	shirt = -1;
+class Person {
+    constructor() {
+        this.eliminated = false;
+        this.traits = {
+            eyes: Math.ceil(Math.random() * 3),
+            skin: Math.ceil(Math.random() * 3),
+        };
+    }
 
-	constructor(){
-		this.eliminated = false;
-		this.eyes = Math.ceil(Math.random()*3);
-		this.skin = Math.ceil(Math.random()*3);
-	}
+    setTrait(trait, value) {
+        this.traits[trait] = value;
+    }
 
-	equalTo(suspect){
-		return (
-			(this.eyes == suspect.eyes) && (this.skin == suspect.skin)
-		);
-	}
+    equalTo(suspect) {
+        for (let trait in this.traits) {
+            if (this.traits[trait] !== suspect.traits[trait]) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-	toString() {
-        let eyeRep = ['🟢', '🔵', '🟤'][this.eyes - 1];
-        let skinRep = ['🟨 ', '🟥', '🟫'][this.skin - 1];
-        // Map other traits similarly
-        return `${eyeRep}${skinRep}`
+    toString() {
+        const representations = {
+            eyes: ['🟢', '🔵', '🟤'],
+            skin: ['🟨', '🟥', '🟫']
+        };
+
+        return Object.keys(this.traits).reduce((acc, trait) => {
+            const index = this.traits[trait] - 1;
+            const rep = representations[trait] ? representations[trait][index] : '?';
+            return acc + rep;
+        }, '');
     }
 }
+
 
 class CluePool{
 	cluePool = [];
@@ -47,8 +57,8 @@ class CluePool{
 	filterClues(excludedIndividual){
 		var temp = [];
 		this.cluePool.forEach((item) => {
-			console.log(item.attribute + " : " + excludedIndividual[item.attribute] + " compared to " + item.value)
-			if (excludedIndividual[item.attribute] != item.value){
+			console.log(item.attribute + " : " + excludedIndividual.traits[item.attribute] + " compared to " + item.value)
+			if (excludedIndividual.traits[item.attribute] != item.value){
 				temp.push(item);
 			}
 		});
@@ -60,7 +70,7 @@ class CluePool{
 			this.cluePool.forEach((clue) => {
 				var keep = false;
 				suspectPool.forEach((sus) => {
-					if (sus[clue.attribute] == clue.value && sus.eliminated == false){
+					if (sus.traits[clue.attribute] == clue.value && sus.eliminated == false){
 						keep = true;
 					}
 				});

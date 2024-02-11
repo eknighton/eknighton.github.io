@@ -84,7 +84,7 @@ var caseScene = {
 
     applyClue: function(clue) {
         this.suspects.forEach((item) => {
-            if (item[clue.attribute] == clue.value) {
+            if (item.traits[clue.attribute] == clue.value) {
                 if (!item.eliminated) {
                     item.eliminated = true;
                     this.suspectsLeft -= 1;
