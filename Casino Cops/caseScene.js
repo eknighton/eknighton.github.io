@@ -9,7 +9,22 @@ var caseScene = {
     round: 0,
     button1: null,
     button2: null,
-    traitsInGame : [{ name: "Circles", values: [1, 2, 3] },{ name: "Squares", values: [1, 2, 3] }],
+    ALL_TRAITS : [
+		{ name: "Circles", values: [1, 2, 3] },
+		{ name: "Squares", values: [1, 2, 3] },
+		{ name: "Teeth", values: [1, 2, 3] },
+		{ name: "Stars", values: [1, 2, 3] },
+		{ name: "Hearts", values: [1, 2, 3] },
+		{ name: "Flowers", values: [1, 2, 3] },
+		{ name: "Moons", values: [1, 2, 3] },
+		{ name: "Diamonds", values: [1, 2, 3] },
+		{ name: "Leaves", values: [1, 2, 3] },
+		{ name: "Fruits", values: [1, 2, 3] },
+		{ name: "Faces", values: [1, 2, 3] },
+		{ name: "Animals", values: [1, 2, 3] },
+		{ name: "Weather", values: [1, 2, 3] },
+	],
+    traitsInGame : [],
     cluePools : {},
 
     newGame: function() {
@@ -18,26 +33,23 @@ var caseScene = {
         this.score = 0;
         this.round = 0;
         document.getElementById("score").innerText = 0;
+        this.traitsInGame = [{ name: "Circles", values: [1, 2, 3] },{ name: "Squares", values: [1, 2, 3] }];
         this.newLineup(9);
         this.drawSuspects();
     },
 
     newLineup: function(numSuspects) {
         this.suspectsLeft = numSuspects;
-        this.suspects = this.generateSuspects(this.suspectsLeft);
+        this.suspects = this.generateSuspects(this.suspectsLeft, this.traitsInGame);
         this.perp = this.suspects[0];
         this.suspects = this.shuffleArray(this.suspects);
 
-        this.buttonClicks += 4;
+        this.buttonClicks += (this.traitsInGame.length*2);
         document.getElementById("clicks").innerText = "🔍" + this.buttonClicks;
 
         this.cases += 1;
         document.getElementById("cases").innerText = "Case #" + this.cases;
 
-        this.button1 = new CluePool([new Clue('eyes', 1), new Clue('eyes', 2), new Clue('eyes', 3)]);
-        this.button1.filterClues(this.perp);
-        this.button2 = new CluePool([new Clue('skin', 1), new Clue('skin', 2), new Clue('skin', 3)]);
-        this.button2.filterClues(this.perp);
         this.setupCluePools();
         this.generateButtons();
     },
@@ -70,20 +82,21 @@ var caseScene = {
                     this.newGame();
                 }, 20);
             } else {
-                setTimeout(() => {
-                    this.newLineup(9);
+                setTimeout(() => { //Generate new lineup
+                	this.traitsInGame = this.ALL_TRAITS.slice(0, (2+this.round));
+                    this.newLineup(this.traitsInGame.length*2+1);
                     this.drawSuspects();
                 }, 400);
             }
         }
     },
 
-    generateSuspects: function(count) {
-        var P = new Person();
+    generateSuspects: function(count, traits) {
+        var P = new Person(traits);
         var ret = [P];
         var temp;
         while (ret.length < count) {
-            temp = new Person();
+            temp = new Person(traits);
             if (!temp.equalTo(P)) {
                 ret.push(temp);
             } else {

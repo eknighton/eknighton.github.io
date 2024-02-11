@@ -1,15 +1,18 @@
 /* Case Scene */
 
 class Person {
-    constructor() {
-        this.eliminated = false;
-        this.traits = {
-            Circles: Math.ceil(Math.random() * 3),
-            Squares: Math.ceil(Math.random() * 3),
-            //teeth: Math.ceil(Math.random() * 3),
-        };
-    }
 
+    constructor(traitsInGame) {
+        this.eliminated = false;
+        this.traits = {};
+
+        traitsInGame.forEach(trait => {
+            const randomValueIndex = Math.floor(Math.random() * trait.values.length);
+            const randomValue = trait.values[randomValueIndex];
+            this.traits[trait.name] = randomValue;
+        });
+    }
+	
     setTrait(trait, value) {
         this.traits[trait] = value;
     }
@@ -27,8 +30,17 @@ class Person {
         const representations = {
             Circles: ['🟢', '🔵', '🟤'],
             Squares: ['🟨', '🟥', '🟫'],
-            Teeth: ['🔺', '🔻', '🔸']
-
+            Teeth: ['🔺', '🔻', '🔸'],
+            Stars: ['⭐', '🌟', '✨'], // Representation of stars with different styles
+			Hearts: ['❤️', '💛', '💚'], // Representation of hearts in different colors
+			Flowers: ['🌸', '🌼', '🌺'], // Different types of flowers
+			Moons: ['🌑', '🌓', '🌕'], // Phases of the moon
+			Diamonds: ['💎', '🔷', '🔶'], // Diamonds and similar shapes in different colors
+			Leaves: ['🍁', '🍃', '🍂'], // Types of leaves, representing different seasons
+			Fruits: ['🍎', '🍌', '🍇'], // Various fruits
+			Faces: ['😊', '😂', '😍'], // Different facial expressions
+			Animals: ['🐶', '🐱', '🐭'], // Various small animals
+			Weather: ['☀️', '☁️', '🌧️'], // Weather conditions
         };
 
         return Object.keys(this.traits).reduce((acc, trait) => {
