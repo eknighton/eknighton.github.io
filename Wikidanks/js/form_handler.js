@@ -100,7 +100,27 @@ function check() {
 				document.getElementById("guidance_text").innerHTML = "You guessed \"" + guess + ".\" " + candidates[rngNum];
 
 		}
-		document.getElementById("guesses").innerHTML = guess + "<p></p>" + document.getElementById("guesses").innerHTML;
+		// Get the 'guesses' element
+		var guessesElement = document.getElementById("guesses");
+
+		// Create a new paragraph element
+		var newParagraph = document.createElement("p");
+
+		// Assign the 'guidance' class to the new paragraph
+		newParagraph.className = "wrong";
+
+		// Add the guess text to the new paragraph
+		newParagraph.textContent = guess;
+
+		// Insert the new paragraph at the beginning of the 'guesses' element
+		// If 'guessesElement' has existing children, insert before the first one, otherwise just append
+		if (guessesElement.firstChild) {
+		    guessesElement.insertBefore(newParagraph, guessesElement.firstChild);
+		} else {
+		    guessesElement.appendChild(newParagraph);
+		}
+
+		//document.getElementById("guesses").innerHTML = guess + "<p></p>" + document.getElementById("guesses").innerHTML;
 		document.getElementById("hints").innerHTML = "Begins with " + hints[0] + " Ends with "  + hints[1] + ". You've found the letters: " + letters + ". (Max two per entry)";
 	}
 
