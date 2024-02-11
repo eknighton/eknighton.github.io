@@ -4,8 +4,9 @@ class Person {
     constructor() {
         this.eliminated = false;
         this.traits = {
-            eyes: Math.ceil(Math.random() * 3),
-            skin: Math.ceil(Math.random() * 3),
+            Circles: Math.ceil(Math.random() * 3),
+            Squares: Math.ceil(Math.random() * 3),
+            //teeth: Math.ceil(Math.random() * 3),
         };
     }
 
@@ -24,8 +25,10 @@ class Person {
 
     toString() {
         const representations = {
-            eyes: ['🟢', '🔵', '🟤'],
-            skin: ['🟨', '🟥', '🟫']
+            Circles: ['🟢', '🔵', '🟤'],
+            Squares: ['🟨', '🟥', '🟫'],
+            Teeth: ['🔺', '🔻', '🔸']
+
         };
 
         return Object.keys(this.traits).reduce((acc, trait) => {

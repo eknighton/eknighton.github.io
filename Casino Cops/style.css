@@ -1,6 +1,10 @@
 body {
 	text-align: center;
 }
+button {
+    margin: 5px; /* Spacing between buttons */
+    font-size: 64px;
+}
 
 .scene {
 	display: none;
@@ -39,9 +43,13 @@ body {
     gap: 10px; /* Space between items */
     padding: 10px;
 }
-
 .personItem {
     border: 1px solid #ccc;
     padding: 10px;
     text-align: center;
+}
+#buttonContainer {
+    display: flex;
+    flex-direction: row; 
+    justify-content: center; 
 }

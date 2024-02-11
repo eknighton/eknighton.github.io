@@ -9,7 +9,8 @@ var caseScene = {
     round: 0,
     button1: null,
     button2: null,
-    //More buttons can be dynamically added as needed
+    traitsInGame : [{ name: "Circles", values: [1, 2, 3] },{ name: "Squares", values: [1, 2, 3] }],
+    cluePools : {},
 
     newGame: function() {
         this.buttonClicks = 0;
@@ -37,6 +38,16 @@ var caseScene = {
         this.button1.filterClues(this.perp);
         this.button2 = new CluePool([new Clue('skin', 1), new Clue('skin', 2), new Clue('skin', 3)]);
         this.button2.filterClues(this.perp);
+        this.setupCluePools();
+        this.generateButtons();
+    },
+
+    setupCluePools: function() {
+        this.traitsInGame.forEach(trait => {
+            // Assuming trait is an object like { name: "eyes", values: [1, 2, 3] }
+            this.cluePools[trait.name] = new CluePool(trait.values.map(value => new Clue(trait.name, value)));
+            this.cluePools[trait.name].filterClues(this.perp);
+        });
     },
 
     statusCheck: function() {
@@ -135,6 +146,21 @@ var caseScene = {
         this.buttonClicks -= 1;
         document.getElementById("clicks").innerText = "🔍" + this.buttonClicks;
         setTimeout(() => this.statusCheck(), 100);
+    },
+
+    generateButtons: function() {
+        const buttonContainer = document.getElementById('buttonContainer');
+        buttonContainer.innerHTML = ''; // Clear existing buttons
+
+        this.traitsInGame.forEach((trait, index) => {
+            const button = document.createElement('button');
+            button.id = `button${index + 1}`;
+            button.innerHTML = `Investigate ${trait.name}`;
+            button.style.fontSize = '64px';
+            button.onclick = () => this.buttonDown(this.cluePools[trait.name]);
+            button.style.display = 'block';
+            buttonContainer.appendChild(button);
+        });
     }
 };
 
