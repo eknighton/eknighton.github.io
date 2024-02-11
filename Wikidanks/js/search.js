@@ -46,7 +46,22 @@ function makeSearch(term) {
             if (temp == text) {
                 makeSearch(term)
             } else {
-             document.getElementById("searchResult").innerHTML = document.getElementById("searchResult").innerHTML + "<br> <b>Hint:</b> " + temp+ "<br>"; 
+                // Create a new div element
+                var newDiv = document.createElement("div");
+
+                // Add the 'question-box' class to the new div
+                newDiv.className = 'question-box';
+
+                // Set the innerHTML of the new div with your content, including the hint
+                newDiv.innerHTML = "<b>Hint:</b> " + temp + "<br>";
+
+                // Select the 'searchResult' element
+                var searchResult = document.getElementById("searchResult");
+
+                // Append the new div to the 'searchResult' element
+                searchResult.appendChild(newDiv);
+                
+             //document.getElementById("searchResult").innerHTML = document.getElementById("searchResult").innerHTML + "<br> <b>Hint:</b> " + temp+ "<br>"; 
             }
         })
         .catch(function(error){console.log(error);});
