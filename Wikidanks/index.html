@@ -45,11 +45,11 @@
 		  text-align: center; /* Center text */
 	}
 	#Guidance {
-		  border: 2px solid #28a745; /* Darker green border */
+		  border: 2px solid #dc3545; /* Darker red border */
 		  padding: 20px; /* Space inside the box */
 		  margin: 20px auto; /* Space outside the box, centered */
-		  background-color: #dff0d8; /* Light green background */
-		  color: #155724; /* Dark green text color for contrast */
+		  background-color: #f8d7da; /* Light red background */
+		  color: #721c24; /* Dark red text color for contrast */
 		  font-family: Arial, sans-serif; /* Clean, simple font */
 		  border-radius: 10px; /* Rounded corners */
 		  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
@@ -74,17 +74,18 @@
 <script src="js/text_processor.js"></script>
 <script src="js/change_blank.js"></script>
 
-<p id="hints"></p>
+
 <form id = "myForm">
+<p id="hints"></p>
 <input type="text" id="guess" name="hue"/>
 <input type="button" id="forfeit" value = "Give Up" id="guess"/>
+<p id="guidance_text"></p>
+<p id="bonusRound"></p>
 </form>
 
 
 <script src="js/form_handler.js"></script>
 <div id = 'Guidance'>
-<p id="guidance_text"></p>
-<p id="bonusRound"></p>
 <p id="points"></p>
 <p id="guesses"></p>
 </div>
