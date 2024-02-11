@@ -9,6 +9,7 @@ var caseScene = {
     round: 0,
     button1: null,
     button2: null,
+    //More buttons can be dynamically added as needed
 
     newGame: function() {
         this.buttonClicks = 0;
@@ -120,24 +121,14 @@ var caseScene = {
         return array; // This is optional, as the array is modified in place
     },
 
-    buttonOne: function() {
-        var clue = null;
-        if (this.button1.usable(this.suspects)) {
-            clue = this.button1.getClue();
-            this.applyClue(clue);
-            this.drawSuspects();
-            this.onButtonClick();
-        }
-    },
-
-    buttonTwo: function() {
-        var clue = null;
-        if (this.button2.usable(this.suspects)) {
-            clue = this.button2.getClue();
-            this.applyClue(clue);
-            this.drawSuspects();
-            this.onButtonClick();
-        }
+    buttonDown: function(button) {
+    	var clue = null;
+    	if (button.usable(this.suspects)){
+    		clue = button.getClue();
+    		this.applyClue(clue);
+    		this.drawSuspects();
+    		this.onButtonClick();
+    	}
     },
 
     onButtonClick: function() {
