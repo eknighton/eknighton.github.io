@@ -101,24 +101,24 @@ function check() {
 
 		}
 		// Get the 'guesses' element
-		var guessesElement = document.getElementById("guesses");
+		const guessesElement = document.getElementById("guesses");
 
-		// Create a new paragraph element
-		var newParagraph = document.createElement("p");
+		// Check if an element with the class 'wrong' already exists
+		const existingParagraph = guessesElement.querySelector('.wrong');
 
-		// Assign the 'guidance' class to the new paragraph
-		newParagraph.className = "wrong";
-
-		// Add the guess text to the new paragraph
-		newParagraph.textContent = guess;
-
-		// Insert the new paragraph at the beginning of the 'guesses' element
-		// If 'guessesElement' has existing children, insert before the first one, otherwise just append
-		if (guessesElement.firstChild) {
-		    guessesElement.insertBefore(newParagraph, guessesElement.firstChild);
+		if (existingParagraph) {
+		  // If it exists, add the new guess text, separated by a comma
+		  existingParagraph.textContent += `, ${guess}`;
 		} else {
-		    guessesElement.appendChild(newParagraph);
+		  // If it doesn't exist, create a new paragraph element
+		  const newParagraph = document.createElement("p");
+		  newParagraph.className = "wrong";
+		  newParagraph.textContent = guess;
+
+		  // Prepend the new paragraph to the 'guesses' element
+		  guessesElement.prepend(newParagraph);
 		}
+
 
 		//document.getElementById("guesses").innerHTML = guess + "<p></p>" + document.getElementById("guesses").innerHTML;
 		document.getElementById("hints").innerHTML = "Begins with " + hints[0] + " Ends with "  + hints[1] + ". You've found the letters: " + letters + ". (Max two per entry)";
