@@ -172,6 +172,7 @@ var caseScene = {
             button.style.fontSize = '64px';
             button.onclick = () => this.buttonDown(this.cluePools[trait.name]);
             button.style.display = 'block';
+            button.classList.add("investigateButton");
             buttonContainer.appendChild(button);
         });
     }
