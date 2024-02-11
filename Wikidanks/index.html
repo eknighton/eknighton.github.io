@@ -19,7 +19,7 @@
 		  margin-left: auto; /* Center the box */
 		  margin-right: auto; /* Center the box */
 		}
-	.styled-box {
+	.hints-box {
 		  border: 2px solid #007BFF; /* Solid blue border */
 		  padding: 20px; /* Space inside the box */
 		  margin: 20px 0; /* Space outside the box */
@@ -32,6 +32,30 @@
 		  margin-left: auto; /* Center the box */
 		  margin-right: auto; /* Center the box */
 	}
+	#myForm {
+		  border: 2px solid #28a745; /* Darker green border */
+		  padding: 20px; /* Space inside the box */
+		  margin: 20px auto; /* Space outside the box, centered */
+		  background-color: #dff0d8; /* Light green background */
+		  color: #155724; /* Dark green text color for contrast */
+		  font-family: Arial, sans-serif; /* Clean, simple font */
+		  border-radius: 10px; /* Rounded corners */
+		  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+		  max-width: 80%; /* Maximum width, for better readability */
+		  text-align: center; /* Center text */
+	}
+	#Guidance {
+		  border: 2px solid #28a745; /* Darker green border */
+		  padding: 20px; /* Space inside the box */
+		  margin: 20px auto; /* Space outside the box, centered */
+		  background-color: #dff0d8; /* Light green background */
+		  color: #155724; /* Dark green text color for contrast */
+		  font-family: Arial, sans-serif; /* Clean, simple font */
+		  border-radius: 10px; /* Rounded corners */
+		  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+		  max-width: 80%; /* Maximum width, for better readability */
+		  text-align: center; /* Center text */
+	}
 </style>
 </head>
 
@@ -41,7 +65,7 @@
 <p id="spank" class="question-box"></p>
 <p id="wank"></p>
 
-<p id="searchResult"></p>
+<p id="searchResult" class="hints-box" ></p>
 
 <!JS scripts>
 <script src="js/util.js"></script>
@@ -58,10 +82,12 @@
 
 
 <script src="js/form_handler.js"></script>
+<div id = 'Guidance'>
 <p id="guidance_text"></p>
 <p id="bonusRound"></p>
 <p id="points"></p>
 <p id="guesses"></p>
+</div>
 
 </body>
 </html>
