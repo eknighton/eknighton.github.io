@@ -1,4 +1,4 @@
-body {
+html {
 	text-align: center;
 }
 button {
@@ -38,16 +38,29 @@ button {
 /* Case Scene */
 
 #personsGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 2fr)); /* Adjust minmax values as needed */
-    gap: 10px; /* Space between items */
-    padding: 10px;
+  display: grid;
+  width: 100%; /* Full width of the parent container */
+  height: 70vh; /* Fixed height based on the viewport height */
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px; /* Space between grid items */
+  padding: 10px;
+  background-color: black;
+  box-sizing: border-box; /* Includes padding in the element's total width and height */
 }
-.personItem {
-    border: 1px solid #ccc;
-    padding: 10px;
-    text-align: center;
+#personsGrid .person {
+  font-size: 64px;
+  display: flex;
+  justify-content: center;
+  align-items: top;
+  width: 200px; /* Fixed width */
+  height: 200px; /* Fixed height */
+  overflow: hidden; /* Hide overflow content */
+  text-align: center;
+  background-color: #fff; /* Background color for visibility */
+  color: #000; /* Text color */
+  box-sizing: border-box; /* Includes padding and border in the element's total width and height */
 }
+
 #buttonContainer {
     display: flex;
     flex-direction: row; 
