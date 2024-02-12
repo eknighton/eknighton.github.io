@@ -40,6 +40,8 @@ button {
 #personsGrid {
   display: grid; 
 grid-auto-flow: row dense;
+ justify-content: space-evenly; /* Distribute items evenly along the row */
+  align-content: space-evenly; /* Distribute items evenly along the column */
   width: 100%; 
   height: 50vh;
 background-color: blue; For visibility */
