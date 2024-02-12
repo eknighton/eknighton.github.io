@@ -25,6 +25,7 @@ function setupGrid() {
 
   // Initial guess for person size (square side length)
   let personSide = Math.sqrt(gridWidth * grid.clientHeight / totalPersons);
+  personSide = personSide+10;
 
   // Calculate initial number of columns, rounding down
   let numColumns = Math.floor(gridWidth / personSide);
@@ -43,8 +44,8 @@ function setupGrid() {
 
   // Apply the calculated size to each .person element
   persons.forEach(person => {
-    person.style.width = `${personSide}px`;
-    person.style.height = `${personSide}px`;
+    person.style.width = `${personSide-10}px`;
+    person.style.height = `${personSide-10}px`;
   });
 }
 
