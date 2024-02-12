@@ -12,7 +12,6 @@ var caseScene = {
     ALL_TRAITS : [
 		{ name: "Circles", values: [1, 2, 3] },
 		{ name: "Squares", values: [1, 2, 3] },
-		{ name: "Teeth", values: [1, 2, 3] },
 		{ name: "Stars", values: [1, 2, 3] },
 		{ name: "Hearts", values: [1, 2, 3] },
 		{ name: "Flowers", values: [1, 2, 3] },
@@ -23,6 +22,7 @@ var caseScene = {
 		{ name: "Faces", values: [1, 2, 3] },
 		{ name: "Animals", values: [1, 2, 3] },
 		{ name: "Weather", values: [1, 2, 3] },
+        { name: "Teeth", values: [1, 2, 3] },
 	],
     traitsInGame : [],
     cluePools : {},
@@ -71,7 +71,10 @@ var caseScene = {
         });
         if (left == 1) {
             this.round += 1;
-            this.score += this.buttonClicks;
+            if (this.buttonClicks > 0) {
+                this.score += this.buttonClicks;
+            }
+            
             this.buttonClicks = 0;
             document.getElementById("clicks").innerText = "🔍" + this.buttonClicks;
             document.getElementById("score").innerHTML = this.score;
