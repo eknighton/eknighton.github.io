@@ -16,31 +16,44 @@ function adjustFontSize() {
   });
 }
 
-function adjustPersonItemsToFit() {
-    const grid = document.getElementById('personsGrid');
-    const personItems = document.querySelectorAll('.person');
-    let itemSize = 150; // Initial item size
-    const itemMargin = 10; // Margin around items
 
-    const gridStyle = window.getComputedStyle(grid);
-    const gridPaddingHorizontal = parseFloat(gridStyle.paddingLeft) + parseFloat(gridStyle.paddingRight);
-    const availableWidth = grid.offsetWidth - gridPaddingHorizontal;
+function setupGrid() {
+  const persons = document.querySelectorAll('.person');
+  const grid = document.getElementById('personsGrid');
+  const totalPersons = persons.length;
+  let gridWidth = grid.clientWidth;
 
-    let itemsPerRow = Math.floor(availableWidth / (itemSize + itemMargin * 2));
+  // Initial guess for person size (square side length)
+  let personSide = Math.sqrt(gridWidth * grid.clientHeight / totalPersons);
 
-    while (itemsPerRow * (itemSize + itemMargin * 2) > availableWidth) {
-        itemSize--; // Decrease item size
-        itemsPerRow = Math.floor(availableWidth / (itemSize + itemMargin * 2));
-    }
+  // Calculate initial number of columns, rounding down
+  let numColumns = Math.floor(gridWidth / personSide);
 
-    personItems.forEach(item => {
-        item.style.width = `${itemSize}px`;
-        item.style.height = `${itemSize}px`;
-    });
+  // Check and adjust the number of columns to ensure the total height does not exceed 50vh
+  let numRows = Math.ceil(totalPersons / numColumns);
+  while (personSide * numRows > grid.clientHeight && numColumns < totalPersons) {
+    numColumns++;
+    personSide = gridWidth / numColumns; // Recalculate personSide based on new numColumns
+    numRows = Math.ceil(totalPersons / numColumns); // Recalculate numRows
+  }
+
+  // Set the CSS Grid styles
+  grid.style.gridTemplateColumns = `repeat(${numColumns}, 1fr)`;
+  grid.style.gridAutoRows = `${personSide}px`; // Set the height of the rows based on the final personSide
+
+  // Apply the calculated size to each .person element
+  persons.forEach(person => {
+    person.style.width = `${personSide}px`;
+    person.style.height = `${personSide}px`;
+  });
 }
 
+// Call this function on page load and whenever the number of .person elements changes
+setupGrid();
+
+
 // Run the function when the document is fully loaded
-document.addEventListener('DOMContentLoaded', () => {adjustPersonItemsToFit(); adjustFontSize();});
+document.addEventListener('DOMContentLoaded', () => {setupGrid(); adjustFontSize();});
 
 // Optionally, run the function when the window is resized or when items are dynamically added/removed
-window.addEventListener('resize', () => {adjustPersonItemsToFit(); adjustFontSize();});
+window.addEventListener('resize', () => {setupGrid(); adjustFontSize();});

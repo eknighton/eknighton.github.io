@@ -135,7 +135,7 @@ var caseScene = {
 
     drawSuspects: function() {
         this.updateGrid();
-        adjustPersonItemsToFit();
+        setupGrid();
         adjustFontSize();
     },
 

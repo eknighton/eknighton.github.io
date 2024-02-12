@@ -38,27 +38,15 @@ button {
 /* Case Scene */
 
 #personsGrid {
-  display: grid;
-  width: 100%; /* Full width of the parent container */
-  height: 70vh; /* Fixed height based on the viewport height */
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 10px; /* Space between grid items */
-  padding: 10px;
-  background-color: black;
-  box-sizing: border-box; /* Includes padding in the element's total width and height */
+  display: grid; 
+grid-auto-flow: row dense;
+  width: 100%; 
+  height: 50vh;
+background-color: blue; For visibility */
+
 }
 #personsGrid .person {
-  font-size: 64px;
-  display: flex;
-  justify-content: center;
-  align-items: top;
-  width: 200px; /* Fixed width */
-  height: 200px; /* Fixed height */
-  overflow: hidden; /* Hide overflow content */
-  text-align: center;
-  background-color: #fff; /* Background color for visibility */
-  color: #000; /* Text color */
-  box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+ background-color: white;/* For visibility */
 }
 
 #buttonContainer {
