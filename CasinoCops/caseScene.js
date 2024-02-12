@@ -48,7 +48,7 @@ var caseScene = {
         document.getElementById("clicks").innerText = "🔍" + this.buttonClicks;
 
         this.cases += 1;
-        document.getElementById("cases").innerText = "Case #" + this.cases;
+        document.getElementById("cases").innerText = "|  Case #" + this.cases+ "  |";
 
         this.setupCluePools();
         this.generateButtons();
