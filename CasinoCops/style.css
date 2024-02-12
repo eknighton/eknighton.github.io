@@ -2,8 +2,7 @@ html {
 	text-align: center;
 }
 button {
-    margin: 5px; /* Spacing between buttons */
-    font-size: 64px;
+
 }
 
 .scene {
@@ -40,8 +39,11 @@ button {
 #personsGrid {
   display: grid; 
 grid-auto-flow: row dense;
- justify-content: space-evenly; /* Distribute items evenly along the row */
-  align-content: space-evenly; /* Distribute items evenly along the column */
+ justify-items: center; /* Centers items within their grid cells horizontally */
+  align-items: center; /* Centers items within their grid cells vertically */
+  justify-content: center; /* Centers the entire grid content horizontally when there's extra space */
+  align-content: center; /* Centers the entire grid content vertically when there's extra space */
+
   width: 100%; 
   height: 50vh;
 background-color: blue; For visibility */
@@ -52,7 +54,18 @@ background-color: blue; For visibility */
 }
 
 #buttonContainer {
-    display: flex;
-    flex-direction: row; 
-    justify-content: center; 
+ display: grid; 
+ grid-auto-flow: row dense;
+ justify-items: center; /* Centers items within their grid cells horizontally */
+  align-items: center; /* Centers items within their grid cells vertically */
+  justify-content: center; /* Centers the entire grid content horizontally when there's extra space */
+  align-content: center; /* Centers the entire grid content vertically when there's extra space */
+
+  width: 100%; 
+  height: 30vh;
+  background-color: black; For visibility */
+}
+
+#buttonContainer .investigateButton{
+
 }
