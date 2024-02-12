@@ -44,7 +44,7 @@ var caseScene = {
         this.perp = this.suspects[0];
         this.suspects = this.shuffleArray(this.suspects);
 
-        this.buttonClicks += (this.traitsInGame.length*2);
+        this.buttonClicks += (4);
         document.getElementById("clicks").innerText = "🔍" + this.buttonClicks;
 
         this.cases += 1;
@@ -83,8 +83,9 @@ var caseScene = {
                 }, 20);
             } else {
                 setTimeout(() => { //Generate new lineup
-                	this.traitsInGame = this.ALL_TRAITS.slice(0, 2+this.round);
-                    this.newLineup(this.traitsInGame.length*2+1); 
+                    //rewardScene.init();
+                     this.newLineup(9);
+                	this.traitsInGame = this.ALL_TRAITS.slice(0, 2+Math.floor(this.round/2));
                     this.drawSuspects();
                 }, 400);
             }
