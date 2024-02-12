@@ -83,8 +83,8 @@ var caseScene = {
                 }, 20);
             } else {
                 setTimeout(() => { //Generate new lineup
-                	this.traitsInGame = this.ALL_TRAITS.slice(0, 8);//2+this.round
-                    this.newLineup(80); //this.traitsInGame.length*2+1
+                	this.traitsInGame = this.ALL_TRAITS.slice(0, 2+this.round);
+                    this.newLineup(this.traitsInGame.length*2+1); 
                     this.drawSuspects();
                 }, 400);
             }
