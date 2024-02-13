@@ -103,6 +103,7 @@ def move_piece_directly(board, from_square, to_square):
         board.set_piece_at(to_square, piece)
 
 def post_move():
+    global player_has_won
     # Generate the Stockfish move for the current board state
     current_move = get_stockfish_move(board)
     
@@ -123,9 +124,11 @@ def post_proceed():
     global currentPuzzle
     global board
     global puzzles
+    global player_has_won
     print("Going to next puzzle")
     currentPuzzle+=1
-    board = chess.board(puzzles[currentPuzzle]['state'])
+    board = chess.Board(puzzles[currentPuzzle]['state'])
+    player_has_won = false
 
 
 # Calculate the expected move for the initial puzzle state
