@@ -45,6 +45,7 @@ pygame.display.set_caption('Chess Game')
 # Chess Variables
 board = chess.Board(puzzles[0]['state'])
 selected_square = None  # Store the first selected square
+clicked_square = None
 player_has_won = False
 player_has_failed = False
 white_no_move = False
@@ -94,7 +95,7 @@ def display_win_state():
     pygame.display.flip()
 
 def display_fail_state():
-    # Display the "You Win" prompt
+    # Display the "You Fail" prompt
     font = pygame.font.SysFont("Arial", 36)
     text_surface = font.render("You Failed! Press Space to retry", True, (255, 0, 0))  # Green text
     text_rect = text_surface.get_rect(center=(screen_size / 2, screen_size / 2))
@@ -102,10 +103,16 @@ def display_fail_state():
     pygame.display.flip()
 
 def display_no_move():
-    # Display the "You Win" prompt
     font = pygame.font.SysFont("Arial", 36)
     text_surface = font.render("You Failed! White has no valid moves. Press Space", True, (255, 0, 0))  # Green text
     text_rect = text_surface.get_rect(center=(screen_size / 2, screen_size / 2))
+    screen.blit(text_surface, text_rect)
+    pygame.display.flip()
+
+def display_editing():
+    font = pygame.font.SysFont("Arial", 18)
+    text_surface = font.render("Editing. J to toggle. Keys to place.", True, (0, 255, 0))  # Green text
+    text_rect = text_surface.get_rect(center=(screen_size / 2, screen_size / 4))
     screen.blit(text_surface, text_rect)
     pygame.display.flip()
 
@@ -293,6 +300,8 @@ while True:
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_j:
             editing = not editing
             selected_square = None
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                 print(board.fen())
         elif event.type == pygame.KEYDOWN and editing:
             if clicked_square is not None:
                 if event.key in piece_map:
@@ -300,6 +309,7 @@ while True:
                     place_piece_on_square(board, clicked_square, piece_symbol)
                 elif event.key == pygame.K_0:
                     board.remove_piece_at(clicked_square)
+           
 
 
     # Drawing the board and pieces
@@ -313,10 +323,13 @@ while True:
         display_fail_state()
 
 
+
     # Highlight the selected square
     if selected_square is not None:
         draw_highlight_square(selected_square)
 
+    if editing:
+        display_editing()
 
     pygame.display.flip()
 
