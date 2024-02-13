@@ -6,7 +6,7 @@ import chess.engine
 
 
 #Puzzles
-puzzles = [{'id': 0, 'state':'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'length': 1},{'id': 1, 'state':'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'length': 1}]
+puzzles = [{'id': 0, 'state':'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'length': 1},{'id': 1, 'state':'8/P7/8/8/8/8/8/k1K5 w - - 0 1', 'length': 1}]
 currentPuzzle = 0
 refBoard = chess.Board('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
 
@@ -104,6 +104,7 @@ def move_piece_directly(board, from_square, to_square):
 
 def post_move():
     global player_has_won
+    global refBoard
     # Generate the Stockfish move for the current board state
     current_move = get_stockfish_move(board)
     
@@ -125,10 +126,12 @@ def post_proceed():
     global board
     global puzzles
     global player_has_won
+    global refBoard
     print("Going to next puzzle")
     currentPuzzle+=1
     board = chess.Board(puzzles[currentPuzzle]['state'])
-    player_has_won = false
+    refBoard = board
+    player_has_won = False
 
 
 # Calculate the expected move for the initial puzzle state
