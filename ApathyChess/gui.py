@@ -106,17 +106,26 @@ def getMove(board):
     STOCKFISH_PATH = 'stockfish-windows-x86-64/stockfish/stockfish-windows-x86-64.exe'
 
     # Set up the engine
-    with chess.engine.SimpleEngine.popen_uci(STOCKFISH_PATH) as engine:
-        # Get the best move for the current position
-        result = engine.play(board, chess.engine.Limit(time=0.1))
+    try:
+        with chess.engine.SimpleEngine.popen_uci(STOCKFISH_PATH) as engine:
+            # Get the best move for the current position
+            result = engine.play(board, chess.engine.Limit(time=0.1))
+            
+            # Return the best move
+    except Exception as e:
+        return None
         
-        # Return the best move
-        return result.move
+    return result.move 
 
 def update_board_with_stockfish_move(board):
+    global current_move
     move = get_stockfish_move(board)
     if move is not None:
-        board.push(move)  # Apply the move to the board
+        try:
+            board.push(move)  # Apply the move to the board
+            board.turn = chess.WHITE
+        except chess.IllegalMoveError:
+            current_move = None
     else:
         print("No move available or engine terminated.")
 
@@ -154,14 +163,17 @@ def post_move():
     global white_no_move
     # Generate the Stockfish move for the current board state
     current_move = get_stockfish_move(board)
+    print(current_move)
     
     # Generate the Stockfish move for the reference board state
     reference_move = get_stockfish_move(refBoard)
+    print(reference_move)
     
     # Compare the two moves
     if current_move != None and current_move == reference_move:
+        print("Move Accepted!")
         update_board_with_stockfish_move(board)
-        refBoard = board
+        refBoard = board.copy()
         lenLeft-=1
         if lenLeft < 1:
             player_has_won = True 
@@ -188,18 +200,39 @@ def post_proceed():
     global lenLeft
     global white_no_move
     white_no_move = False
-    if player_has_won:
+    if player_has_failed:
+        board = chess.Board(puzzles[currentPuzzle]['state'])
+        lenLeft = puzzles[currentPuzzle]['length']
+        refBoard = board.copy()
+        player_has_failed = False
+    elif player_has_won:
         print("Going to next puzzle")
         currentPuzzle+=1
         board = chess.Board(puzzles[currentPuzzle]['state'])
         lenLeft = puzzles[currentPuzzle]['length']
-        refBoard = board
+        refBoard = board.copy()
         player_has_won = False
     else:
         board = chess.Board(puzzles[currentPuzzle]['state'])
         lenLeft = puzzles[currentPuzzle]['length']
-        refBoard = board
-        player_has_failed = False
+        refBoard = board.copy()
+
+def restart():
+    global currentPuzzle
+    global board
+    global puzzles
+    global player_has_won
+    global player_has_failed
+    global refBoard
+    global lenLeft
+    global white_no_move
+    board = chess.Board(puzzles[currentPuzzle]['state'])
+    lenLeft = puzzles[currentPuzzle]['length']
+    refBoard = board.copy()
+    player_has_won = False
+    player_has_failed = False
+    white_no_move = False
+
 
 
 # Calculate the expected move for the initial puzzle state
@@ -218,15 +251,17 @@ while True:
             elif selected_square is not None:
                 # Move the piece to the new square if it's different from the selected one
                 if selected_square != clicked_square and board.piece_at(clicked_square) is None:
-                    print(board)
                     move_piece_directly(board, selected_square, clicked_square)
                     print(board)
                     post_move()
-                    print(player_has_won)
                 # Reset selection in any case
                 selected_square = None
         elif (player_has_won or player_has_failed) and event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             post_proceed()
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_r:
+            restart()
+
+
     # Drawing the board and pieces
     draw_chessboard()
     draw_pieces(board)
