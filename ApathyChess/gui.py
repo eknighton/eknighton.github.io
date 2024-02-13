@@ -32,6 +32,7 @@ selected_square = None  # Store the first selected square
 player_has_won = False
 player_has_failed = False
 white_no_move = False
+editing = False
 # Define colors
 white = (255, 255, 255)
 black = (0, 0, 0)
@@ -114,7 +115,7 @@ def getMove(board):
             # Return the best move
     except Exception as e:
         return None
-        
+
     return result.move 
 
 def update_board_with_stockfish_move(board):
@@ -154,6 +155,12 @@ def move_piece_directly(board, from_square, to_square):
         board.set_piece_at(to_square, piece)
 
 def post_move():
+
+    global editing
+
+    if editing:
+        return
+
     global player_has_won
     global refBoard
     global board
@@ -172,6 +179,8 @@ def post_move():
     # Compare the two moves
     if current_move != None and current_move == reference_move:
         print("Move Accepted!")
+        update_board_with_stockfish_move(board)
+        board.turn = chess.BLACK
         update_board_with_stockfish_move(board)
         refBoard = board.copy()
         lenLeft-=1
@@ -260,6 +269,8 @@ while True:
             post_proceed()
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_r:
             restart()
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_j:
+            editing = not editing
 
 
     # Drawing the board and pieces
