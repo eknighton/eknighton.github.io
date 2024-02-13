@@ -51,6 +51,11 @@ background-color: blue; For visibility */
 }
 #personsGrid .person {
  background-color: white;/* For visibility */
+ transition: opacity 2s ease;
+}
+
+#personsGrid .fade-out {
+  opacity: 0; /* Fully transparent */
 }
 
 #buttonContainer {

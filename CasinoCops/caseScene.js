@@ -131,7 +131,7 @@ var caseScene = {
             personDiv.classList.add('person');
             personDiv.textContent = person.toString(); // Use your method to get text representation
             if (person.eliminated) {
-                personDiv.textContent = " ";
+                personDiv.classList.add('fade-out');
             }
             grid.appendChild(personDiv);
         });
