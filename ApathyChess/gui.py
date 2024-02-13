@@ -14,6 +14,22 @@ puzzles = [
     {'id': 8, 'state': '4k3/8/8/8/8/8/8/R3K2R w KQ - 0 1', 'length': 2},  # Castling puzzle
 ]
 
+#Piece Keyshortcuts
+piece_map = {
+    pygame.K_p: 'p',  # Black Pawn
+    pygame.K_n: 'n',  # Black Knight
+    pygame.K_b: 'b',  # Black Bishop
+    pygame.K_r: 'r',  # Black Rook
+    pygame.K_q: 'q',  # Black Queen
+    pygame.K_k: 'k',  # Black King
+    pygame.K_1: 'P',  # White Pawn
+    pygame.K_2: 'N',  # White Knight
+    pygame.K_3: 'B',  # White Bishop
+    pygame.K_4: 'R',  # White Rook
+    pygame.K_5: 'Q',  # White Queen
+    pygame.K_6: 'K',  # White King
+}
+
 currentPuzzle = 0
 refBoard = chess.Board(puzzles[0]['state'])
 lenLeft = puzzles[0]['length']
@@ -242,7 +258,10 @@ def restart():
     player_has_failed = False
     white_no_move = False
 
-
+# For Editing
+def place_piece_on_square(board, square, piece_symbol):
+    piece = chess.Piece.from_symbol(piece_symbol)
+    board.set_piece_at(square, piece)
 
 # Calculate the expected move for the initial puzzle state
 expected_move = get_stockfish_move(board)
@@ -265,12 +284,22 @@ while True:
                     post_move()
                 # Reset selection in any case
                 selected_square = None
+            if editing:
+                selected_square = clicked_square
         elif (player_has_won or player_has_failed) and event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             post_proceed()
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_r:
             restart()
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_j:
             editing = not editing
+            selected_square = None
+        elif event.type == pygame.KEYDOWN and editing:
+            if clicked_square is not None:
+                if event.key in piece_map:
+                    piece_symbol = piece_map[event.key]
+                    place_piece_on_square(board, clicked_square, piece_symbol)
+                elif event.key == pygame.K_0:
+                    board.remove_piece_at(clicked_square)
 
 
     # Drawing the board and pieces
