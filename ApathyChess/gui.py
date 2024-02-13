@@ -31,6 +31,7 @@ board = chess.Board(puzzles[0]['state'])
 selected_square = None  # Store the first selected square
 player_has_won = False
 player_has_failed = False
+white_no_move = False
 # Define colors
 white = (255, 255, 255)
 black = (0, 0, 0)
@@ -83,12 +84,22 @@ def display_fail_state():
     screen.blit(text_surface, text_rect)
     pygame.display.flip()
 
+def display_no_move():
+    # Display the "You Win" prompt
+    font = pygame.font.SysFont("Arial", 36)
+    text_surface = font.render("You Failed! White has no valid moves. Press Space", True, (255, 0, 0))  # Green text
+    text_rect = text_surface.get_rect(center=(screen_size / 2, screen_size / 2))
+    screen.blit(text_surface, text_rect)
+    pygame.display.flip()
+
 def get_stockfish_move(board):
     global current_move
     try:
         current_move = getMove(board)
     except chess.engine.EngineTerminatedError as e:
        current_move = None
+       print("Move: none")
+    return current_move
 
 def getMove(board):
     # Path to the Stockfish engine executable
@@ -102,6 +113,12 @@ def getMove(board):
         # Return the best move
         return result.move
 
+def update_board_with_stockfish_move(board):
+    move = get_stockfish_move(board)
+    if move is not None:
+        board.push(move)  # Apply the move to the board
+    else:
+        print("No move available or engine terminated.")
 
 
 def get_square_from_mouse_pos(pos):
@@ -134,6 +151,7 @@ def post_move():
     global currentPuzzle
     global player_has_failed
     global lenLeft
+    global white_no_move
     # Generate the Stockfish move for the current board state
     current_move = get_stockfish_move(board)
     
@@ -141,7 +159,9 @@ def post_move():
     reference_move = get_stockfish_move(refBoard)
     
     # Compare the two moves
-    if current_move == reference_move:
+    if current_move != None and current_move == reference_move:
+        update_board_with_stockfish_move(board)
+        refBoard = board
         lenLeft-=1
         if lenLeft < 1:
             player_has_won = True 
@@ -149,7 +169,12 @@ def post_move():
         #True
         # Additional logic for handling puzzle completion can go here
     else:
-        print("The moves do not match. Current move: {current_move}, Reference move: {reference_move}")
+        if current_move != None:
+            update_board_with_stockfish_move(board)
+            print("The moves do not match. Current move: {current_move}, Reference move: {reference_move}")
+        else:
+            print("No move")
+            white_no_move = True
         player_has_failed = True 
         # Additional logic for handling puzzle failure can go here
 
@@ -161,6 +186,8 @@ def post_proceed():
     global player_has_failed
     global refBoard
     global lenLeft
+    global white_no_move
+    white_no_move = False
     if player_has_won:
         print("Going to next puzzle")
         currentPuzzle+=1
@@ -170,6 +197,7 @@ def post_proceed():
         player_has_won = False
     else:
         board = chess.Board(puzzles[currentPuzzle]['state'])
+        lenLeft = puzzles[currentPuzzle]['length']
         refBoard = board
         player_has_failed = False
 
@@ -202,7 +230,9 @@ while True:
     # Drawing the board and pieces
     draw_chessboard()
     draw_pieces(board)
-    if player_has_won == True:
+    if white_no_move:
+        display_no_move()
+    elif player_has_won == True:
         display_win_state()
     elif player_has_failed == True:
         display_fail_state()
