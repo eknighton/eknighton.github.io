@@ -6,9 +6,10 @@ import chess.engine
 
 
 #Puzzles
-puzzles = [{'id': 0, 'state':'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'length': 1},{'id': 1, 'state':'8/P7/8/8/8/8/8/k1K5 w - - 0 1', 'length': 1}]
+puzzles = [{'id': 0, 'state':'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'length': 1},{'id': 1, 'state':'8/P7/8/8/8/8/8/k1K5 w - - 0 1', 'length': 3}]
 currentPuzzle = 0
-refBoard = chess.Board('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
+refBoard = chess.Board(puzzles[0]['state'])
+lenLeft = puzzles[0]['length']
 
 # Initialize Pygame
 pygame.init()
@@ -22,6 +23,7 @@ pygame.display.set_caption('Chess Game')
 board = chess.Board(puzzles[0]['state'])
 selected_square = None  # Store the first selected square
 player_has_won = False
+player_has_failed = False
 # Define colors
 white = (255, 255, 255)
 black = (0, 0, 0)
@@ -66,6 +68,14 @@ def display_win_state():
     screen.blit(text_surface, text_rect)
     pygame.display.flip()
 
+def display_fail_state():
+    # Display the "You Win" prompt
+    font = pygame.font.SysFont("Arial", 36)
+    text_surface = font.render("You Failed! Press Space to retry", True, (255, 0, 0))  # Green text
+    text_rect = text_surface.get_rect(center=(screen_size / 2, screen_size / 2))
+    screen.blit(text_surface, text_rect)
+    pygame.display.flip()
+
 def get_stockfish_move(board):
     # Path to the Stockfish engine executable
     STOCKFISH_PATH = 'stockfish-windows-x86-64/stockfish/stockfish-windows-x86-64.exe'
@@ -105,6 +115,10 @@ def move_piece_directly(board, from_square, to_square):
 def post_move():
     global player_has_won
     global refBoard
+    global board
+    global currentPuzzle
+    global player_has_failed
+    global lenLeft
     # Generate the Stockfish move for the current board state
     current_move = get_stockfish_move(board)
     
@@ -113,12 +127,15 @@ def post_move():
     
     # Compare the two moves
     if current_move == reference_move:
-        player_has_won = True 
-        print("The moves match. Puzzle solved!")
+        lenLeft-=1
+        if lenLeft < 1:
+            player_has_won = True 
+            print("The moves match. Puzzle solved!")
         #True
         # Additional logic for handling puzzle completion can go here
     else:
-        print(f"The moves do not match. Current move: {current_move}, Reference move: {reference_move}")
+        print("The moves do not match. Current move: {current_move}, Reference move: {reference_move}")
+        player_has_failed = True 
         # Additional logic for handling puzzle failure can go here
 
 def post_proceed():
@@ -126,12 +143,20 @@ def post_proceed():
     global board
     global puzzles
     global player_has_won
+    global player_has_failed
     global refBoard
-    print("Going to next puzzle")
-    currentPuzzle+=1
-    board = chess.Board(puzzles[currentPuzzle]['state'])
-    refBoard = board
-    player_has_won = False
+    global lenLeft
+    if player_has_won:
+        print("Going to next puzzle")
+        currentPuzzle+=1
+        board = chess.Board(puzzles[currentPuzzle]['state'])
+        lenLeft = puzzles[currentPuzzle]['length']
+        refBoard = board
+        player_has_won = False
+    else:
+        board = chess.Board(puzzles[currentPuzzle]['state'])
+        refBoard = board
+        player_has_failed = False
 
 
 # Calculate the expected move for the initial puzzle state
@@ -157,13 +182,15 @@ while True:
                     print(player_has_won)
                 # Reset selection in any case
                 selected_square = None
-        elif player_has_won and event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+        elif (player_has_won or player_has_failed) and event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             post_proceed()
     # Drawing the board and pieces
     draw_chessboard()
     draw_pieces(board)
     if player_has_won == True:
         display_win_state()
+    elif player_has_failed == True:
+        display_fail_state()
 
 
     # Highlight the selected square
