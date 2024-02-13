@@ -120,6 +120,9 @@ def post_move():
         # Additional logic for handling puzzle failure can go here
 
 def post_proceed():
+    global currentPuzzle
+    global board
+    global puzzles
     print("Going to next puzzle")
     currentPuzzle+=1
     board = chess.board(puzzles[currentPuzzle]['state'])
@@ -149,18 +152,13 @@ while True:
                 # Reset selection in any case
                 selected_square = None
         elif player_has_won and event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            # Logic to load the next puzzle and reset the win state
-           # player_has_won = False
             post_proceed()
-
     # Drawing the board and pieces
-    print(player_has_won)
+    draw_chessboard()
+    draw_pieces(board)
     if player_has_won == True:
-        print("Displaying won")
         display_win_state()
-    else:
-        draw_chessboard()
-        draw_pieces(board)
+
 
     # Highlight the selected square
     if selected_square is not None:
