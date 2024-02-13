@@ -6,7 +6,14 @@ import chess.engine
 
 
 #Puzzles
-puzzles = [{'id': 0, 'state':'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'length': 1},{'id': 1, 'state':'8/P7/8/8/8/8/8/k1K5 w - - 0 1', 'length': 3}]
+puzzles = [
+    {'id': 0, 'state': 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'length': 1},
+    {'id': 1, 'state': '8/P7/8/8/8/8/8/k1K5 w - - 0 1', 'length': 1},
+    {'id': 5, 'state': '8/5ppk/8/2Q5/8/8/8/7K w - - 0 1', 'length': 2},  # Queen checkmate puzzle
+    {'id': 7, 'state': '8/8/2p5/8/2P5/8/3K4/3k4 w - - 0 1', 'length': 4},  # Pawn endgame puzzle
+    {'id': 8, 'state': '4k3/8/8/8/8/8/8/R3K2R w KQ - 0 1', 'length': 2},  # Castling puzzle
+]
+
 currentPuzzle = 0
 refBoard = chess.Board(puzzles[0]['state'])
 lenLeft = puzzles[0]['length']
@@ -77,9 +84,16 @@ def display_fail_state():
     pygame.display.flip()
 
 def get_stockfish_move(board):
+    global current_move
+    try:
+        current_move = getMove(board)
+    except chess.engine.EngineTerminatedError as e:
+       current_move = None
+
+def getMove(board):
     # Path to the Stockfish engine executable
     STOCKFISH_PATH = 'stockfish-windows-x86-64/stockfish/stockfish-windows-x86-64.exe'
-    
+
     # Set up the engine
     with chess.engine.SimpleEngine.popen_uci(STOCKFISH_PATH) as engine:
         # Get the best move for the current position
@@ -87,6 +101,7 @@ def get_stockfish_move(board):
         
         # Return the best move
         return result.move
+
 
 
 def get_square_from_mouse_pos(pos):
