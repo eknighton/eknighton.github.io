@@ -21,6 +21,7 @@ pygame.display.set_caption('Chess Game')
 # Chess Variables
 board = chess.Board(puzzles[0]['state'])
 selected_square = None  # Store the first selected square
+player_has_won = False
 # Define colors
 white = (255, 255, 255)
 black = (0, 0, 0)
@@ -56,6 +57,14 @@ def draw_text(text, x, y):
     text_surface = font.render(text, True, black)
     text_rect = text_surface.get_rect(center=(x, y))
     screen.blit(text_surface, text_rect)
+
+def display_win_state():
+    # Display the "You Win" prompt
+    font = pygame.font.SysFont("Arial", 36)
+    text_surface = font.render("You Win! Press Space for Next Puzzle", True, (0, 255, 0))  # Green text
+    text_rect = text_surface.get_rect(center=(screen_size / 2, screen_size / 2))
+    screen.blit(text_surface, text_rect)
+    pygame.display.flip()
 
 def get_stockfish_move(board):
     # Path to the Stockfish engine executable
@@ -94,8 +103,26 @@ def move_piece_directly(board, from_square, to_square):
         board.set_piece_at(to_square, piece)
 
 def post_move():
+    # Generate the Stockfish move for the current board state
+    current_move = get_stockfish_move(board)
     
+    # Generate the Stockfish move for the reference board state
+    reference_move = get_stockfish_move(refBoard)
+    
+    # Compare the two moves
+    if current_move == reference_move:
+        player_has_won = True 
+        print("The moves match. Puzzle solved!")
+        #True
+        # Additional logic for handling puzzle completion can go here
+    else:
+        print(f"The moves do not match. Current move: {current_move}, Reference move: {reference_move}")
+        # Additional logic for handling puzzle failure can go here
 
+def post_proceed():
+    print("Going to next puzzle")
+    currentPuzzle+=1
+    board = chess.board(puzzles[currentPuzzle]['state'])
 
 
 # Calculate the expected move for the initial puzzle state
@@ -117,17 +144,27 @@ while True:
                     print(board)
                     move_piece_directly(board, selected_square, clicked_square)
                     print(board)
+                    post_move()
+                    print(player_has_won)
                 # Reset selection in any case
                 selected_square = None
+        elif player_has_won and event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            # Logic to load the next puzzle and reset the win state
+           # player_has_won = False
+            post_proceed()
 
     # Drawing the board and pieces
-    draw_chessboard()
-    draw_pieces(board)
+    print(player_has_won)
+    if player_has_won == True:
+        print("Displaying won")
+        display_win_state()
+    else:
+        draw_chessboard()
+        draw_pieces(board)
 
     # Highlight the selected square
     if selected_square is not None:
         draw_highlight_square(selected_square)
-
 
 
     pygame.display.flip()
