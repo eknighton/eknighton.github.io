@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<htmL lang="en" style="font-size: 64px;">
+<head>
+<meta charset="UTF-8">
+<title>
+Casino Cops
+</title>
+<style>
+	#personsGrid {
+	    display: grid;
+	    grid-template-columns: repeat(auto-fill, minmax(200px, 2fr)); /* Adjust minmax values as needed */
+	    gap: 10px; /* Space between items */
+	    padding: 10px;
+	}
+
+	.personItem {
+	    border: 1px solid #ccc;
+	    padding: 10px;
+	    text-align: center;
+	}
+</style>
+
+</head>
+
+
+<body>
+	<div id="cases" style="display: inline-block;">Case #1</div>
+	<div id="personsGrid"></div>
+	<button id="button1" onclick="buttonOne()" style="font-size: 64px">Investigate Circles</button>
+	<button id="button2" onclick="buttonTwo()" style="font-size: 64px">Investigate Squares</button> 
+	<div id="clicks">🔍4 Case #1</div>
+	<span id="medal">🎖️</span><span id="score">0</span>
+
+</body> 
+
+<script type="text/javascript">
+	
+
+class Person{
+	eliminated = false;
+	skin = -1;
+	eyes = -1;
+	hair = -1;
+	shirt = -1;
+
+	constructor(){
+		this.eliminated = false;
+		this.eyes = Math.ceil(Math.random()*3);
+		this.skin = Math.ceil(Math.random()*3);
+	}
+
+	equalTo(suspect){
+		return (
+			(this.eyes == suspect.eyes) && (this.skin == suspect.skin)
+		);
+	}
+
+	toString() {
+        let eyeRep = ['🟢', '🔵', '🟤'][this.eyes - 1];
+        let skinRep = ['🟨 ', '🟥', '🟫'][this.skin - 1];
+        // Map other traits similarly
+        return `${eyeRep}${skinRep}`
+    }
+}
+
+class CluePool{
+	cluePool = [];
+	htmlement = null;
+	constructor(Clues){
+		this.cluePool = Clues;
+		//Shuffle cluePool
+
+
+		///!!!!!!!
+	}
+	getClue(){
+
+		if (this.cluePool.length > 0){
+			return this.cluePool.pop();
+		}
+		return null;
+	}
+	filterClues(excludedIndividual){
+		var temp = [];
+		this.cluePool.forEach((item) => {
+			console.log(item.attribute + " : " + excludedIndividual[item.attribute] + " compared to " + item.value)
+			if (excludedIndividual[item.attribute] != item.value){
+				temp.push(item);
+			}
+		});
+		this.cluePool = temp;
+	}
+	usable(){
+
+			var temp = [];
+			this.cluePool.forEach((clue) => {
+				var keep = false;
+				suspects.forEach((sus) => {
+					if (sus[clue.attribute] == clue.value && sus.eliminated == false){
+						keep = true;
+					}
+				});
+				if (keep){
+					temp.push(clue);
+				} else {
+					console.log ("Removed a redundant clue!");
+				}
+			});
+			this.cluePool = temp;
+			
+		return this.cluePool.length > 0;
+	}
+}
+
+class Clue{
+	attribute = null;
+	value = null;
+	constructor(att, val){
+		this.attribute = att;
+		this.value = val;
+	}
+	equalTo(otherClue){
+		return this.value == otherClue[this.attribute];
+	}
+}
+
+
+
+var suspectsLeft = null;
+var suspects = null;
+var perp = null;
+var buttonClicks = 0;
+var cases = 0;
+var score = 0;
+var round = 0;
+var button1 = null;
+var button2 = null;
+
+window.alert("Welcome to Casino Cops!\nChoose what to investigate in order to narrow the suspects down to just one.\nYou get 4🔍 each case. You win a medal for each one you don't spend.\nYour career is 10 cases long.")
+
+newLineup(9);
+drawSuspects();
+console.log(suspects);
+
+
+function newGame(){
+	buttonClicks = 0;
+	cases = 0;
+
+	score = 0;
+	round = 0;
+	document.getElementById("score").innerText = 0;
+	newLineup(9);
+	drawSuspects();
+}
+
+
+function newLineup(numSuspects){
+	suspectsLeft = numSuspects;
+	suspects = generateSuspects(suspectsLeft);
+	perp = suspects[0];
+	suspects = shuffleArray(suspects);
+
+	buttonClicks+=4;
+	document.getElementById("clicks").innerText = "🔍"+buttonClicks;
+
+	cases+=1;
+	document.getElementById("cases").innerText = "Case #"+cases;
+
+	button1 = new CluePool([new Clue('eyes', 1),new Clue('eyes', 2),new Clue('eyes', 3)]);
+	button1.filterClues(perp);
+	button2 = new CluePool([new Clue('skin', 1),new Clue('skin', 2),new Clue('skin', 3)]);
+	button2.filterClues(perp);
+}
+
+function statusCheck(){
+	var left = 0;
+	suspects.forEach(item => {
+		if (!item.eliminated){
+			left+=1;
+		}
+	})
+	if (left == 1){
+		round +=1;
+		score += buttonClicks;
+		buttonClicks = 0;
+		document.getElementById("clicks").innerText = "🔍"+buttonClicks;
+		document.getElementById("score").innerHTML = score;
+
+		if (round > 9){
+			setTimeout(() => {
+				window.alert("You've completed your career! You earned "+ score+ " medals!\nEnjoy retirement!");
+				newGame();
+			}, 20);
+
+			return;
+		} else {
+
+			setTimeout(() => {
+				newLineup(9);
+				drawSuspects();
+			}, 400);
+		}
+	}
+}
+
+function generateSuspects(count){
+	var P = new Person();
+	var ret  = [];
+	ret.push(P);
+	var temp;
+	while (ret.length < count){
+		temp = new Person();
+		if (!temp.equalTo(P)){
+			ret.push(temp);
+		} else {
+			console.log("Excluded " + temp);
+		} 
+	}
+	return ret;
+}
+
+function applyClue(clue){
+	suspects.forEach((item) => {
+		if (item[clue.attribute] == clue.value){
+			if (!item.eliminated){
+				item.eliminated = true;
+				suspectsLeft = suspectsLeft - 1
+			}
+		}
+	});
+}
+
+function updateGrid() {
+    const grid = document.getElementById('personsGrid');
+    grid.innerHTML = ''; // Clear existing grid content
+
+    suspects.forEach(person => {
+    	console.log("adding person");
+        const personDiv = document.createElement('div');
+        personDiv.classList.add('person');
+        personDiv.textContent = person.toString(); // Use your method to get text representation
+        if (person.eliminated){
+        	personDiv.textContent = " ";
+        }
+        grid.appendChild(personDiv);
+    });
+}
+
+function drawSuspects(){
+	updateGrid();
+}
+
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        // Generate a random index from 0 to i
+        let j = Math.floor(Math.random() * (i + 1));
+        
+        // Swap elements at indices i and j
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array; // This is optional, as the array is modified in place
+}
+
+function buttonOne(){
+	var clue = null;
+	if (button1.usable()){
+		clue = button1.getClue();
+		applyClue(clue);
+		drawSuspects();
+		onButtonClick();
+	}
+	
+}
+
+function buttonTwo(){
+	var clue = null;
+	if (button2.usable()){
+		clue = button2.getClue();
+		applyClue(clue);
+		drawSuspects();
+		onButtonClick();
+	}
+	
+}
+
+function onButtonClick(){
+	buttonClicks-=1;
+	document.getElementById("clicks").innerText = "🔍"+buttonClicks;
+	setTimeout(() => statusCheck(), 100);
+}
+
+
+</script>
+
+</html>

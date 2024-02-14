@@ -1,0 +1,79 @@
+html {
+	text-align: center;
+}
+button {
+
+}
+
+.scene {
+	display: none;
+}
+
+
+/* Start Menu */
+
+.startMenuButton {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text */
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.1s; /* Smooth transition for background color and transform */
+}
+.startMenuButton:hover {
+    background-color: #45a049; /* Darker shade of green on hover */
+}
+.startMenuButton:active {
+    transform: translateY(2px); /* Slight push down effect when clicked */
+}
+
+
+/* Case Scene */
+
+#personsGrid {
+  display: grid; 
+grid-auto-flow: row dense;
+ justify-items: center; /* Centers items within their grid cells horizontally */
+  align-items: center; /* Centers items within their grid cells vertically */
+  justify-content: center; /* Centers the entire grid content horizontally when there's extra space */
+  align-content: center; /* Centers the entire grid content vertically when there's extra space */
+
+  width: 100%; 
+  height: 50vh;
+background-color: blue; For visibility */
+
+}
+#personsGrid .person {
+ background-color: white;/* For visibility */
+ transition: opacity 2s ease;
+}
+
+#personsGrid .fade-out {
+  opacity: 0; /* Fully transparent */
+}
+
+#buttonContainer {
+ display: grid; 
+ grid-auto-flow: row dense;
+ justify-items: center; /* Centers items within their grid cells horizontally */
+  align-items: center; /* Centers items within their grid cells vertically */
+  justify-content: center; /* Centers the entire grid content horizontally when there's extra space */
+  align-content: center; /* Centers the entire grid content vertically when there's extra space */
+
+  width: 100%; 
+  height: 30vh;
+  background-color: black; For visibility */
+}
+
+#buttonContainer .investigateButton{
+
+}
+#caseHead{
+    width:  100%;
+}
