@@ -10,11 +10,11 @@ var caseScene = {
     button1: null,
     button2: null,
     ALL_TRAITS : [
-		{ name: "Circles", values: [1, 2, 3] },
-		{ name: "Squares", values: [1, 2, 3] },
-		{ name: "Stars", values: [1, 2, 3] },
-		{ name: "Hearts", values: [1, 2, 3] },
-		{ name: "Flowers", values: [1, 2, 3] },
+		{ name: "Circles", values: [1, 2] },
+		{ name: "Squares", values: [1, 2] },
+		{ name: "Stars", values: [1, 2] },
+		{ name: "Hearts", values: [1, 2] },
+		{ name: "Flowers", values: [1, 2] },
 		{ name: "Moons", values: [1, 2, 3] },
 		{ name: "Diamonds", values: [1, 2, 3] },
 		{ name: "Leaves", values: [1, 2, 3] },
@@ -50,8 +50,8 @@ var caseScene = {
         this.score = 0;
         this.round = 0;
         document.getElementById("score").innerText = 0;
-        this.traitsInGame = [{ name: "Circles", values: [1, 2, 3] },{ name: "Squares", values: [1, 2, 3] }];
-        this.newLineup(9);
+        this.traitsInGame = [{ name: "Circles", values: [1, 2] },{ name: "Squares", values: [1, 2] }];
+        this.newLineup(5);
         this.drawSuspects();
     },
 
@@ -192,9 +192,9 @@ var caseScene = {
         const buttonContainer = document.getElementById('buttonContainer');
         buttonContainer.innerHTML = ''; // Clear existing buttons
 
-        for (let i = 0; i < this.allClues.length; i += 3) {
+        for (let i = 0; i < this.allClues.length; i += 2) {
             const button = document.createElement('button');
-            let group = this.allClues.slice(i, i + 3);
+            let group = this.allClues.slice(i, i + 2);
             let temp = new CluePool(group);
 
             button.id = `button${i}`;
