@@ -77,3 +77,7 @@ background-color: blue; For visibility */
 #caseHead{
     width:  100%;
 }
+
+.red {
+    background-color: red;
+}

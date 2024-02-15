@@ -172,14 +172,18 @@ var caseScene = {
         return array; // This is optional, as the array is modified in place
     },
 
-    buttonDown: function(button) {
+    buttonDown: function(button, element) {
     	var clue = null;
     	if (button.usable(this.suspects)){
     		clue = button.getClue();
     		this.applyClue(clue);
     		this.drawSuspects();
     		this.onButtonClick();
-    	}
+
+    	} else {
+            element.classList.add("red");
+            console.log("Adding Red")
+        }
     },
 
     onButtonClick: function() {
@@ -207,7 +211,7 @@ var caseScene = {
             });
             button.innerHTML = `Investigate ${name}`;
             temp.filterClues(this.perp);
-            button.onclick = () => this.buttonDown(temp);
+            button.onclick = () => this.buttonDown(temp, button);
 
 
             button.classList.add("investigateButton");
