@@ -13,8 +13,8 @@ var caseScene = {
 		{ name: "Circles", values: [1, 2] },
 		{ name: "Squares", values: [1, 2] },
 		{ name: "Stars", values: [1, 2] },
-		{ name: "Hearts", values: [1, 2] },
-		{ name: "Flowers", values: [1, 2] },
+		{ name: "Hearts", values: [1, 2,3] },
+		{ name: "Flowers", values: [1, 2,3] },
 		{ name: "Moons", values: [1, 2, 3] },
 		{ name: "Diamonds", values: [1, 2, 3] },
 		{ name: "Leaves", values: [1, 2, 3] },
@@ -50,8 +50,8 @@ var caseScene = {
         this.score = 0;
         this.round = 0;
         document.getElementById("score").innerText = 0;
-        this.traitsInGame = [{ name: "Circles", values: [1, 2] },{ name: "Squares", values: [1, 2] }];
-        this.newLineup(5);
+        this.traitsInGame = [{ name: "Circles", values: [1, 2] },{ name: "Squares", values: [1, 2] },{ name: "Stars", values: [1, 2] }];
+        this.newLineup(9);
         this.drawSuspects();
     },
 
@@ -61,14 +61,16 @@ var caseScene = {
         this.perp = this.suspects[0];
         this.suspects = this.shuffleArray(this.suspects);
 
-        this.buttonClicks += (4);
+        this.setupCluePools();
+        this.generateButtons();
+
+        this.buttonClicks += (1+this.traitsInGame.length);
         document.getElementById("clicks").innerText = "🔍" + this.buttonClicks;
 
         this.cases += 1;
         document.getElementById("cases").innerText = "|  Case #" + this.cases+ "  |";
 
-        this.setupCluePools();
-        this.generateButtons();
+
     },
 
 
@@ -109,7 +111,7 @@ var caseScene = {
                 setTimeout(() => { //Generate new lineup
                     //rewardScene.init();
                      this.newLineup(9);
-                	this.traitsInGame = this.ALL_TRAITS.slice(0, 2+Math.floor(this.round/2));
+                	this.traitsInGame = this.ALL_TRAITS.slice(0, 3+Math.floor(this.round/2));
                     this.drawSuspects();
                 }, 400);
             }
@@ -117,19 +119,34 @@ var caseScene = {
     },
 
     generateSuspects: function(count, traits) {
-        var P = new Person(traits);
-        var ret = [P];
-        var temp;
-        while (ret.length < count) {
-            temp = new Person(traits);
-            if (!temp.equalTo(P)) {
-                ret.push(temp);
-            } else {
-                console.log("Excluded " + temp);
+        var ret = []; // Start with an empty array
+        var attempts = 0; // Track the number of attempts to avoid infinite loops
+
+        // Continue generating suspects until the desired count is reached or a certain number of attempts have been made
+        while (ret.length < count && attempts < count * 10) { // Adjust the multiplier as needed to balance performance and the chance of finding unique suspects
+            var temp = new Person(traits);
+            var isUnique = true; // Assume the new suspect is unique
+
+            // Check the new suspect against all existing suspects in ret
+            for (var i = 0; i < ret.length; i++) {
+                if (temp.equalTo(ret[i])) {
+                    isUnique = false; // The suspect is not unique
+                    console.log("Excluded " + temp);
+                    break; // No need to check further
+                }
             }
+
+            // If the suspect is unique, add it to ret
+            if (isUnique) {
+                ret.push(temp);
+            }
+
+            attempts++; // Increment the number of attempts
         }
+
         return ret;
     },
+
 
     applyClue: function(clue) {
         this.suspects.forEach((item) => {
@@ -195,11 +212,13 @@ var caseScene = {
     generateButtons: function() {
         const buttonContainer = document.getElementById('buttonContainer');
         buttonContainer.innerHTML = ''; // Clear existing buttons
+        this.cluePools = []
 
         for (let i = 0; i < this.allClues.length; i += 2) {
             const button = document.createElement('button');
             let group = this.allClues.slice(i, i + 2);
             let temp = new CluePool(group);
+            this.cluePools.push(temp);
 
             button.id = `button${i}`;
             button.style.fontSize = '64px';
