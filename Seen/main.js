@@ -43,7 +43,10 @@ function startLevel() {
     if (currentLevel > 16){
         updateScoreDisplay();
         window.alert("You've finished! Your score was "+currentScore + " out of "+ maxScore);
-        return
+        currentLevel = 2;
+        currentScore = 0;
+        maxScore = 0;
+        updateScoreDisplay();
     }
     currentEmojis = chooseEmojis(currentLevel);
     emojiContainer.textContent = currentEmojis.join(' ');
