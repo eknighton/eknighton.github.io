@@ -85,6 +85,16 @@ function updateScoreDisplay() {
 
 yesBtn.addEventListener('click', () => handleResponse(true));
 noBtn.addEventListener('click', () => handleResponse(false));
+yesBtn.addEventListener('click', () => {
+    handleResponse(true);
+    yesBtn.blur(); // Remove focus from the yes button
+});
+
+noBtn.addEventListener('click', () => {
+    handleResponse(false);
+    noBtn.blur(); // Remove focus from the no button
+});
+
 
 const gameContainer = document.getElementById('game-container'); // Make sure this matches the ID of your game container
 
