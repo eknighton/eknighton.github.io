@@ -76,6 +76,8 @@ function handleResponse(isCorrect) {
     maxScore += currentLevel; // Always increment max score by the level number
     currentLevel++;
     updateScoreDisplay();
+        noBtn.blur();
+         yesBtn.blur();
     startLevel(); // Start the next level
 }
 
@@ -85,16 +87,6 @@ function updateScoreDisplay() {
 
 yesBtn.addEventListener('click', () => handleResponse(true));
 noBtn.addEventListener('click', () => handleResponse(false));
-yesBtn.addEventListener('click', () => {
-    handleResponse(true);
-    yesBtn.blur(); // Remove focus from the yes button
-});
-
-noBtn.addEventListener('click', () => {
-    handleResponse(false);
-    noBtn.blur(); // Remove focus from the no button
-});
-
 
 const gameContainer = document.getElementById('game-container'); // Make sure this matches the ID of your game container
 
@@ -102,14 +94,15 @@ gameContainer.addEventListener('click', function(event) {
     if (event.target.id === 'yes-btn' || event.target.id === 'no-btn') {
         return;
     } else {
+        if (!canSkip){
+            return
+        }
         skipTimeout();
     }
 });
 
 function skipTimeout() {
-    if (!canSkip){
-        return
-    }
+    
     clearTimeout(timeout);
     canSkip = false;
     emojiContainer.textContent = '';
