@@ -1,4 +1,27 @@
-const emojiSet = ["😀", "😃", "😄", "😁", "😆", "😅", "🤣", "😂", "🙂", "🙃", "😉", "😊", "😇", "🥰", "😍", "🤩", "😘", "😗", "😚", "😙"];
+const emojiSet = [
+    "😀", "😃", "😄", "😁", "😆", 
+    "😅", "🤣", "😂", "🙂", "🙃", 
+    "😉", "😊", "😇", "🥰", "😍", 
+    "🤩", "😘", "😗", "😚", "😙",
+    "😋", "😛", "😜", "🤪", "😝", 
+    "🤑", "🤗", "🤭", "🤫", "🤔", 
+    "🤐", "🤨", "😐", "😑", "😶", 
+    "😏", "😒", "🙄", "😬", "🤥", 
+    "😌", "😔", "😪", "🤤", "😴", 
+    "😷", "🤒", "🤕", "🤢", "🤮", 
+    "🤧", "😵", "🤯", "🤠", "😎",
+    "🤓", "🧐", "😕", "😟", "🙁", 
+    "😮", "😯", "😲", "😳", "🥺", 
+    "😦", "😧", "😨", "😰", "😥", 
+    "😢", "😭", "😱", "😖", "😣",
+    "😞", "😓", "😩", "😫", "🥱",
+    "😤", "😡", "😠", "🤬", "😈", 
+    "👿", "💀", "☠️", "💩", "🤡", 
+    "👹", "👺", "👻", "👽", "👾", 
+    "🤖", "😺", "😸", "😹", "😻", 
+    "😼", "😽", "🙀", "😿", "😾"
+];
+
 let currentLevel = 2;
 let currentScore = 0;
 let maxScore = 0;
@@ -13,13 +36,13 @@ const yesBtn = document.getElementById('yes-btn');
 const noBtn = document.getElementById('no-btn');
 const scoreDisplay = document.getElementById('score-display');
 
-window.alert("Memorize 10 sets of emojis! Tap gamebox to take a test early!");
+window.alert("Memorize 15 sets of emojis! Tap gamebox to take a test early!");
 
 function startLevel() {
     canSkip=false;
-    if (currentLevel > 11){
+    if (currentLevel > 16){
         updateScoreDisplay();
-        window.alert("You've finished! Your score was "+currentScore + " our of "+ maxScore);
+        window.alert("You've finished! Your score was "+currentScore + " out of "+ maxScore);
         return
     }
     currentEmojis = chooseEmojis(currentLevel);
@@ -61,11 +84,22 @@ function chooseEmojis(number) {
 function setAnswerEmoji() {
     const randomNum = Math.random();
     if (randomNum < 0.5) {
-        answerEmoji = emojiSet[Math.floor(Math.random() * emojiSet.length)];
+        // Filter out emojis from emojiSet that are not in currentEmojis
+        const notInCurrentEmojis = emojiSet.filter(emoji => !currentEmojis.includes(emoji));
+        
+        // Choose a random emoji from those not in currentEmojis
+        if (notInCurrentEmojis.length > 0) {
+            answerEmoji = notInCurrentEmojis[Math.floor(Math.random() * notInCurrentEmojis.length)];
+        } else {
+            // Fallback in case all emojis from emojiSet are in currentEmojis
+            answerEmoji = emojiSet[Math.floor(Math.random() * emojiSet.length)];
+        }
     } else {
+        // Choose a random emoji from currentEmojis as before
         answerEmoji = currentEmojis[Math.floor(Math.random() * currentEmojis.length)];
     }
 }
+
 
 
 function handleResponse(isCorrect) {
