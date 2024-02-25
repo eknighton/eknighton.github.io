@@ -1,0 +1,47 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+#game-container {
+    text-align: center;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#emoji-set, #prompt-emoji {
+    font-size: 2rem;
+    margin: 20px 0;
+}
+
+button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#response-buttons {
+    display: flex; /* Enables Flexbox layout */
+    justify-content: center; /* Centers the buttons horizontally */
+    gap: 10px; /* Adds some space between the buttons */
+}
+
+#score-display {
+    margin-top: 20px;
+    font-size: 1.2rem;
+}
