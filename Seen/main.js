@@ -17,7 +17,7 @@ window.alert("Memorize 10 sets of emojis! Tap gamebox to take a test early!");
 
 function startLevel() {
     canSkip=false;
-    if (currentLevel > 12){
+    if (currentLevel > 11){
         updateScoreDisplay();
         window.alert("You've finished! Your score was "+currentScore + " our of "+ maxScore);
         return
