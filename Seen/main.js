@@ -13,7 +13,7 @@ const yesBtn = document.getElementById('yes-btn');
 const noBtn = document.getElementById('no-btn');
 const scoreDisplay = document.getElementById('score-display');
 
-window.alert("Memorize the set of emojis! Tap to skip to test.");
+window.alert("Memorize 10 sets of emojis! Tap gamebox to take a test early!");
 
 function startLevel() {
     canSkip=false;
