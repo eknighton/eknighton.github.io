@@ -9,7 +9,7 @@ Without dirupting the timeline..
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Interactive Chessboard</title>
+    <title>The Chess Timeline</title>
     <style>
         body {
             display: flex; /* Use Flexbox for layout */
@@ -103,6 +103,9 @@ Without dirupting the timeline..
 <script src="data.js"></script>
 
 <script>
+    const winOverlay = document.getElementById('levelCompleteOverlay');
+    const loseOverlay = document.getElementById('gameOverOverlay');
+
     var levels = ["rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1","rnbqkbnr/pppppppp/2Q5/8/8/8/PPPPPPPP/RNB1KBNR w KQkq - 0 1"];
     var currLevel = levels[0];
     var lvlIndex = 0;
@@ -227,29 +230,23 @@ Without dirupting the timeline..
 
     function goNextLevel(){
         lvlIndex+=1;
+        console.log ("lvl index "+ lvlIndex)
+        console.log ("lvls length "+ levels.length)
+        if (!(lvlIndex < levels.length)) {
+            lvlIndex = 0;
+            console.log("restarting game");
+        }
         currLevel = levels[lvlIndex]
         loadFen(currLevel)
         document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex+1) + ". Just before your opponent, White, made their last move...";
     }
 
     function showLevelCompleteOverlay() {
-        const overlay = document.getElementById('levelCompleteOverlay');
-        overlay.style.display = 'flex'; // Show the overlay
+        winOverlay.style.display = 'flex'; // Show the overlay
 
-        overlay.addEventListener('click', function() {
-            overlay.style.display = 'none'; // Hide the overlay when tapped
-            // Here you can also call any function that transitions to the next level
-            goNextLevel();
-        });
     }
     function showGameOverOverlay() {
-        const overlay = document.getElementById('gameOverOverlay');
-        overlay.style.display = 'flex'; // Show the overlay
-
-        overlay.addEventListener('click', function() {
-            overlay.style.display = 'none'; // Hide the overlay when tapped
-            restartLevel(); // Call the function to restart the level
-        });
+        loseOverlay.style.display = 'flex'; // Show the overlay
     }
 
     function restartLevel() {
@@ -258,6 +255,16 @@ Without dirupting the timeline..
 
     // Example FEN for the initial position
     loadFen(currLevel);
+
+    winOverlay.addEventListener('click', function() {
+            winOverlay.style.display = 'none';
+            goNextLevel();
+    });
+
+    loseOverlay.addEventListener('click', function() {
+        loseOverlay.style.display = 'none';
+        restartLevel();
+    });
 </script>
 </body>
 </html>
