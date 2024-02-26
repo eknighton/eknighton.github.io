@@ -1,0 +1,263 @@
+<!--
+You've been sent back in time...
+One chess move...
+Before time can continue, you must move one piece.
+Without dirupting the timeline..
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Interactive Chessboard</title>
+    <style>
+        body {
+            display: flex; /* Use Flexbox for layout */
+            flex-direction: column; /* Arrange children in a vertical column */
+            justify-content: center; /* Center children vertically */
+            align-items: center; /* Center children horizontally */
+            min-height: 100vh; /* Minimum height to fill the viewport */
+            margin: 0; /* Remove default margin */
+            background-color: #f0f0f0; /* Optional: background color of the page */
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(8, 50px);
+            grid-template-rows: repeat(8, 50px);
+            width: 400px;
+            height: 400px;
+        }
+        .tile {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            cursor: pointer;
+        }
+        .light {
+            background-color: #f0d9b5;
+        }
+        .dark {
+            background-color: #b58863;
+        }
+        .selected {
+            border: 2px solid red; /* Highlight selected tile */
+        }
+        .overlay-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; /* Ensure it sits on top of other content */
+        }
+
+        .overlay-message {
+            text-align: center;
+            color: white; /* Adjust text color to contrast with the overlay background */
+            padding: 20px;
+            border-radius: 10px;
+            background: rgba(50, 50, 50, 0.9); /* Slightly darker background for the message box */
+        }
+
+        .overlay-message h2 {
+            margin-bottom: 10px;
+        }
+
+        .overlay-message p {
+            margin-top: 0;
+        }
+        #title {
+            font-size: 20px;
+        }
+
+    </style>
+</head>
+<body>
+<div id="title">Move any piece to an empty square, without changing white's next move.</div>
+<div id="boardContainer">
+    <div id="board" class="board"></div>
+</div>
+<div id="lvlInd">Lvl 1. Just before your opponent, White, made their last move...</div>
+<!-- Overlay Container -->
+<div id="levelCompleteOverlay" class="overlay-container" style="display: none;">
+    <div class="overlay-message">
+        <h2>Level complete!</h2>
+        <p>Tap anywhere to continue...</p>
+    </div>
+</div>
+<!-- Game Over Overlay Container -->
+<div id="gameOverOverlay" class="overlay-container" style="display: none;">
+    <div class="overlay-message">
+        <h2 id="FailMsg">Game Over</h2>
+        <p>Tap anywhere to restart...</p>
+    </div>
+</div>
+
+<script src="data.js"></script>
+
+<script>
+    var levels = ["rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1","rnbqkbnr/pppppppp/2Q5/8/8/8/PPPPPPPP/RNB1KBNR w KQkq - 0 1"];
+    var currLevel = levels[0];
+    var lvlIndex = 0;
+
+    const pieceMap = {
+        'p': '♟', 'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚',
+        'P': '♙', 'R': '♖', 'N': '♘', 'B': '♗', 'Q': '♕', 'K': '♔'
+    };
+    let selectedTile = null;
+
+        function createTile(isLight, piece = '', rowIndex, colIndex) {
+            const tile = document.createElement('div');
+            tile.className = `tile ${isLight ? 'light' : 'dark'}`;
+            tile.textContent = pieceMap[piece] || '';
+            tile.setAttribute('data-row', rowIndex); // Set row attribute
+            tile.setAttribute('data-col', colIndex); // Set column attribute
+            tile.addEventListener('click', () => selectOrMovePiece(rowIndex, colIndex, tile, piece));
+            return tile;
+        }
+
+
+    function selectOrMovePiece(rowIndex, colIndex, tile, piece) {
+        console.log(makeFen());
+        if (selectedTile && tile !== selectedTile && !tile.textContent) {
+            // Move piece to the new tile
+            tile.textContent = selectedTile.textContent;
+            selectedTile.textContent = '';
+            selectedTile.classList.remove('selected');
+            selectedTile = null;
+            console.log(makeFen())
+            checkSolution(getResult(makeFen()));
+        } else if (tile.textContent && !selectedTile) {
+            // Select the tile if it has a piece
+            selectedTile = tile;
+            tile.classList.add('selected');
+        } else if (selectedTile === tile) {
+            // Deselect the tile if it's already selected
+            selectedTile.classList.remove('selected');
+            selectedTile = null;
+        }
+    }
+
+    function loadFen(fen) {
+        const boardElement = document.getElementById('board');
+        boardElement.innerHTML = ''; // Clear the board
+        const rows = fen.split(' ')[0].split('/');
+        rows.forEach((row, rowIndex) => {
+            let colIndex = 0;
+            row.split('').forEach(char => {
+                if (!isNaN(char)) { // If the character is a number, it represents empty squares
+                    for (let i = 0; i < parseInt(char); i++) {
+                        const isLight = (rowIndex + colIndex) % 2 === 0;
+                        boardElement.appendChild(createTile(isLight, '', rowIndex, colIndex));
+                        colIndex++;
+                    }
+                } else {
+                    const isLight = (rowIndex + colIndex) % 2 === 0;
+                    boardElement.appendChild(createTile(isLight, char, rowIndex, colIndex));
+                    colIndex++;
+                }
+            });
+        });
+    }
+
+    function makeFen() {
+        let fen = '';
+        for (let row = 0; row < 8; row++) {
+            let emptyCount = 0;
+            for (let col = 0; col < 8; col++) {
+                const tile = document.querySelector(`.tile[data-row="${row}"][data-col="${col}"]`);
+                const piece = Object.keys(pieceMap).find(key => pieceMap[key] === tile.textContent);
+                if (piece) {
+                    if (emptyCount > 0) {
+                        fen += emptyCount;
+                        emptyCount = 0;
+                    }
+                    fen += piece;
+                } else {
+                    emptyCount++;
+                }
+            }
+            if (emptyCount > 0) fen += emptyCount;
+            if (row < 7) fen += '/';
+        }
+        // Adding some default values for the rest of the FEN fields
+        fen += ' w KQkq - 0 1';
+        return fen;
+    }
+
+    function getResult(fen) {
+        return jsonLookupTable[fen] || 'Invalid';
+    }
+
+    function checkSolution(result) {
+        console.log("result:")
+        console.log(result)
+        if (result != 'Invalid') {
+             loadFen(result[0]);
+        }
+        if (result === 'Invalid') {
+            // Handle the 'Invalid' case here
+            console.log("Invalid Board! Level failed!")
+            document.getElementById('FailMsg').innerText = "You made an invalid board, destroying the universe!"
+            document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex+1) + ". Just after you altered the past and destroyed the universe.";
+            showGameOverOverlay();
+
+        } else if (result[1] === getResult(currLevel)[1]) {
+            // Handle the case where FENs match here
+            console.log("Level passed!")
+            document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex+1) + ". Present day.";
+            showLevelCompleteOverlay();
+        } else {
+            // Handle the case where FENs do not match here
+            console.log("You changed the best move! Level failed!")
+            console.log("Move "+ result[1] + " replaced "+getResult(currLevel)[1])
+            document.getElementById('FailMsg').innerText = "You've altered the timeline! You Fail!"
+            document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex+1) + ". Immediately after your actions caused White to deviate from God's plan.";
+            showGameOverOverlay();
+        }
+        console.log("made move");
+    }
+
+    function goNextLevel(){
+        lvlIndex+=1;
+        currLevel = levels[lvlIndex]
+        loadFen(currLevel)
+        document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex+1) + ". Just before your opponent, White, made their last move...";
+    }
+
+    function showLevelCompleteOverlay() {
+        const overlay = document.getElementById('levelCompleteOverlay');
+        overlay.style.display = 'flex'; // Show the overlay
+
+        overlay.addEventListener('click', function() {
+            overlay.style.display = 'none'; // Hide the overlay when tapped
+            // Here you can also call any function that transitions to the next level
+            goNextLevel();
+        });
+    }
+    function showGameOverOverlay() {
+        const overlay = document.getElementById('gameOverOverlay');
+        overlay.style.display = 'flex'; // Show the overlay
+
+        overlay.addEventListener('click', function() {
+            overlay.style.display = 'none'; // Hide the overlay when tapped
+            restartLevel(); // Call the function to restart the level
+        });
+    }
+
+    function restartLevel() {
+        loadFen(currLevel);
+    }
+
+    // Example FEN for the initial position
+    loadFen(currLevel);
+</script>
+</body>
+</html>
