@@ -99,6 +99,13 @@ Without dirupting the timeline..
         <p>Tap anywhere to restart...</p>
     </div>
 </div>
+<!-- Game Complete Overlay Container -->
+<div id="completeOverlay" class="overlay-container" style="display: none;">
+    <div class="overlay-message">
+        <h2 id="completeMsg">You've Completed Every Level</h2>
+        <p>Tap anywhere to restart the game...</p>
+    </div>
+</div>
 
 <script src="data.js"></script>
 
@@ -106,7 +113,13 @@ Without dirupting the timeline..
     const winOverlay = document.getElementById('levelCompleteOverlay');
     const loseOverlay = document.getElementById('gameOverOverlay');
 
-    var levels = ["rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1","rnbqkbnr/pppppppp/2Q5/8/8/8/PPPPPPPP/RNB1KBNR w KQkq - 0 1"];
+    var levels = ["rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "rnbqkbnr/pppppppp/2Q5/8/8/8/PPPPPPPP/RNB1KBNR w KQkq - 0 1",
+    //'4k3/pppppppp/8/8/8/8/PPPPPPPP/4K3 w - - 0 1',
+    //'qqqqkqqq/pppppppp/8/8/8/8/PPPPPPPP/QQQQKQQQ w - - 0 1',
+    '8/5ppk/8/2Q5/8/8/8/7K w - - 0 1',
+    '8/P7/8/8/8/8/8/k1K5 w - - 0 1'
+    ];
     var currLevel = levels[0];
     var lvlIndex = 0;
 
@@ -191,7 +204,11 @@ Without dirupting the timeline..
             if (row < 7) fen += '/';
         }
         // Adding some default values for the rest of the FEN fields
-        fen += ' w KQkq - 0 1';
+        //fen += ' w KQkq - 0 1';
+        const parts = currLevel.split(' ');
+        const additionalInfo = parts.slice(1).join(' ');
+        fen+=' '+additionalInfo;
+        console.log ("Fen crated: " + fen)
         return fen;
     }
 
@@ -233,9 +250,16 @@ Without dirupting the timeline..
         console.log ("lvl index "+ lvlIndex)
         console.log ("lvls length "+ levels.length)
         if (!(lvlIndex < levels.length)) {
-            lvlIndex = 0;
-            console.log("restarting game");
+            completeOverlay.style.display = 'flex'
+            return
         }
+        currLevel = levels[lvlIndex]
+        loadFen(currLevel)
+        document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex+1) + ". Just before your opponent, White, made their last move...";
+    }
+
+    function gameCompleted() {
+        lvlIndex = 0;
         currLevel = levels[lvlIndex]
         loadFen(currLevel)
         document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex+1) + ". Just before your opponent, White, made their last move...";
@@ -264,6 +288,10 @@ Without dirupting the timeline..
     loseOverlay.addEventListener('click', function() {
         loseOverlay.style.display = 'none';
         restartLevel();
+    });
+    completeOverlay.addEventListener('click', function() {
+        completeOverlay.style.display = 'none';
+        gameCompleted();
     });
 </script>
 </body>
