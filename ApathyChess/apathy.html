@@ -84,7 +84,7 @@ Without dirupting the timeline..
 <div id="boardContainer">
     <div id="board" class="board"></div>
 </div>
-<div id="lvlInd">Lvl 1. Just before your opponent, White, made their last move...</div>
+<div id="lvlInd">Lvl 1. Just before White moves...</div>
 
 <!-- Game Start Overlay Container -->
 <div id="startOverlay" class="overlay-container" style="display: none;">
@@ -100,10 +100,12 @@ Without dirupting the timeline..
 <!-- Update Notes Container -->
 <div id="updateOverlay" class="overlay-container" style="display: none;">
     <div class="overlay-message">
-        <h2>Version 0.121 Update Notes</h2>
-        <li>New, beginner friendly Level Set!</li>
-        <li>Move comparison now with UCI notation, not SAN</li>
-        <li>Gave AI 5x the time to think when generating move cache.</li>
+        <h2>Version 0.122</h2>
+        <div>Released Feb 27, 2024</div>
+        <div>Thank you for being an alpha tester!</div>
+        <a href="devlog.html" target="_blank" style="color: whitesmoke;">Dev Log</a>
+        <p><i>Click anywhere to play!</i></p>
+
     </div>
 </div>
 <!-- Level Beat Container -->
@@ -128,16 +130,19 @@ Without dirupting the timeline..
     </div>
 </div>
 
+<script src="loader.js"></script>
+
 <script src="data.js"></script>
 
 <script>
     const winOverlay = document.getElementById('levelCompleteOverlay');
     const loseOverlay = document.getElementById('gameOverOverlay');
 
-    var levels = [    
-    '2K1k3/7R/8/8/8/8/8/3R4 w - - 0 1',
-    '8/P7/8/8/8/8/8/k1K5 w - - 0 1',
-    '4k3/8/8/8/8/8/3PP3/2BQKB2 w - - 0 1'
+    //var levels = [    
+    //'KKKKKKKK/KKKKKKKK/KKKKKKKK/KKKKKKKK/kkkkkkkk/kkkkkkkk/kkkkkkkk/kkkkkkkk w - - 0 1',
+    //'2K1k3/7R/8/8/8/8/8/3R4 w - - 0 1',
+    //'8/P7/8/8/8/8/8/k1K5 w - - 0 1',
+    //'4k3/8/8/8/8/8/3PP3/2BQKB2 w - - 0 1'
     //'4k3/8/8/8/7Q/8/8/3QK3 w - - 0 1',
     //'8/5ppk/8/2Q5/8/8/8/7K w - - 0 1'
     //"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
@@ -145,9 +150,9 @@ Without dirupting the timeline..
     //'4k3/pppppppp/8/8/8/8/PPPPPPPP/4K3 w - - 0 1',
     //'qqqqkqqq/pppppppp/8/8/8/8/PPPPPPPP/QQQQKQQQ w - - 0 1',
 
-    ];
-    var currLevel = levels[0];
-    var lvlIndex = 0;
+    //];
+    var currLevel = data[1]['puzzle'];
+    var lvlIndex = 1;
 
     const pieceMap = {
         'p': '♟', 'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚',
@@ -239,7 +244,7 @@ Without dirupting the timeline..
     }
 
     function getResult(fen) {
-        return table[fen] || 'Invalid';
+        return data[lvlIndex][fen] || 'Invalid';
     }
 
     function checkSolution(result) {
@@ -252,20 +257,20 @@ Without dirupting the timeline..
             // Handle the 'Invalid' case here
             console.log("Invalid Board! Level failed!")
             document.getElementById('FailMsg').innerText = "You made an invalid board, destroying the universe!"
-            document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex+1) + ". Just after you altered the past and destroyed the universe.";
+            document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just after you altered the past and destroyed the universe.";
             showGameOverOverlay();
 
         } else if (result[1] === getResult(currLevel)[1]) {
             // Handle the case where FENs match here
             console.log("Level passed!")
-            document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex+1) + ". Present day.";
+            document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Present day.";
             showLevelCompleteOverlay();
         } else {
             // Handle the case where FENs do not match here
             console.log("You changed the best move! Level failed!")
             console.log("Move "+ result[1] + " replaced "+getResult(currLevel)[1])
             document.getElementById('FailMsg').innerText = "You've altered the timeline! You Fail!"
-            document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex+1) + ". Immediately after your actions caused White to deviate from God's plan.";
+            document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Immediately after your actions caused White to deviate from God's plan.";
             showGameOverOverlay();
         }
         console.log("made move");
@@ -274,14 +279,14 @@ Without dirupting the timeline..
     function goNextLevel(){
         lvlIndex+=1;
         console.log ("lvl index "+ lvlIndex)
-        console.log ("lvls length "+ levels.length)
-        if (!(lvlIndex < levels.length)) {
+        console.log ("lvls length "+ data.length)
+        if (!(lvlIndex < data.length)) {
             completeOverlay.style.display = 'flex'
             return
         }
-        currLevel = levels[lvlIndex]
+        currLevel = data[lvlIndex]['puzzle']
         loadFen(currLevel)
-        document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex+1) + ". Just before your opponent, White, made their last move...";
+        document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just before White moves...";
     }
 
     function startUpdateOverlay() {
@@ -294,10 +299,10 @@ Without dirupting the timeline..
     }
 
     function gameCompleted() {
-        lvlIndex = 0;
-        currLevel = levels[lvlIndex]
+        lvlIndex = 1;
+        currLevel = data[lvlIndex]['puzzle']
         loadFen(currLevel)
-        document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex+1) + ". Just before your opponent, White, made their last move...";
+        document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just before White moves...";
     }
 
     function showLevelCompleteOverlay() {
@@ -310,18 +315,19 @@ Without dirupting the timeline..
 
     function restartLevel() {
         loadFen(currLevel);
-        document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex+1) + ". Just before your opponent, White, made their last move...";
+        document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just before White moves...";
     }
 
     // Example FEN for the initial position
     loadFen(currLevel);
-    gameStartOverlay();
+    startUpdateOverlay();
     updateOverlay.addEventListener('click', function() {
         updateOverlay.style.display = 'none';
+        gameStartOverlay();
     });
     startOverlay.addEventListener('click', function() {
         startOverlay.style.display = 'none';
-        startUpdateOverlay()
+
     });
     winOverlay.addEventListener('click', function() {
             winOverlay.style.display = 'none';
