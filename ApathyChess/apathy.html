@@ -107,8 +107,8 @@ Without dirupting the timeline..
 <!-- Update Notes Container -->
 <div id="updateOverlay" class="overlay-container" style="display: none;">
     <div class="overlay-message">
-        <h2>Version 0.123</h2>
-        <div>Released Feb 27, 2024</div>
+        <h2>Version 0.124</h2>
+        <div>Released Feb 28, 2024</div>
         <div>Thank you for being an alpha tester!</div>
         <a href="devlog.html" target="_blank" style="color: whitesmoke;">Dev Log</a>
         <p><i>Click anywhere to play!</i></p>
@@ -201,6 +201,11 @@ Without dirupting the timeline..
                 // Deselect the tile if it's already selected
                 selectedTile.classList.remove('selected');
                 selectedTile = null;
+            } else {
+                // Deselect and select new if it is a piece
+                selectedTile.classList.remove('selected');
+                selectedTile = tile;
+                tile.classList.add('selected');
             }
         }
 
@@ -272,7 +277,12 @@ Without dirupting the timeline..
                 document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just after you altered the past and destroyed the universe.";
                 showGameOverOverlay();
 
-            } else if (result[1] === getResult(currLevel)[1]) {
+            } else if (result[0] === 'EngineError'){
+                document.getElementById('FailMsg').innerText = "You somehow made White's head explode... and are convicted of murder."
+                document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just after you blew a mind.";
+                showGameOverOverlay();
+            }
+            else if (result[1] === getResult(currLevel)[1]) {
                 // Handle the case where FENs match here
                 console.log("Level passed!")
                 document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Present day.";
