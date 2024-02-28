@@ -65,6 +65,13 @@ Without dirupting the timeline..
             border-radius: 10px;
             background: rgba(50, 50, 50, 0.9); /* Slightly darker background for the message box */
         }
+        .overlay-message2 {
+            text-align: center;
+            color: white; /* Adjust text color to contrast with the overlay background */
+            padding: 20px;
+            border-radius: 10px;
+            /*background: rgba(50, 50, 50, 0.2); /* Slightly darker background for the message box */
+        }
 
         .overlay-message h2 {
             margin-bottom: 10px;
@@ -100,7 +107,7 @@ Without dirupting the timeline..
 <!-- Update Notes Container -->
 <div id="updateOverlay" class="overlay-container" style="display: none;">
     <div class="overlay-message">
-        <h2>Version 0.122</h2>
+        <h2>Version 0.123</h2>
         <div>Released Feb 27, 2024</div>
         <div>Thank you for being an alpha tester!</div>
         <a href="devlog.html" target="_blank" style="color: whitesmoke;">Dev Log</a>
@@ -110,14 +117,14 @@ Without dirupting the timeline..
 </div>
 <!-- Level Beat Container -->
 <div id="levelCompleteOverlay" class="overlay-container" style="display: none;">
-    <div class="overlay-message">
+    <div class="overlay-message2">
         <h2>Level complete!</h2>
         <p>Tap anywhere to continue...</p>
     </div>
 </div>
 <!-- Level Fail Overlay Container -->
 <div id="gameOverOverlay" class="overlay-container" style="display: none;">
-    <div class="overlay-message">
+    <div class="overlay-message2">
         <h2 id="FailMsg">Game Over</h2>
         <p>Tap anywhere to restart...</p>
     </div>

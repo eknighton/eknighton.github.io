@@ -1,5 +1,5 @@
 var data = [];
-const scripts = ['lvl1.js', 'lvl2.js', 'lvl3.js','lvl4.js']; // List of scripts to load
+const scripts = ['lvl1.js', 'lvl2.js', 'lvl3.js','lvl4.js','lvl5.js']; // List of scripts to load
 
 const scriptPromises = scripts.map(script => {
     return new Promise((resolve, reject) => {
