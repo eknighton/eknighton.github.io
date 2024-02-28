@@ -10,7 +10,7 @@ Without dirupting the timeline..
 <head>
     <meta charset="UTF-8">
     <title>The Chess Timeline</title>
-    <style>
+    <style> 
         body {
             display: flex; /* Use Flexbox for layout */
             flex-direction: column; /* Arrange children in a vertical column */
@@ -18,7 +18,7 @@ Without dirupting the timeline..
             align-items: center; /* Center children horizontally */
             min-height: 100vh; /* Minimum height to fill the viewport */
             margin: 0; /* Remove default margin */
-            background-color: #f0f0f0; /* Optional: background color of the page */
+            background-color: black; /* Optional: background color of the page */
         }
         .board {
             display: grid;
@@ -87,11 +87,15 @@ Without dirupting the timeline..
     </style>
 </head>
 <body>
-<div id="title">Move any piece to an empty square, without changing white's next move.</div>
+    <!--
+<div style="font-size: 30px; color: whitesmoke;">
+<div style="color: white">Move any piece to an empty square</div>
+<div style="color: white">Without changing white's next move</div>
+</div> -->
 <div id="boardContainer">
     <div id="board" class="board"></div>
 </div>
-<div id="lvlInd">Lvl 1. Just before White moves...</div>
+<div id="lvlInd" style="color: white; font-size: 20px;">Lvl 1. Just before White moves...</div>
 
 <!-- Game Start Overlay Container -->
 <div id="startOverlay" class="overlay-container" style="display: none;">
@@ -107,7 +111,7 @@ Without dirupting the timeline..
 <!-- Update Notes Container -->
 <div id="updateOverlay" class="overlay-container" style="display: none;">
     <div class="overlay-message">
-        <h2>Version 0.124</h2>
+        <h2>Version 0.125</h2>
         <div>Released Feb 28, 2024</div>
         <div>Thank you for being an alpha tester!</div>
         <a href="devlog.html" target="_blank" style="color: whitesmoke;">Dev Log</a>
@@ -163,8 +167,17 @@ Without dirupting the timeline..
     function dataLoaded(){
 
         console.log("About to load")
-        var currLevel = data[1]['puzzle'];
+        var levels = [
+        'NullLevel',
+        '2RooksMate',
+        'LonelyKing',
+        'ArabianKnights',
+        'KnightsTemplar',
+        'FiveCompanions'
+        ];
         var lvlIndex = 1;
+        var currLevel = data[levels[lvlIndex]]['puzzle'];
+
 
         const pieceMap = {
             'p': '♟', 'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚',
@@ -261,7 +274,7 @@ Without dirupting the timeline..
         }
 
         function getResult(fen) {
-            return data[lvlIndex][fen] || 'Invalid';
+            return data[levels[lvlIndex]][fen] || 'Invalid';
         }
 
         function checkSolution(result) {
@@ -273,12 +286,12 @@ Without dirupting the timeline..
             if (result === 'Invalid') {
                 // Handle the 'Invalid' case here
                 console.log("Invalid Board! Level failed!")
-                document.getElementById('FailMsg').innerText = "You made an invalid board, destroying the universe!"
+                document.getElementById('FailMsg').innerHTML = "You made an invalid board, destroying the universe!<div>(You must create a board white could have at the start of its turn.)<div>"
                 document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just after you altered the past and destroyed the universe.";
                 showGameOverOverlay();
 
             } else if (result[0] === 'EngineError'){
-                document.getElementById('FailMsg').innerText = "You somehow made White's head explode... and are convicted of murder."
+                document.getElementById('FailMsg').innerText = "You somehow made White's head explode... and are convicted of manslaughter."
                 document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just after you blew a mind.";
                 showGameOverOverlay();
             }
@@ -291,7 +304,7 @@ Without dirupting the timeline..
                 // Handle the case where FENs do not match here
                 console.log("You changed the best move! Level failed!")
                 console.log("Move "+ result[1] + " replaced "+getResult(currLevel)[1])
-                document.getElementById('FailMsg').innerText = "You've altered the timeline! You Fail!"
+                document.getElementById('FailMsg').innerHTML = "You've altered the timeline! You Fail!<div>(Your board tweak affected what white did next.)</div>"
                 document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Immediately after your actions caused White to deviate from God's plan.";
                 showGameOverOverlay();
             }
@@ -300,13 +313,11 @@ Without dirupting the timeline..
 
         function goNextLevel(){
             lvlIndex+=1;
-            console.log ("lvl index "+ lvlIndex)
-            console.log ("lvls length "+ data.length)
-            if (!(lvlIndex < data.length)) {
+            if (!(lvlIndex < levels.length)) {
                 completeOverlay.style.display = 'flex'
                 return
             }
-            currLevel = data[lvlIndex]['puzzle']
+            currLevel = data[levels[lvlIndex]]['puzzle']
             loadFen(currLevel)
             document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just before White moves...";
         }
@@ -322,7 +333,7 @@ Without dirupting the timeline..
 
         function gameCompleted() {
             lvlIndex = 1;
-            currLevel = data[lvlIndex]['puzzle']
+            currLevel = data[levels[lvlIndex]]['puzzle']
             loadFen(currLevel)
             document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just before White moves...";
         }
