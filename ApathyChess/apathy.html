@@ -95,7 +95,7 @@ Without dirupting the timeline..
 <div id="boardContainer">
     <div id="board" class="board"></div>
 </div>
-<div id="lvlInd" style="color: white; font-size: 20px;">Lvl 1. Just before White moves...</div>
+<div id="lvlInd" style="color: white; font-size: 20px;">Lvl 1. Just before White moved...</div>
 
 <!-- Game Start Overlay Container -->
 <div id="startOverlay" class="overlay-container" style="display: none;">
@@ -286,7 +286,7 @@ Without dirupting the timeline..
             if (result === 'Invalid') {
                 // Handle the 'Invalid' case here
                 console.log("Invalid Board! Level failed!")
-                document.getElementById('FailMsg').innerHTML = "You made an invalid board, destroying the universe!<div>(You must create a board white could have at the start of its turn.)<div>"
+                document.getElementById('FailMsg').innerHTML = "You made an invalid board, destroying the universe!<div>(You must create a board White could have at the start of its turn.)<div>"
                 document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just after you altered the past and destroyed the universe.";
                 showGameOverOverlay();
 
@@ -304,7 +304,7 @@ Without dirupting the timeline..
                 // Handle the case where FENs do not match here
                 console.log("You changed the best move! Level failed!")
                 console.log("Move "+ result[1] + " replaced "+getResult(currLevel)[1])
-                document.getElementById('FailMsg').innerHTML = "You've altered the timeline! You Fail!<div>(Your board tweak affected what white did next.)</div>"
+                document.getElementById('FailMsg').innerHTML = "You've altered the timeline! You Fail!<div>(Your board tweak affected what White did next.)</div>"
                 document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Immediately after your actions caused White to deviate from God's plan.";
                 showGameOverOverlay();
             }
@@ -319,7 +319,7 @@ Without dirupting the timeline..
             }
             currLevel = data[levels[lvlIndex]]['puzzle']
             loadFen(currLevel)
-            document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just before White moves...";
+            document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just before White moved...";
         }
 
         function startUpdateOverlay() {
@@ -335,7 +335,7 @@ Without dirupting the timeline..
             lvlIndex = 1;
             currLevel = data[levels[lvlIndex]]['puzzle']
             loadFen(currLevel)
-            document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just before White moves...";
+            document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just before White moved...";
         }
 
         function showLevelCompleteOverlay() {
@@ -348,7 +348,7 @@ Without dirupting the timeline..
 
         function restartLevel() {
             loadFen(currLevel);
-            document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just before White moves...";
+            document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just before White moved...";
         }
 
         // Example FEN for the initial position
