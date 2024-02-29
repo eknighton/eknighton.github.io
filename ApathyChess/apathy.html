@@ -449,7 +449,7 @@ Without dirupting the timeline..
 
             console.log(`Occurrences of cordA: ${countCordA}`);
             console.log(`Occurrences of cordB: ${countCordB}`);
-            if (countCordA < countCordB) {
+            if (countCordA > countCordB) {
                 lockedSquares.add(cordA)
             } else {
                 lockedSquares.add(cordB)
@@ -460,6 +460,31 @@ Without dirupting the timeline..
                 && hasUnlockedMove(data[levels[lvlIndex]]['locks'],data[levels[lvlIndex]]['sols'])){
                 nextLoop.push(levels[lvlIndex])
             }
+
+        }
+
+        function pickToLock(a,b){
+
+
+
+            /* 
+                We need to avoid revealing too much information by the decision
+                
+
+                
+                Locking B by default cuts down on possible solutions too rapidly.
+                Locking A by default 
+                Our goal is to optimize the set of the solutions the player 
+                When the piece has multiple moves, 
+            */
+            lockedSquares.add(b)
+            data[levels[lvlIndex]]['locks'] = Array.from(lockedSquares)
+
+
+
+
+
+
 
         }
 
