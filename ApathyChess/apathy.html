@@ -449,7 +449,7 @@ Without dirupting the timeline..
 
             console.log(`Occurrences of cordA: ${countCordA}`);
             console.log(`Occurrences of cordB: ${countCordB}`);
-            if (countCordA > countCordB) {
+            if (countCordA >= countCordB) {
                 lockedSquares.add(cordA)
             } else {
                 lockedSquares.add(cordB)
@@ -468,12 +468,37 @@ Without dirupting the timeline..
 
 
             /* 
+
+                A good enough way to decide-
+
+                Simple cases
+                Using PV series to evaluate similarity?
+                -> Number of items in common? (0 to 3)
+                -> Length of series?
+                -> How is this affected by random variation?
+                Hardcoding
+
+
+                Can we ever rule out locking the piece?
+                Yes, when there is only one destination for it.
+
+                Can we ever rule out locking the destination?
+
+                Always lock on the squares from latest move? Yes, can't allow repeat.
+                Only one? 
+
                 We need to avoid revealing too much information by the decision
                 
+                If a piece has lots of bad solutions, but some good ones, how do we capitalize on the good ones?
 
-                
+                How do we avoid cutting down the # of solutions too quickly
+                How do we tell if we want to cut a solution or not?
+
+                We can rate solutions?
+                Solution redundancy
+                Explore all possible sets to 
                 Locking B by default cuts down on possible solutions too rapidly.
-                Locking A by default 
+                Locking A by default fails to eliminate redundant solutions
                 Our goal is to optimize the set of the solutions the player 
                 When the piece has multiple moves, 
             */
@@ -493,7 +518,7 @@ Without dirupting the timeline..
             if (!(lvlIndex < levels.length)) {
                 var temp = levels.length-nextLoop.length
                 if (loops < 1){
-                    document.getElementById('completeMsg').innerHTML = "<h2>Get Ready!</h2><div>You've found a solution to each level.</div><div>Now it is time to loop the game!</div><div>Every time you loop, a square or piece you've used will be permanently locked🔒.</div>"
+                    document.getElementById('completeMsg').innerHTML = "<h2>Get Ready!</h2><div>You've found a solution to each level.</div><div>Now it is time to loop the game!</div><div>Every time you loop, a square or piece you've used will get permanently locked🔒.</div>"
                 } else if (temp > 1) {
                     
                     document.getElementById('completeMsg').innerHTML = "<h2>You've completed Loop " + loops + "!</h2> <div> "+ temp + " levels have been eliminated. </div>"
