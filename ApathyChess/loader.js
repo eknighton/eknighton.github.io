@@ -1,5 +1,5 @@
 var data = [];
-const scripts = ['2RooksMate.js', 'LonelyKing.js', 'ArabianKnights.js','KnightsTemplar.js','FiveCompanions.js']; // List of scripts to load
+const scripts = ['NullLevel.js','2RooksMate.js', 'LonelyKing.js', 'ArabianKnights.js','KnightsTemplar.js','FiveCompanions.js']; // List of scripts to load
 
 const scriptPromises = scripts.map(script => {
     return new Promise((resolve, reject) => {

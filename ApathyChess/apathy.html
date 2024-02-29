@@ -12,6 +12,7 @@ Without dirupting the timeline..
     <title>The Chess Timeline</title>
     <style> 
         body {
+            /* white-space: pre-wrap;*/
             display: flex; /* Use Flexbox for layout */
             flex-direction: column; /* Arrange children in a vertical column */
             justify-content: center; /* Center children vertically */
@@ -30,12 +31,31 @@ Without dirupting the timeline..
         .tile {
             width: 50px;
             height: 50px;
+            margin: 0px;
+            padding: 0px;
+
             display: flex;
+            position: relative;
+
             justify-content: center;
             align-items: center;
             font-size: 32px;
             cursor: pointer;
         }
+        .piece-text {
+            /* Style for piece text, adjust as needed */
+            z-index: 1; /* Ensure the piece text is below the lock icon */
+        }
+        .lock-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Center the icon */
+            font-size: 32px; /* Adjust based on your preference */
+            opacity: 0.45; /* Adjust for visibility */
+            z-index: 2; /* Ensure it overlays the piece text */
+        }
+
         .light {
             background-color: #f0d9b5;
         }
@@ -112,7 +132,7 @@ Without dirupting the timeline..
 <!-- Game Start Overlay Container -->
 <div id="startOverlay" class="overlay-container" style="display: none;">
     <div class="overlay-message">
-        <h2 id="completeMsg">Welcome to The Chess Timeline</h2>
+        <h2 id="startMsg">Welcome to The Chess Timeline</h2>
         <p><---[You Are Here]---[Time Barrier]--[White Moves]---[Present Day]></p>
         <p>To return to the present, you must break through the Time Barrier by moving any piece. </p>
         <p>However, if you alter White's next move, you'll be executed for time crime.</p>
@@ -123,8 +143,8 @@ Without dirupting the timeline..
 <!-- Update Notes Container -->
 <div id="updateOverlay" class="overlay-container" style="display: none;">
     <div class="overlay-message">
-        <h2>Version 0.125</h2>
-        <div>Released Feb 28, 2024</div>
+        <h2>Version 0.2</h2>
+        <div>Released Feb 29, 2024</div>
         <div>Thank you for being an alpha tester!</div>
         <a href="devlog.html" target="_blank" style="color: whitesmoke;">Dev Log</a>
         <p><i>Click anywhere to play!</i></p>
@@ -147,9 +167,17 @@ Without dirupting the timeline..
 </div>
 <!-- Game Complete Overlay Container -->
 <div id="completeOverlay" class="overlay-container" style="display: none;">
-    <div class="overlay-message">
-        <h2 id="completeMsg">You've Completed Every Level</h2>
+    <div class="overlay-message" id="completeMsg">
+        <h2>You've Completed Every Level</h2>
         <p>Tap anywhere to restart the game...</p>
+    </div>
+</div>
+<!-- Thanks For Playing Overlay Container -->
+<div id="doneOverlay" class="overlay-container" style="display: none;">
+    <div class="overlay-message">
+        <h2 id="doneMsg">You've Finished The Game!</h2>
+        <div>Thank you for being an alpha tester!</div>
+        <a href="https://discord.gg/gAHusuSQA5" target="_blank" style="color: whitesmoke;">Join the 315 discord for updates and news!</a>
     </div>
 </div>
 
@@ -161,6 +189,7 @@ Without dirupting the timeline..
     const startOverlay = document.getElementById('startOverlay');
     const completeOverlay = document.getElementById('completeOverlay');
     const updateOverlay = document.getElementById('updateOverlay');
+    const doneOverlay = document.getElementById('doneOverlay');
 
     //var levels = [    
     //'KKKKKKKK/KKKKKKKK/KKKKKKKK/KKKKKKKK/kkkkkkkk/kkkkkkkk/kkkkkkkk/kkkkkkkk w - - 0 1',
@@ -179,24 +208,29 @@ Without dirupting the timeline..
     function dataLoaded(){
 
         console.log("About to load")
-        var levels = [
+        let levels = [
         'NullLevel',
         '2RooksMate',
         'LonelyKing',
-        'ArabianKnights',
+         /*'ArabianKnights',
         'KnightsTemplar',
-        'FiveCompanions'
+        'FiveCompanions'*/
         ];
-        var lvlIndex = 1;
-        var currLevel = data[levels[lvlIndex]]['puzzle'];
+        let nextLoop = ['NullLevel'];
+        let loops = 0;
+        let lvlIndex = 1;
+        let currLevel = data[levels[lvlIndex]]['puzzle'];
 
 
         const pieceMap = {
             'p': '♟', 'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚',
             'P': '♙', 'R': '♖', 'N': '♘', 'B': '♗', 'Q': '♕', 'K': '♔'
         };
+        let lockedSquares = new Set([]); // Add the squares you want to lock
+
         let selectedTile = null;
 
+        /*
             function createTile(isLight, piece = '', rowIndex, colIndex) {
                 const tile = document.createElement('div');
                 tile.className = `tile ${isLight ? 'light' : 'dark'}`;
@@ -206,18 +240,71 @@ Without dirupting the timeline..
                 tile.addEventListener('click', () => selectOrMovePiece(rowIndex, colIndex, tile, piece));
                 return tile;
             }
+        */
+
+        //UTIL
+        function hasUnlockedMove(locks, sols) {
+            console.log(locks)
+            console.log(sols)
+            for (let move of sols) {
+                // Split the move into its start and end coordinates
+                let start = move.substring(0, 2);
+                let end = move.substring(2, 4);
+
+                // Check if neither the start nor the end of the move is in locks
+                if (!locks.includes(start) && !locks.includes(end)) {
+                    return true; // Found a move that does not involve any locked coordinates
+                }
+            }
+
+            // If we get through all moves without returning true, then no such move exists
+            return false;
+        }
+
+
+        function createTile(isLight, piece = '', rowIndex, colIndex, locks) {
+            const tile = document.createElement('div');
+            tile.className = `tile ${isLight ? 'light' : 'dark'}`;
+            tile.setAttribute('data-row', rowIndex); // Set row attribute
+            tile.setAttribute('data-col', colIndex); // Set column attribute
+            tile.setAttribute('data-square', String.fromCharCode('a'.charCodeAt(0) + colIndex) + (8 - rowIndex)); // Set square attribute
+            tile.addEventListener('click', () => selectOrMovePiece(rowIndex, colIndex, tile, piece));
+
+            // Create a span to hold the piece text
+            const pieceText = document.createElement('span');
+            pieceText.className = 'piece-text';
+            pieceText.textContent = pieceMap[piece] || '';
+            tile.appendChild(pieceText); // Add the piece text to the tile
+
+            // Check if the current square is in the lockedSquares set
+            if (locks && lockedSquares.has(tile.getAttribute('data-square'))) {
+                const lockIcon = document.createElement('span'); // Create a span for the lock icon
+                lockIcon.textContent = '🔒'; // Using the lock emoji
+                lockIcon.className = 'lock-icon'; // Add a class for potential styling
+                tile.appendChild(lockIcon); // Add the lock icon to the tile
+            }
+
+            return tile;
+        }
+
 
 
         function selectOrMovePiece(rowIndex, colIndex, tile, piece) {
             console.log(makeFen());
-            if (selectedTile && tile !== selectedTile && !tile.textContent) {
+            if (lockedSquares.has(tile.getAttribute('data-square'))) {
+                console.log("Locked Square!")
+            }else if (selectedTile && tile !== selectedTile && !tile.textContent) {
                 // Move piece to the new tile
-                tile.textContent = selectedTile.textContent;
-                selectedTile.textContent = '';
+                tile.querySelector('.piece-text').textContent = selectedTile.querySelector('.piece-text').textContent;
+                selectedTile.querySelector('.piece-text').textContent = '';
                 selectedTile.classList.remove('selected');
+
+                var cordA = tile.getAttribute('data-square')
+                var cordB = selectedTile.getAttribute('data-square')
+
                 selectedTile = null;
                 console.log(makeFen())
-                checkSolution(getResult(makeFen()));
+                checkSolution(getResult(makeFen()), cordA, cordB);
             } else if (tile.textContent && !selectedTile) {
                 // Select the tile if it has a piece
                 selectedTile = tile;
@@ -234,7 +321,8 @@ Without dirupting the timeline..
             }
         }
 
-        function loadFen(fen) {
+        function loadFen(fen, locks=false) {
+            lockedSquares = new Set(data[levels[lvlIndex]]['locks']) || new Set([]);
             const boardElement = document.getElementById('board');
             boardElement.innerHTML = ''; // Clear the board
             const rows = fen.split(' ')[0].split('/');
@@ -244,12 +332,12 @@ Without dirupting the timeline..
                     if (!isNaN(char)) { // If the character is a number, it represents empty squares
                         for (let i = 0; i < parseInt(char); i++) {
                             const isLight = (rowIndex + colIndex) % 2 === 0;
-                            boardElement.appendChild(createTile(isLight, '', rowIndex, colIndex));
+                            boardElement.appendChild(createTile(isLight, '', rowIndex, colIndex, locks));
                             colIndex++;
                         }
                     } else {
                         const isLight = (rowIndex + colIndex) % 2 === 0;
-                        boardElement.appendChild(createTile(isLight, char, rowIndex, colIndex));
+                        boardElement.appendChild(createTile(isLight, char, rowIndex, colIndex, locks));
                         colIndex++;
                     }
                 });
@@ -262,7 +350,10 @@ Without dirupting the timeline..
                 let emptyCount = 0;
                 for (let col = 0; col < 8; col++) {
                     const tile = document.querySelector(`.tile[data-row="${row}"][data-col="${col}"]`);
-                    const piece = Object.keys(pieceMap).find(key => pieceMap[key] === tile.textContent);
+                    var piece = false
+                    if (tile.querySelector('.piece-text') != null) {
+                        piece = Object.keys(pieceMap).find(key => pieceMap[key] === tile.querySelector('.piece-text').textContent);
+                    }
                     if (piece) {
                         if (emptyCount > 0) {
                             fen += emptyCount;
@@ -289,20 +380,31 @@ Without dirupting the timeline..
             return data[levels[lvlIndex]][fen] || 'Invalid';
         }
 
-        function checkSolution(result) {
+        function checkSolution(result, cordA, cordB) {
+            /*
+                DOCUMENTATION
+                result[0] = resulting state
+                result[1] = move made to get that state
+                result[2] = if initial state was invalid, this says why
+            */
             console.log("result:")
             console.log(result)
-            if (result != 'Invalid') {
+            if (result != 'Invalid' && result[2] == null) {
                  loadFen(result[0]);
             }
             if (result === 'Invalid') {
                 // Handle the 'Invalid' case here
                 console.log("Invalid Board! Level failed!")
-                document.getElementById('FailMsg').innerHTML = "You made an invalid board, destroying the universe!<div>(You must create a board White could have at the start of its turn.)<div>"
+                document.getElementById('FailMsg').innerHTML = "You made an invalid board, destroying the universe!<div>(You must create a board White could have at the start of its turn.)</div>"
                 document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just after you altered the past and destroyed the universe.";
                 showGameOverOverlay();
 
-            } else if (result[0] === 'EngineError'){
+            } else if (result[2] != null){
+                document.getElementById('FailMsg').innerHTML = "You made an invalid board, destroying the universe! <div> ⚠️"+result[2]+" </div> 💡You must create a board White could have at the start of its turn.";
+                document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just after you broke the universe";
+                showGameOverOverlay(); 
+            }
+            else if (result[0] === 'EngineError'){
                 document.getElementById('FailMsg').innerText = "You somehow made White's head explode... and are convicted of manslaughter."
                 document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just after you blew a mind.";
                 showGameOverOverlay();
@@ -311,6 +413,7 @@ Without dirupting the timeline..
                 // Handle the case where FENs match here
                 console.log("Level passed!")
                 document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Present day.";
+                recordSolution(result, cordA, cordB);
                 showLevelCompleteOverlay();
             } else {
                 // Handle the case where FENs do not match here
@@ -323,16 +426,68 @@ Without dirupting the timeline..
             console.log("made move");
         }
 
+        function recordSolution(result, cordA, cordB){
+            //See which of the two coords occurs fewer times in the list
+
+            // Initialize counters
+            let countCordA = 0;
+            let countCordB = 0;
+
+            // Assuming 'data', 'levels', and 'lvlIndex' are defined and accessible
+            const sols = data[levels[lvlIndex]]['solsLeft'];
+
+            // Should only count unused sols!
+
+            // Iterate through the array and count occurrences
+            sols.forEach(item => {
+                if (item === cordA) {
+                    countCordA++;
+                } else if (item === cordB) {
+                    countCordB++;
+                }
+            });
+
+            console.log(`Occurrences of cordA: ${countCordA}`);
+            console.log(`Occurrences of cordB: ${countCordB}`);
+            if (countCordA < countCordB) {
+                lockedSquares.add(cordA)
+            } else {
+                lockedSquares.add(cordB)
+            }
+            data[levels[lvlIndex]]['locks'] = Array.from(lockedSquares)
+
+            if (data[levels[lvlIndex]]['locks'].length < data[levels[lvlIndex]]['loops']
+                && hasUnlockedMove(data[levels[lvlIndex]]['locks'],data[levels[lvlIndex]]['sols'])){
+                nextLoop.push(levels[lvlIndex])
+            }
+
+        }
+
         function goNextLevel(){
             lvlIndex+=1;
             if (!(lvlIndex < levels.length)) {
+                var temp = levels.length-nextLoop.length
+                if (loops < 1){
+                    document.getElementById('completeMsg').innerHTML = "<h2>Get Ready!</h2><div>You've found a solution to each level.</div><div>Now it is time to loop the game!</div><div>Every time you loop, a square or piece you've used will be permanently locked🔒.</div>"
+                } else if (temp > 1) {
+                    
+                    document.getElementById('completeMsg').innerHTML = "<h2>You've completed Loop " + loops + "!</h2> <div> "+ temp + " levels have been eliminated. </div>"
+                } else if (temp == 1) {
+                    
+                    document.getElementById('completeMsg').innerHTML = "<h2>You've completed Loop " + loops + "!</h2> <div> One level has been eliminated. </div>"
+                }
+                else {
+                    document.getElementById('completeMsg').innerHTML = "<h2>You've completed Loop " + loops + "!</h2> <div> But how far will you make it? </div>"
+                }
                 completeOverlay.style.display = 'flex'
+
                 return
             }
             currLevel = data[levels[lvlIndex]]['puzzle']
-            loadFen(currLevel)
+            loadFen(currLevel, true)
             document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just before White moved...";
         }
+
 
         function startUpdateOverlay() {
             updateOverlay.style.display = 'flex'; 
@@ -345,8 +500,19 @@ Without dirupting the timeline..
 
         function gameCompleted() {
             lvlIndex = 1;
+            levels = nextLoop;
+            nextLoop = ['NullLevel'];
+            if (levels.length < 2) {
+                document.getElementById('lvlInd').innerText = "Loop " + loops+ ". Just after you beat the game!";
+                lvlIndex = 0
+                currLevel = data[levels[lvlIndex]]['puzzle']
+                loadFen(currLevel, true)
+                doneOverlay.style.display = 'flex';
+                return
+            }
+            loops+=1;
             currLevel = data[levels[lvlIndex]]['puzzle']
-            loadFen(currLevel)
+            loadFen(currLevel, true)
             document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just before White moved...";
         }
 
@@ -359,12 +525,12 @@ Without dirupting the timeline..
         }
 
         function restartLevel() {
-            loadFen(currLevel);
+            loadFen(currLevel, true);
             document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just before White moved...";
         }
 
         // Example FEN for the initial position
-        loadFen(currLevel);
+        loadFen(currLevel, true);
         startUpdateOverlay();
         updateOverlay.addEventListener('click', function() {
             updateOverlay.style.display = 'none';

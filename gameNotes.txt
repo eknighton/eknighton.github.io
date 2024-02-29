@@ -1,0 +1,111 @@
+
+
+Stealth Chess
+
+
+Challenge:
+Knowing which board changes don't affect the game
+
+Fun:
+Competition, Stealth, Skill
+
+
+
+A simple stealth game? (Theory of mind) 
+-> Would require more specific criteria
+
+
+A re-roll mechanic?
+
+Chess Puzzles?
+
+
+
+What if it is a betting game where you need to wager whether the AI will make a different move? 
+(We show two boards side by side?)
+This amounts to jsut (find the best move in each context)
+
+Inputting the change is key
+
+
+
+
+
+
+------
+
+
+
+Updating Apathy Chess
+
+1. HUD to display Puzzle # / Name, # of turns you must survive.
+
+
+Or
+
+Limiting it to 1 move puzzles and then implementing caching.
+(If we implement caching we can develop a web frontend!)
+
+
+Story:
+
+You've been sent back in time...
+One chess move...
+Before time can continue, you must move one piece.
+Without dirupting the timeline..
+
+
+Known issues:
+-- getting 'invalid board' ex when pawn in impossible row
+-- current json system uses one object, so not gonna be great when that obj holds multiple boards
+
+-- We consider moves with same destination to be the same
+
+Looping 
+-- For each puzzle, we have a solution count (or list)
+-- For each puzzle, We track which solutions the player has used in the past. 
+-- When looping, players can use a solution they've used in the past.
+-- We help the player avoid repeating a past solution by...
+
+
+One solution puzzles, but every state the player can make would also have to be one solution...
+
+
+
+Confusions
+
+1. Why is getting check or checkmate bad?
+2. The move was the same from the POV of the piece
+3. Oh, I can move pieces of either color?
+
+------
+
+
+Casino Cops:
+-- Prove it can't be fun
+-- Random action test
+---
+
+
+Updating Aware
+
+1. A version where you are shown a set of emojis then tap whether an item was in the set
+
+
+
+
+
+In BoxSim, you have fallen deep into the meta-box, and the only way out is to go even deeper.
+Features
+
+    Simple rules, many variations: The rules of BoxSim are simple. You can move, you can pick up boxes, and you can put down boxes. How many different puzzles can there be? Turns out, quite a lot.
+    Recursive levels: Every level holds a box containing the next level, and you shrink down to advance. This means that you can see the path you've taken by looking off into the distance.
+    Creativity is more important than logic: The best part about puzzle solving is coming up with a new idea. Our puzzles are all designed around this ideal. Each puzzle requires thinking outside the box (ironic, we know), not doing a bunch of logic. The solution to every puzzle should feel intuitive in retrospect.
+    Variable diffuclty: The game is entirely beatable without making any difficult jumps. However, for those of you who like a challenge, each level has a hard mode version which includes some more *ahem* intense platforming. And did we mention time trials?
+    Level editor?: We will try and include a level editor in the final game, but no promises. More wishlists makes this more likely ;)
+
+
+
+
+
+BoxSim invites you to think outside of the box while inside of a box that's inside of a box. Find creative solutions to puzzles. Navigate platforming challenges. Pick up boxes, put down boxes. Will you escape, or will you spend the rest of your life inside the box? 
