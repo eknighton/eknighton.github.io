@@ -323,6 +323,25 @@ Without dirupting the timeline..
             const endX = endRect.left - boardRect.left + endRect.width / 2;
             const endY = endRect.top - boardRect.top + endRect.height / 2;
 
+            // Calculate the direction vector components
+            const dirX = endX - startX;
+            const dirY = endY - startY;
+
+            // Calculate the length of the direction vector
+            const length = Math.sqrt(dirX * dirX + dirY * dirY);
+
+            // Normalize the direction vector components
+            const normX = dirX / length;
+            const normY = dirY / length;
+
+            // Calculate the half-tile offset
+            const halfTileOffset = startRect.width / 2;
+
+            // Adjust endX and endY to make the line half a tile shorter
+            lineEndX = endX - normX * halfTileOffset;
+            lineEndY = endY - normY * halfTileOffset;
+
+
             // Create an SVG element for the arrow if it doesn't exist
             let svg = boardElement.querySelector('svg');
             if (!svg) {
@@ -338,13 +357,13 @@ Without dirupting the timeline..
             marker.setAttribute('id', 'arrowhead');
             marker.setAttribute('markerWidth', '10');
             marker.setAttribute('markerHeight', '7');
-            marker.setAttribute('refX', '9'); // Position the arrowhead close to the end of the line
+            marker.setAttribute('refX', '0'); // Position the arrowhead close to the end of the line
             marker.setAttribute('refY', '3.5');
             marker.setAttribute('orient', 'auto');
+            marker.setAttribute('opacity', 1); 
             const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
             polygon.setAttribute('points', '0 0, 10 3.5, 0 7'); // Arrowhead shape
             polygon.setAttribute('fill', color); // Match line color
-            polygon.setAttribute('opacity', .5); 
             marker.appendChild(polygon);
             defs.appendChild(marker);
             svg.appendChild(defs);
@@ -353,8 +372,8 @@ Without dirupting the timeline..
             const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
             line.setAttribute('x1', startX);
             line.setAttribute('y1', startY);
-            line.setAttribute('x2', endX);
-            line.setAttribute('y2', endY);
+            line.setAttribute('x2', lineEndX);
+            line.setAttribute('y2', lineEndY);
             line.setAttribute('stroke', color);
             line.setAttribute('stroke-width', '3');
             line.setAttribute('marker-end', 'url(#arrowhead)');
@@ -433,7 +452,7 @@ Without dirupting the timeline..
             }
         }
 
-        function loadFen(fen, locks=false, move=null, color="lime", transform=false) {
+        function loadFen(fen, locks=false, move=null, color="#CCFFCC", transform=false) {
 
             //Clear timeout
             if (moveTimeout){
