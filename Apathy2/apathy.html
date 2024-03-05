@@ -1,0 +1,753 @@
+<!--
+You've been sent back in time...
+One chess move...
+Before time can continue, you must move one piece.
+Without dirupting the timeline..
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The Chess Timeline</title>
+    <style> 
+        body {
+            /* white-space: pre-wrap;*/
+            display: flex; /* Use Flexbox for layout */
+            flex-direction: column; /* Arrange children in a vertical column */
+            justify-content: center; /* Center children vertically */
+            align-items: center; /* Center children horizontally */
+            min-height: 100vh; /* Minimum height to fill the viewport */
+            margin: 0; /* Remove default margin */
+            background-color: black; /* Optional: background color of the page */
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(8, 50px);
+            grid-template-rows: repeat(8, 50px);
+            width: 400px;
+            height: 400px;
+        }
+        .tile {
+            width: 50px;
+            height: 50px;
+            margin: 0px;
+            padding: 0px;
+
+            display: flex;
+            position: relative;
+
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            cursor: pointer;
+        }
+        .piece-text {
+            /* Style for piece text, adjust as needed */
+            z-index: 1; /* Ensure the piece text is below the lock icon */
+        }
+        .lock-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Center the icon */
+            font-size: 32px; /* Adjust based on your preference */
+            opacity: 0.45; /* Adjust for visibility */
+            z-index: 2; /* Ensure it overlays the piece text */
+        }
+
+        .light {
+            background-color: #f0d9b5;
+        }
+        .dark {
+            background-color: #b58863;
+        }
+        .selected {
+            border: 2px solid red; /* Highlight selected tile */
+        }
+        .overlay-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; /* Ensure it sits on top of other content */
+        }
+        .overlay-container2 {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; /* Ensure it sits on top of other content */
+        }
+
+        .overlay-message {
+            text-align: center;
+            color: white; /* Adjust text color to contrast with the overlay background */
+            padding: 20px;
+            border-radius: 10px;
+            background: rgba(50, 50, 50, 0.9); /* Slightly darker background for the message box */
+        }
+        .overlay-message2 {
+            text-align: center;
+            color: white; /* Adjust text color to contrast with the overlay background */
+            padding: 20px;
+            border-radius: 10px;
+            /*background: rgba(50, 50, 50, 0.2); /* Slightly darker background for the message box */
+        }
+
+        .overlay-message h2 {
+            margin-bottom: 10px;
+        }
+
+        .overlay-message p {
+            margin-top: 0;
+        }
+        #title {
+            font-size: 20px;
+        }
+
+    </style>
+</head>
+<body>
+    <!--
+<div style="font-size: 30px; color: whitesmoke;">
+<div style="color: white">Move any piece to an empty square</div>
+<div style="color: white">Without changing white's next move</div>
+</div> -->
+<div id="boardContainer">
+    <div id="board" class="board"></div>
+</div>
+<div id="lvlInd" style="color: white; font-size: 20px;">Lvl 1. Just before White moved...</div>
+
+<!-- Game Start Overlay Container -->
+<div id="startOverlay" class="overlay-container" style="display: none;">
+    <div class="overlay-message">
+        <h2 id="startMsg">Welcome to The Chess Timeline</h2>
+        <p><---[You Are Here]---[Time Barrier]--[White Moves]---[Present Day]></p>
+        <p>To return to the present, you must break through the Time Barrier by moving any piece. </p>
+        <p>However, if you alter White's next move, you'll be executed for time crime.</p>
+        <p>Good Luck!</p>
+        <p><i>Click anywhere to start!</i></p>
+    </div>
+</div>
+<!-- Update Notes Container -->
+<div id="updateOverlay" class="overlay-container" style="display: none;">
+    <div class="overlay-message">
+        <h2>Version 0.3</h2>
+        <div>Released Feb 29, 2024</div>
+        <div>Thank you for being an alpha tester!</div>
+        <a href="devlog.html" target="_blank" style="color: whitesmoke;">Dev Log</a>
+        <p><i>Click anywhere to play!</i></p>
+
+    </div>
+</div>
+<!-- Level Beat Container -->
+<div id="levelCompleteOverlay" class="overlay-container2" style="display: none; font-size: 30px;">
+    <div class="overlay-message2">
+        <h2>Level complete!</h2>
+        <p>Tap anywhere to continue...</p>
+    </div>
+</div>
+<!-- Level Fail Overlay Container -->
+<div id="gameOverOverlay" class="overlay-container2" style="display: none;">
+    <div class="overlay-message2">
+        <p id="FailMsg">Game Over</p>
+        <p><i>Tap anywhere to restart...</i></p>
+    </div>
+</div>
+<!-- Game Complete Overlay Container -->
+<div id="completeOverlay" class="overlay-container" style="display: none;">
+    <div class="overlay-message" id="completeMsg">
+        <h2>You've Completed Every Level</h2>
+        <p><i>Tap anywhere to restart the game...</i></p>
+    </div>
+</div>
+<!-- Thanks For Playing Overlay Container -->
+<div id="doneOverlay" class="overlay-container" style="display: none;">
+    <div class="overlay-message">
+        <h2 id="doneMsg">You've Finished The Game!</h2>
+        <div>Thank you for being an alpha tester!</div>
+        <a href="https://discord.gg/gAHusuSQA5" target="_blank" style="color: whitesmoke;">Join the 315 discord for updates and news!</a>
+    </div>
+</div>
+<!-- Involved Tiles Overlay Container -->
+<div id="involvedOverlay" class="overlay-container" style="display: none;">
+    <div id = "involvedMsg" class="overlay-message">
+        <h2>You can't move this piece!</h2>
+        <div>This is the piece white plans to move. If you were to move it, you be gauranteed to fail the level.</div>
+    </div>
+</div>
+
+
+<div id="tooltip" style="display: none; position: absolute; padding: 5px; background: #fff; border: 1px solid #000; border-radius: 3px; pointer-events: none; z-index: 100;"></div>
+
+
+<script src="data.js"></script>
+
+<script>
+    const winOverlay = document.getElementById('levelCompleteOverlay');
+    const loseOverlay = document.getElementById('gameOverOverlay');
+    const startOverlay = document.getElementById('startOverlay');
+    const completeOverlay = document.getElementById('completeOverlay');
+    const updateOverlay = document.getElementById('updateOverlay');
+    const doneOverlay = document.getElementById('doneOverlay');
+
+    //var levels = [    
+    //'KKKKKKKK/KKKKKKKK/KKKKKKKK/KKKKKKKK/kkkkkkkk/kkkkkkkk/kkkkkkkk/kkkkkkkk w - - 0 1',
+    //'2K1k3/7R/8/8/8/8/8/3R4 w - - 0 1',
+    //'8/P7/8/8/8/8/8/k1K5 w - - 0 1',
+    //'4k3/8/8/8/8/8/3PP3/2BQKB2 w - - 0 1'
+    //'4k3/8/8/8/7Q/8/8/3QK3 w - - 0 1',
+    //'8/5ppk/8/2Q5/8/8/8/7K w - - 0 1'
+    //"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    //"rnbqkbnr/pppppppp/2Q5/8/8/8/PPPPPPPP/RNB1KBNR w KQkq - 0 1",
+    //'4k3/pppppppp/8/8/8/8/PPPPPPPP/4K3 w - - 0 1',
+    //'qqqqkqqq/pppppppp/8/8/8/8/PPPPPPPP/QQQQKQQQ w - - 0 1',
+
+    //];
+
+    function dataLoaded(){
+
+        console.log("About to load")
+        let levels = [
+        'NullLevel',
+        '2RooksMate',
+        'LonelyKing',
+         /*'ArabianKnights',
+        'KnightsTemplar',
+        'FiveCompanions'*/
+        ];
+        let nextLoop = ['NullLevel'];
+        let loops = 0;
+        let lvlIndex = 1;
+        let currLevel = data[levels[lvlIndex]]['puzzle'];
+
+
+        const pieceMap = {
+            'p': '♟', 'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚',
+            'P': '♙', 'R': '♖', 'N': '♘', 'B': '♗', 'Q': '♕', 'K': '♔'
+        };
+        let lockedSquares = new Set([]); // Add the squares you want to lock
+
+        let selectedTile = null;
+        let moveTimeout = null;
+        let moveHovertext = null;
+
+        /*
+            function createTile(isLight, piece = '', rowIndex, colIndex) {
+                const tile = document.createElement('div');
+                tile.className = `tile ${isLight ? 'light' : 'dark'}`;
+                tile.textContent = pieceMap[piece] || '';
+                tile.setAttribute('data-row', rowIndex); // Set row attribute
+                tile.setAttribute('data-col', colIndex); // Set column attribute
+                tile.addEventListener('click', () => selectOrMovePiece(rowIndex, colIndex, tile, piece));
+                return tile;
+            }
+        */
+
+        //UTIL
+        function hasUnlockedMove(locks, sols) {
+            console.log(locks)
+            console.log(sols)
+            for (let move of sols) {
+                // Split the move into its start and end coordinates
+                let start = move.substring(0, 2);
+                let end = move.substring(2, 4);
+
+                // Check if neither the start nor the end of the move is in locks
+                if (!locks.includes(start) && !locks.includes(end)) {
+                    return true; // Found a move that does not involve any locked coordinates
+                }
+            }
+
+            // If we get through all moves without returning true, then no such move exists
+            return false;
+        }
+
+
+        function createTile(isLight, piece = '', rowIndex, colIndex, locks) {
+            const tile = document.createElement('div');
+            tile.className = `tile ${isLight ? 'light' : 'dark'}`;
+            tile.setAttribute('data-row', rowIndex); // Set row attribute
+            tile.setAttribute('data-col', colIndex); // Set column attribute
+            tile.setAttribute('data-square', String.fromCharCode('a'.charCodeAt(0) + colIndex) + (8 - rowIndex)); // Set square attribute
+            tile.addEventListener('click', () => selectOrMovePiece(rowIndex, colIndex, tile, piece));
+
+            // Create a span to hold the piece text
+            const pieceText = document.createElement('span');
+            pieceText.className = 'piece-text';
+            pieceText.textContent = pieceMap[piece] || '';
+            tile.appendChild(pieceText); // Add the piece text to the tile
+
+            // Check if the current square is in the lockedSquares set
+            if (locks && lockedSquares.has(tile.getAttribute('data-square'))) {
+                const lockIcon = document.createElement('span'); // Create a span for the lock icon
+                lockIcon.textContent = '🔒'; // Using the lock emoji
+                lockIcon.className = 'lock-icon'; // Add a class for potential styling
+                tile.appendChild(lockIcon); // Add the lock icon to the tile
+            }
+
+            return tile;
+        }
+
+        function drawArrow(boardElement, startSquare, endSquare, color) {
+            // Find the start and end tiles based on the data-square attribute
+            const startTile = boardElement.querySelector(`[data-square='${startSquare}']`);
+            const endTile = boardElement.querySelector(`[data-square='${endSquare}']`);
+
+            if (!startTile || !endTile) {
+                console.error('Start or end tile not found');
+                return;
+            }
+
+            // Get the bounding rectangles of the start and end tiles
+            const startRect = startTile.getBoundingClientRect();
+            const endRect = endTile.getBoundingClientRect();
+
+            // Get the bounding rectangle of the board element
+            const boardRect = boardElement.getBoundingClientRect();
+
+            // Calculate the center positions of the start and end tiles relative to the board
+            const startX = startRect.left - boardRect.left + startRect.width / 2;
+            const startY = startRect.top - boardRect.top + startRect.height / 2;
+            const endX = endRect.left - boardRect.left + endRect.width / 2;
+            const endY = endRect.top - boardRect.top + endRect.height / 2;
+
+            // Create an SVG element for the arrow if it doesn't exist
+            let svg = boardElement.querySelector('svg');
+            if (!svg) {
+                svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.setAttribute('style', 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;');
+                boardElement.style.position = 'relative'; // Ensure the board element is positioned relatively
+                boardElement.appendChild(svg);
+
+            }
+            // Define arrowhead marker within SVG
+            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+            const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+            marker.setAttribute('id', 'arrowhead');
+            marker.setAttribute('markerWidth', '10');
+            marker.setAttribute('markerHeight', '7');
+            marker.setAttribute('refX', '9'); // Position the arrowhead close to the end of the line
+            marker.setAttribute('refY', '3.5');
+            marker.setAttribute('orient', 'auto');
+            const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+            polygon.setAttribute('points', '0 0, 10 3.5, 0 7'); // Arrowhead shape
+            polygon.setAttribute('fill', color); // Match line color
+            polygon.setAttribute('opacity', .5); 
+            marker.appendChild(polygon);
+            defs.appendChild(marker);
+            svg.appendChild(defs);
+
+            // Create the arrow line
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', startX);
+            line.setAttribute('y1', startY);
+            line.setAttribute('x2', endX);
+            line.setAttribute('y2', endY);
+            line.setAttribute('stroke', color);
+            line.setAttribute('stroke-width', '3');
+            line.setAttribute('marker-end', 'url(#arrowhead)');
+            line.setAttribute('style', 'pointer-events: auto;'); // Enable pointer events for the line
+            line.setAttribute('opacity', .5); 
+
+            //Add listeners to line
+            line.addEventListener('mouseenter', (e) => {
+                console.log("mouseover")
+                const tooltip = document.getElementById('tooltip');
+                tooltip.innerHTML = "<b>"+ moveHovertext + "</b><br>White plans to make this move.<br> You goal is to move a piece such that<br> White will still consider this the best move" ; // Set the text for the tooltip
+                tooltip.style.display = 'block'; // Show the tooltip
+                tooltip.style.left = `${e.pageX + 10}px`;
+                tooltip.style.top = `${e.pageY + 10}px`;
+            });
+            line.addEventListener('mousemove', (e) => {
+                const tooltip = document.getElementById('tooltip');
+                tooltip.style.left = `${e.pageX + 10}px`;
+                tooltip.style.top = `${e.pageY + 10}px`;
+            });
+            line.addEventListener('mouseleave', () => {
+                const tooltip = document.getElementById('tooltip');
+                tooltip.style.display = 'none'; // Hide the tooltip
+            });
+
+            // Append the line to the SVG element
+            svg.appendChild(line);
+        }
+
+        function selectOrMovePiece(rowIndex, colIndex, tile, piece) {
+            console.log(makeFen());
+
+            /*
+                Check if either tile in data[levels[lvlIndex]]['move'] is used
+            */
+            const moveStart = data[levels[lvlIndex]]['move'].substring(0, 2); // e.g., "e2"
+            const moveEnd = data[levels[lvlIndex]]['move'].substring(2, 4); // e.g., "e4"
+            if (tile.getAttribute('data-square') == moveEnd){
+                document.getElementById('involvedMsg').innerHTML = "<h2>You shouldn't put any pieces here.</h2><div>White is planning to move a piece to this tile.</div><div></div><br><p><b>Your Goal:</b><br> Move a piece such that White's best move will still match the green arrow.</p>"
+                involvedOverlay.style.display = 'flex';
+                return
+            }else if (tile.getAttribute('data-square') == moveStart ){
+                document.getElementById('involvedMsg').innerHTML ="<h2>You can't move this piece!</h2><div>This is the piece White plans to move.</div>We never allow you to move the piece White plans to move.<br><p><b>Your Goal:</b><br> Move a piece such that White's best move will still match the green arrow.</p>"
+                involvedOverlay.style.display = 'flex';
+                return
+            }
+
+
+            if (lockedSquares.has(tile.getAttribute('data-square'))) {
+                console.log("Locked Square!")
+            }else if (selectedTile && tile !== selectedTile && !tile.textContent) {
+                // Move piece to the new tile
+                tile.querySelector('.piece-text').textContent = selectedTile.querySelector('.piece-text').textContent;
+                selectedTile.querySelector('.piece-text').textContent = '';
+                selectedTile.classList.remove('selected');
+
+                var cordA = tile.getAttribute('data-square')
+                var cordB = selectedTile.getAttribute('data-square')
+
+                selectedTile = null;
+                console.log(makeFen())
+                checkSolution(getResult(makeFen()), cordA, cordB);
+            } else if (tile.textContent && !selectedTile) {
+                // Select the tile if it has a piece
+                selectedTile = tile;
+                tile.classList.add('selected');
+            } else if (selectedTile === tile) {
+                // Deselect the tile if it's already selected
+                selectedTile.classList.remove('selected');
+                selectedTile = null;
+            } else {
+                // Deselect and select new if it is a piece
+                selectedTile.classList.remove('selected');
+                selectedTile = tile;
+                tile.classList.add('selected');
+            }
+        }
+
+        function loadFen(fen, locks=false, move=null, color="lime", transform=false) {
+
+            //Clear timeout
+            if (moveTimeout){
+                clearTimeout(moveTimeout);
+            }
+
+            lockedSquares = new Set(data[levels[lvlIndex]]['locks']) || new Set([]);
+            const boardElement = document.getElementById('board');
+            boardElement.innerHTML = ''; // Clear the board
+            const rows = fen.split(' ')[0].split('/');
+            rows.forEach((row, rowIndex) => {
+                let colIndex = 0;
+                row.split('').forEach(char => {
+                    if (!isNaN(char)) { // If the character is a number, it represents empty squares
+                        for (let i = 0; i < parseInt(char); i++) {
+                            const isLight = (rowIndex + colIndex) % 2 === 0;
+                            boardElement.appendChild(createTile(isLight, '', rowIndex, colIndex, locks));
+                            colIndex++;
+                        }
+                    } else {
+                        const isLight = (rowIndex + colIndex) % 2 === 0;
+                        boardElement.appendChild(createTile(isLight, char, rowIndex, colIndex, locks));
+                        colIndex++;
+                    }
+                });
+            });
+            if (move) {
+                const start = move.substring(0, 2); // e.g., "e2"
+                const end = move.substring(2, 4); // e.g., "e4"
+                console.log(move)
+                drawArrow(boardElement, start, end, color);
+                moveHovertext = move
+            }
+            /*
+                Add a timeout that moves the piece after a delay
+            */
+
+        }
+
+        function makeFen() {
+            let fen = '';
+            for (let row = 0; row < 8; row++) {
+                let emptyCount = 0;
+                for (let col = 0; col < 8; col++) {
+                    const tile = document.querySelector(`.tile[data-row="${row}"][data-col="${col}"]`);
+                    var piece = false
+                    if (tile.querySelector('.piece-text') != null) {
+                        piece = Object.keys(pieceMap).find(key => pieceMap[key] === tile.querySelector('.piece-text').textContent);
+                    }
+                    if (piece) {
+                        if (emptyCount > 0) {
+                            fen += emptyCount;
+                            emptyCount = 0;
+                        }
+                        fen += piece;
+                    } else {
+                        emptyCount++;
+                    }
+                }
+                if (emptyCount > 0) fen += emptyCount;
+                if (row < 7) fen += '/';
+            }
+            // Adding some default values for the rest of the FEN fields
+            //fen += ' w KQkq - 0 1';
+            const parts = currLevel.split(' ');
+            const additionalInfo = parts.slice(1).join(' ');
+            fen+=' '+additionalInfo;
+            console.log ("Fen crated: " + fen)
+            return fen;
+        }
+
+        function getResult(fen) {
+            return data[levels[lvlIndex]][fen] || 'Invalid';
+        }
+
+        function checkSolution(result, cordA, cordB) {
+            /*
+                DOCUMENTATION
+                result[0] = resulting state
+                result[1] = move made to get that state
+                result[2] = if initial state was invalid, this says why
+            */
+            console.log("result:")
+            console.log(result)
+            if (result != 'Invalid' && result[2] == null) {
+                
+            }
+            if (result === 'Invalid') {
+                // Handle the 'Invalid' case here
+                console.log("Invalid Board! Level failed!")
+                document.getElementById('FailMsg').innerHTML = "You made an invalid board, destroying the universe!<div>(You must create a board White could have at the start of its turn.)</div>"
+                document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just after you altered the past and destroyed the universe.";
+                showGameOverOverlay();
+
+            } else if (result[2] != null){
+                document.getElementById('FailMsg').innerHTML = "<h2>You made an invalid board, destroying the universe!</h2> <div> ⚠️"+result[2]+" </div> 💡You must create a board White could have at the start of its turn.";
+                document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just after you broke the universe";
+                showGameOverOverlay(); 
+            }
+            else if (result[0] === 'EngineError'){
+                document.getElementById('FailMsg').innerText = "You somehow made White's head explode... and are convicted of manslaughter."
+                document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Immediately after you blew a mind.";
+                showGameOverOverlay();
+            }
+            else if (result[1] === getResult(currLevel)[1]) {
+                // Handle the case where FENs match here
+                console.log("Level passed!")
+                document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just after you successfully broke through a time barrier!";
+                loadFen(fen=makeFen(), false, move=result[1], color='lime');
+                //Set Timeout
+                moveTimeout = setTimeout(() => {
+                    loadFen(result[0], false, null, 'none');
+                }, 450);
+
+                recordSolution(result, cordA, cordB);
+                showLevelCompleteOverlay();
+            } else {
+                // Handle the case where FENs do not match here
+                console.log("You changed the best move! Level failed!")
+                console.log("Move "+ result[1] + " replaced "+getResult(currLevel)[1])
+                document.getElementById('FailMsg').innerHTML = "<h2>You've illegally altered the timeline!</h2>White makes a different move because of what you did."
+                document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Shortly after you commited time crime.";
+                loadFen(fen=makeFen(), false, move=result[1], color='red');
+                //Set Timeout
+                moveTimeout = setTimeout(() => {
+                     loadFen(result[0], false, null, 'none');
+                }, 450);
+                showGameOverOverlay();
+            }
+            console.log("made move");
+        }
+
+        function recordSolution(result, cordA, cordB){
+            //See which of the two coords occurs fewer times in the list
+
+            // Initialize counters
+            let countCordA = 0;
+            let countCordB = 0;
+
+            // Assuming 'data', 'levels', and 'lvlIndex' are defined and accessible
+            const sols = data[levels[lvlIndex]]['solsLeft'];
+
+            // Should only count unused sols!
+
+            // Iterate through the array and count occurrences
+            sols.forEach(item => {
+                if (item === cordA) {
+                    countCordA++;
+                } else if (item === cordB) {
+                    countCordB++;
+                }
+            });
+
+            console.log(`Occurrences of cordA: ${countCordA}`);
+            console.log(`Occurrences of cordB: ${countCordB}`);
+            if (countCordA >= countCordB) {
+                lockedSquares.add(cordA)
+            } else {
+                lockedSquares.add(cordB)
+            }
+            data[levels[lvlIndex]]['locks'] = Array.from(lockedSquares)
+
+            if (data[levels[lvlIndex]]['locks'].length < data[levels[lvlIndex]]['loops']
+                && hasUnlockedMove(data[levels[lvlIndex]]['locks'],data[levels[lvlIndex]]['sols'])){
+                nextLoop.push(levels[lvlIndex])
+            }
+
+        }
+
+        function pickToLock(a,b){
+
+
+
+            /* 
+
+                A good enough way to decide-
+
+                Simple cases
+                Using PV series to evaluate similarity?
+                -> Number of items in common? (0 to 3)
+                -> Length of series?
+                -> How is this affected by random variation?
+                Hardcoding
+
+
+                Can we ever rule out locking the piece?
+                Yes, when there is only one destination for it.
+
+                Always lock on the squares from latest move? Yes, can't allow repeat.
+                Only one? 
+
+                We need to avoid revealing too much information by the decision
+                
+                If a piece has lots of bad solutions, but some good ones, how do we capitalize on the good ones?
+
+                How do we avoid cutting down the # of solutions too quickly
+                How do we tell if we want to cut a solution or not?
+
+                We can rate solutions?
+                Solution redundancy
+                Explore all possible sets to 
+                Locking B by default cuts down on possible solutions too rapidly.
+                Locking A by default fails to eliminate redundant solutions
+                Our goal is to optimize the set of the solutions the player 
+                When the piece has multiple moves, 
+            */
+            lockedSquares.add(b)
+            data[levels[lvlIndex]]['locks'] = Array.from(lockedSquares)
+
+
+
+
+
+
+
+        }
+
+        function goNextLevel(){
+            lvlIndex+=1;
+            if (!(lvlIndex < levels.length)) {
+                var temp = levels.length-nextLoop.length
+                if (loops < 1){
+                    document.getElementById('completeMsg').innerHTML = "<h2>Get Ready!</h2><div>You've found a solution to each level.</div><div>Now it is time to loop the game!</div><div>Every time you loop, a square or piece you've used will get permanently locked🔒.</div>"
+                } else if (temp > 1) {
+                    
+                    document.getElementById('completeMsg').innerHTML = "<h2>You've completed Loop " + loops + "!</h2> <div> "+ temp + " levels have been eliminated. </div>"
+                } else if (temp == 1) {
+                    
+                    document.getElementById('completeMsg').innerHTML = "<h2>You've completed Loop " + loops + "!</h2> <div> One level has been eliminated. </div>"
+                }
+                else {
+                    document.getElementById('completeMsg').innerHTML = "<h2>You've completed Loop " + loops + "!</h2> <div> But how far will you make it? </div>"
+                }
+                completeOverlay.style.display = 'flex'
+
+                return
+            }
+            currLevel = data[levels[lvlIndex]]['puzzle']
+            loadFen(currLevel, true, data[levels[lvlIndex]]['move'])
+            document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just before White moved...";
+        }
+
+
+        function startUpdateOverlay() {
+            updateOverlay.style.display = 'flex'; 
+        }
+
+        function gameStartOverlay() {
+            startOverlay.style.display = 'flex'; // Show the overlay
+
+        }
+
+        function gameCompleted() {
+            lvlIndex = 1;
+            levels = nextLoop;
+            nextLoop = ['NullLevel'];
+            if (levels.length < 2) {
+                document.getElementById('lvlInd').innerText = "Loop " + loops+ ". Just after you beat the game!";
+                lvlIndex = 0
+                currLevel = data[levels[lvlIndex]]['puzzle']
+                loadFen(currLevel, true, data[levels[lvlIndex]]['move'])
+                doneOverlay.style.display = 'flex';
+                return
+            }
+            loops+=1;
+            currLevel = data[levels[lvlIndex]]['puzzle']
+            loadFen(currLevel, true, data[levels[lvlIndex]]['move'])
+            document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just before White moved...";
+        }
+
+        function showLevelCompleteOverlay() {
+            winOverlay.style.display = 'flex'; // Show the overlay
+
+        }
+        function showGameOverOverlay() {
+            loseOverlay.style.display = 'flex'; // Show the overlay
+        }
+
+        function restartLevel() {
+            loadFen(currLevel, true, data[levels[lvlIndex]]['move']);
+            document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just before White moved...";
+        }
+
+        // Example FEN for the initial position
+        loadFen(currLevel, true, data[levels[lvlIndex]]['move']);
+        startUpdateOverlay();
+        updateOverlay.addEventListener('click', function() {
+            updateOverlay.style.display = 'none';
+            gameStartOverlay();
+        });
+        startOverlay.addEventListener('click', function() {
+            startOverlay.style.display = 'none';
+
+        });
+        winOverlay.addEventListener('click', function() {
+                winOverlay.style.display = 'none';
+                goNextLevel();
+        });
+
+        loseOverlay.addEventListener('click', function() {
+            loseOverlay.style.display = 'none';
+            restartLevel();
+        });
+        completeOverlay.addEventListener('click', function() {
+            completeOverlay.style.display = 'none';
+            gameCompleted();
+        });
+        involvedOverlay.addEventListener('click', function() {
+            involvedOverlay.style.display = 'none';
+        });
+    }
+</script>
+
+<script src="loader.js"></script>
+
+</body>
+</html>
