@@ -134,8 +134,11 @@ Without dirupting the timeline..
     <div class="overlay-message">
         <h2 id="startMsg">Welcome to The Chess Timeline</h2>
         <p><---[You Are Here]---[Time Barrier]--[White Moves]---[Present Day]></p>
-        <p>To return to the present, you must break through the Time Barrier by moving any piece. </p>
-        <p>However, if you alter White's next move, you'll be executed for time crime.</p>
+        <div>To return to the present, you must break through the Time Barrier.</div>
+        <p>You do this by moving any piece (Black or White) anywhere (move rules don't apply). </p>
+        <div>However, if this alters White's next move, you'll be executed for time crime.</div>
+        <p>(Note: White always makes the best move available.)</p>
+        <p><b>Make a change to the board such that the move you are shown will still be the best move!</b></p>
         <p>Good Luck!</p>
         <p><i>Click anywhere to start!</i></p>
     </div>
@@ -416,7 +419,7 @@ Without dirupting the timeline..
                 involvedOverlay.style.display = 'flex';
                 return
             }else if (tile.getAttribute('data-square') == moveStart ){
-                document.getElementById('involvedMsg').innerHTML ="<h2>You can't move this piece!</h2><div>This is the piece White plans to move.</div>We never allow you to move the piece White plans to move.<br><p><b>Your Goal:</b><br> Move a piece such that White's best move will still match the green arrow.</p>"
+                document.getElementById('involvedMsg').innerHTML ="<h2>You can't move this piece!</h2><div>This is the piece White plans to move.</div><br><p><b>Your Goal:</b><br> Move a piece such that White's best move will still match the green arrow.</p>"
                 involvedOverlay.style.display = 'flex';
                 return
             }
