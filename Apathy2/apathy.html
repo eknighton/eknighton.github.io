@@ -165,7 +165,7 @@ Without dirupting the timeline..
 <div id="gameOverOverlay" class="overlay-container2" style="display: none;">
     <div class="overlay-message2">
         <p id="FailMsg">Game Over</p>
-        <p><i>Tap anywhere to restart...</i></p>
+        <p><i>Tap anywhere to retry...</i></p>
     </div>
 </div>
 <!-- Game Complete Overlay Container -->
@@ -193,6 +193,7 @@ Without dirupting the timeline..
 
 
 <div id="tooltip" style="display: none; position: absolute; padding: 5px; background: #fff; border: 1px solid #000; border-radius: 3px; pointer-events: none; z-index: 100;"></div>
+<div id="tooltip2" style="display: none; position: absolute; padding: 5px; background: #fff; border: 1px solid #000; border-radius: 3px; pointer-events: none; z-index: 100;"><b>Locked Tile</b><br>You can't move pieces to or from this.<br>Cannot be unlocked.</div>
 
 
 <script src="data.js"></script>
@@ -297,6 +298,22 @@ Without dirupting the timeline..
                 const lockIcon = document.createElement('span'); // Create a span for the lock icon
                 lockIcon.textContent = '🔒'; // Using the lock emoji
                 lockIcon.className = 'lock-icon'; // Add a class for potential styling
+                lockIcon.addEventListener('mouseenter', (e) => {
+                    console.log("mouseover")
+                    const tooltip = document.getElementById('tooltip2');
+                    tooltip.style.display = 'block'; // Show the tooltip
+                    tooltip.style.left = `${e.pageX + 10}px`;
+                    tooltip.style.top = `${e.pageY + 10}px`;
+                });
+                lockIcon.addEventListener('mousemove', (e) => {
+                    const tooltip = document.getElementById('tooltip2');
+                    tooltip.style.left = `${e.pageX + 10}px`;
+                    tooltip.style.top = `${e.pageY + 10}px`;
+                });
+                lockIcon.addEventListener('mouseleave', () => {
+                    const tooltip = document.getElementById('tooltip2');
+                    tooltip.style.display = 'none'; // Hide the tooltip
+                });
                 tile.appendChild(lockIcon); // Add the lock icon to the tile
             }
 
@@ -354,34 +371,39 @@ Without dirupting the timeline..
                 boardElement.appendChild(svg);
 
             }
-            // Define arrowhead marker within SVG
-            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-            const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
-            marker.setAttribute('id', 'arrowhead');
-            marker.setAttribute('markerWidth', '10');
-            marker.setAttribute('markerHeight', '7');
-            marker.setAttribute('refX', '0'); // Position the arrowhead close to the end of the line
-            marker.setAttribute('refY', '3.5');
-            marker.setAttribute('orient', 'auto');
-            marker.setAttribute('opacity', 1); 
-            const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-            polygon.setAttribute('points', '0 0, 10 3.5, 0 7'); // Arrowhead shape
-            polygon.setAttribute('fill', color); // Match line color
-            marker.appendChild(polygon);
-            defs.appendChild(marker);
-            svg.appendChild(defs);
 
-            // Create the arrow line
+            const lineWidth = startRect.width / 2
+            const arrowSize = startRect.width*2
+            // Calculate the angle of the line
+            const angleRadians = Math.atan2(endY - startY, endX - startX);
+            const angleDegrees = angleRadians * (180 / Math.PI);
+
+            // Shorten the line slightly to make space for the arrowhead
+            const shortenBy = arrowSize/2;  // Arrow size can be used to determine how much to shorten the line
+            const lineLength = Math.sqrt((endX - startX) ** 2 + (endY - startY) ** 2);
+            const lineShortenedEndX = startX + (endX - startX) * (1 - shortenBy / lineLength);
+            const lineShortenedEndY = startY + (endY - startY) * (1 - shortenBy / lineLength);
+
+            // Create and append the line with the adjusted end point
             const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
             line.setAttribute('x1', startX);
             line.setAttribute('y1', startY);
-            line.setAttribute('x2', lineEndX);
-            line.setAttribute('y2', lineEndY);
+            line.setAttribute('x2', lineShortenedEndX);
+            line.setAttribute('y2', lineShortenedEndY);
             line.setAttribute('stroke', color);
-            line.setAttribute('stroke-width', '3');
-            line.setAttribute('marker-end', 'url(#arrowhead)');
+            line.setAttribute('opacity', 0.5);
+            line.setAttribute('stroke-width', lineWidth);
             line.setAttribute('style', 'pointer-events: auto;'); // Enable pointer events for the line
-            line.setAttribute('opacity', .5); 
+            svg.appendChild(line);
+
+            // Create and position the arrowhead at the original end of the line
+            const arrowhead = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+            const arrowheadPoints = `${-arrowSize * 0.5},-${arrowSize * 0.3} 0,0 ${-arrowSize * 0.5},${arrowSize * 0.3}`; // Example arrowhead shape
+            arrowhead.setAttribute('points', arrowheadPoints);
+            arrowhead.setAttribute('fill', color);
+            arrowhead.setAttribute('opacity', .5);
+            arrowhead.setAttribute('transform', `translate(${endX}, ${endY}) rotate(${angleDegrees})`);
+            svg.appendChild(arrowhead);
 
             //Add listeners to line
             line.addEventListener('mouseenter', (e) => {
@@ -401,9 +423,6 @@ Without dirupting the timeline..
                 const tooltip = document.getElementById('tooltip');
                 tooltip.style.display = 'none'; // Hide the tooltip
             });
-
-            // Append the line to the SVG element
-            svg.appendChild(line);
         }
 
         function selectOrMovePiece(rowIndex, colIndex, tile, piece) {
@@ -563,7 +582,7 @@ Without dirupting the timeline..
             else if (result[1] === getResult(currLevel)[1]) {
                 // Handle the case where FENs match here
                 console.log("Level passed!")
-                document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Just after you successfully broke through a time barrier!";
+                document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". As you arrive in the present.";
                 loadFen(fen=makeFen(), false, move=result[1], color='lime');
                 //Set Timeout
                 moveTimeout = setTimeout(() => {
@@ -576,7 +595,18 @@ Without dirupting the timeline..
                 // Handle the case where FENs do not match here
                 console.log("You changed the best move! Level failed!")
                 console.log("Move "+ result[1] + " replaced "+getResult(currLevel)[1])
-                document.getElementById('FailMsg').innerHTML = "<h2>You've illegally altered the timeline!</h2>White makes a different move because of what you did."
+
+                let myList = [
+                `<h2>Time Crime!</h2>Your change had ripple effects!<br>White decided to make move ${result[1]} instead of ${data[levels[lvlIndex]]['move']}.`,
+                `<h2>Time Crime!</h2>Your change had ripple effects!<br>White's best move was ${result[1]}, not ${data[levels[lvlIndex]]['move']}.`,
+                ];
+
+                // Generate a random index based on the length of the array
+                let randomIndex = Math.floor(Math.random() * myList.length);
+
+                // Use the random index to get a random item from the array
+                let failText = myList[randomIndex];
+                document.getElementById('FailMsg').innerHTML = failText;
                 document.getElementById('lvlInd').innerText = 'Lvl ' + (lvlIndex) + ". Shortly after you commited time crime.";
                 loadFen(fen=makeFen(), false, move=result[1], color='red');
                 //Set Timeout
