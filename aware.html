@@ -34,6 +34,7 @@ Aware
 	<div id="score" align="center">Score: 0</div>
 	<p></p>
 	<p></p>
+	<div id="pos" align="center" style="font-family: 'Courier New', Courier, monospace;">_____</div>
   <div id="num" align="center" style="font-family: 'Courier New', Courier, monospace;">69420</div>
 	<div id="digis" align="center"></div>
 	<p></p>
@@ -50,7 +51,7 @@ Aware
 	// We will simplify it to single digit? with time delay
 
 	var difficulty = 7;
-	var speed = 2000;
+	var speed = 4000;
 
 	var seq = null;
 
@@ -108,13 +109,14 @@ Aware
 
 	function startRound(){
 		userInput.value = '';
-		speed = Math.floor((difficulty/7)*20)*100;
+		speed = Math.floor((difficulty/7)*40)*100+1000;
 		number = alphaRandom(difficulty+1);
 		//console.log(number);
 		numLen = number.length;;
 		answer = null;
 		document.getElementById("num").innerHTML = number;
 		document.getElementById("num").classList.add("flicker-element");
+		document.getElementById('pos').innerText = blanked(numLen);
 	
 		seq = sequence(numLen);
 		timeoutID = setTimeout(test, speed);
@@ -139,6 +141,7 @@ Aware
 		answer = number[index];
 		console.log(answer)
 		document.getElementById('num').innerText = hidden(numLen);
+		document.getElementById('pos').innerText = blanked(numLen);
 		setTimeout(() => {document.getElementById('num').innerHTML = blank(numLen, index)}, 100);
 		modeFlag = "guess";
 	}
@@ -169,6 +172,18 @@ Aware
 	  for (let i = 0; i < length; i++) {
 
 	      resultString += '#';
+	  
+	  }
+
+	  return resultString;
+	}
+
+	function blanked(length) {
+
+	  let resultString = '';
+	  for (let i = 0; i < length; i++) {
+
+	      resultString += '.';
 	  
 	  }
 
