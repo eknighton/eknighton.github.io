@@ -67,7 +67,7 @@ Aware
 	var modeFlag = "none";
 	var score = 0;
 
-	window.alert('Welcome to Aware!\nWe will show you a number, then ask you to provide the digit that was at a specific position. (The position is chosen at random).\nPress SPACE to skip to test. \nGood luck!');
+	window.alert("Cram the code into your head, then press 'Space' when you're done.\nYou'll then be asked to provide the character that was at a given position.\n");
 
 	startRound();
 
@@ -109,7 +109,8 @@ Aware
 
 	function startRound(){
 		userInput.value = '';
-		speed = Math.floor((difficulty/7)*40)*400+100000000;
+		speed = Math.floor((difficulty/7)*40)*400+10000000
+		0;
 		number = alphaRandom(difficulty+1);
 		//console.log(number);
 		numLen = number.length;;

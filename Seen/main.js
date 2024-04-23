@@ -36,7 +36,7 @@ const yesBtn = document.getElementById('yes-btn');
 const noBtn = document.getElementById('no-btn');
 const scoreDisplay = document.getElementById('score-display');
 
-window.alert("Memorize 15 sets of emojis! Tap gamebox to take a test early!");
+window.alert("Memorize the emojis. Click the gamebox when you're done. \nYou'll be asked to indicate whether a certain emoji was in the set!");
 
 function startLevel() {
     canSkip=false;
