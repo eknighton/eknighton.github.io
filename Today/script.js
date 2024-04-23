@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function() {
         "What memories did you revisted today?",
         "Did you meet anyone new today? What were they like?",
         "Did you try something new today?",
-        "How are you feeling today?"
+        "How did you feel when you woke up?"
 
     ];
 
