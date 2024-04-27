@@ -1,6 +1,17 @@
 <html>
 <script>
 
+//We want executables that perform actions, then update the JSON. 
+
+//We create a json architecture where snippets / pages can be looked up by word.
+
+//We have to add more
+
+
+//Word List > Snippet List > Question List
+
+//First, we filter the snippets, then we crop them, then 
+
 var url = "https://en.wikipedia.org/w/api.php"; 
 
 function searchWiki(term) {
@@ -21,7 +32,11 @@ function searchWiki(term) {
     console.log(url);
 
     fetch(url)
-        .then(function(response){console.log(response)})
+        .then(function(response){
+        	response.json().then(data => {
+			  console.log(data.query.search); // This will log the 'search' array
+			})
+        })
         .catch(function(error){console.log(error);});
 }
 
