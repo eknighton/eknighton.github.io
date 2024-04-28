@@ -9,10 +9,10 @@ function MakeStartPanel(){
           offsetY: '-40%' // Vertical offset
         },
         onLoad: null, //[{ func: 'goPanel', params: ['Goblin Math'] }],
-        text: 'Welcome to the game!',
+        text: 'Welcome to town!',
         options: [
           {
-                text: 'Play Game',
+                text: 'Enter',
                 action: (thisPanel) => {
                     console.log(thisPanel.id);
                     goPanel("Goblin Math"); 
@@ -20,11 +20,11 @@ function MakeStartPanel(){
                 }
           },
           {
-                text: 'Fuck This',
+                text: 'Attack this dude',
                 action: (thisPanel) => { 
                     panels = {};
                     let temp = GoblinPunch()
-                    temp.text = "No, fuck you!"
+                    temp.text = "You are slain by the goblin"
                     goPanel(temp);
                     queuePanel("Start", 1000);
                 }
