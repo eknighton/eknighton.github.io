@@ -33,7 +33,8 @@ let panels = [
       },
       { text: '324', actions: [
             { func: 'gainGold', params: [324] },
-            { func: 'goPanel', params: ['Start'] },
+            { func: 'goPanel', params: ['Goblin Gold'] },
+            { func: 'queuePanel', params: ['Start', 1800] }
         ] 
       }
     ]
@@ -48,6 +49,19 @@ let panels = [
     },
     timer: -1,
     text: "No! It's an expression! There's no equals sign!",
+    options: [
+    ]
+  },
+  {
+    id: 'Goblin Gold',
+    imageData: {
+      src: "Images/GoldAdobe.jpeg",
+      size: '100%', // Scale the image
+      offsetX: '-50%', // Horizontal offset
+      offsetY: '-40%' // Vertical offset
+    },
+    timer: -1,
+    text: "The goblin gives you 324 gold...",
     options: [
     ]
   }
