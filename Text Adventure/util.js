@@ -1,4 +1,4 @@
-function startCountdown(seconds, elementId, callback) {
+function startCountdown(seconds, elementId, callback, update) {
     let countdownElement = document.getElementById(elementId);
     if (countdownElement !== null){
         countdownElement.textContent = seconds+"s";
@@ -8,6 +8,9 @@ function startCountdown(seconds, elementId, callback) {
 
     const intervalId = setInterval(() => {
         seconds--;  // Decrease the seconds
+        if (update != null){
+            update();
+        }
         countdownElement = document.getElementById(elementId);
         if (countdownElement === null) {
             clearInterval(intervalId);
