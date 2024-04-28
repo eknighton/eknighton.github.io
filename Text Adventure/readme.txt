@@ -17,3 +17,4 @@ Features
 WARNINGS
 1. 'me' will not be set for dynamically created Panels
 2. Timers won't always successfully set first value.
+3. Timers may sometimes cause console error logs
