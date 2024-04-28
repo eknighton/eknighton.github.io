@@ -45,6 +45,7 @@ function importPanelIfNeeded(panelId) {
         if (panelId in panelMakes) {
             // Import the panel definition from 'panelArchive' to 'panels'
             panels[panelId] = panelMakes[panelId]();
+            panels[panelId].me = panels[panelId];
             console.log(`New Panel of ID ${panelId} created.`);
         } else {
             console.log(`Initializer for Panel ID ${panelId} not found.`);
