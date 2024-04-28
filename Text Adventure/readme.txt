@@ -4,6 +4,11 @@ TODO
 5. Improve support for non-panel displays (ex.canvas)
 6. Remove the less reliable self-refence systems for panels
 
+
+INCOMPLETE FEATURES
+1. Video as media is untested. Be sure to verify, debug.
+2. Panel objs may need edits to support certain item concepts.
+
 Sounds
 
 GIFS

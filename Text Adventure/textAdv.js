@@ -26,7 +26,13 @@ function displayPanel(p) {
         const mediaSrc = panel.mediaData.src;
         const fileExtension = mediaSrc.split('.').pop().toLowerCase();
         const mediaContainer = document.getElementById('mediaContainer');
-         if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(fileExtension)) {
+
+        //Deletes previous media element
+        const element = document.getElementById('panelMedia');
+        if (element) {
+            element.remove();
+        }
+        if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(fileExtension)) {
             const img = document.createElement('img');
             img.src = panel.mediaData.src;
             img.id = "panelMedia";
@@ -34,14 +40,16 @@ function displayPanel(p) {
             img.style.transform = `translate(${panel.mediaData.offsetX}, ${panel.mediaData.offsetY})`;
             mediaContainer.appendChild(img);
         } else if (['mp4', 'webm', 'ogg'].includes(fileExtension)){
-            const video = document.getElementById('panelMedia');
+            const video = document.createElement('video');
             video.src = mediaSrc;
             video.id = "panelMedia";
             video.style.width = panel.mediaData.size;
-            video.controls = true;
+            video.controls = false;
+            video.autoplay = true;
             video.style.transform = `translate(${panel.mediaData.offsetX}, ${panel.mediaData.offsetY})`;
-            mediaContainer.appendChild(video);
             video.load();  // To ensure the video updates with the new source
+            mediaContainer.appendChild(video);
+           
         } else {
             window.alert("Game Error: Panel.mediaData.src has File type not included in textAdv.js > displayPanel > media setter")
         }

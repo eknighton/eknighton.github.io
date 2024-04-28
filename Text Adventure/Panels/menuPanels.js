@@ -25,9 +25,11 @@ function MakeStartPanel(){
                     panels = {};
                     let temp = GoblinPunch()
                     player.HP = 0;
+                    temp.mediaData.src = "Images/Float%20Jump%20Float.MP4"
+                    temp.mediaData.size = "150%"
                     temp.text = "You are slain by the goblin"
                     goPanel(temp);
-                    queuePanel("Start", 1000);
+                    queuePanel("Start", 5000);
                 }
           }
         ]
