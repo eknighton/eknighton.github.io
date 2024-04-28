@@ -15,13 +15,13 @@ function displayPanel(panelId) {
         panel.options.forEach(option => {
             const button = document.createElement('button');
             button.innerHTML = option.text;
-            button.onclick = () => option.action();
+            button.onclick = () => {option.action(panel)};
             optionsContainer.appendChild(button);
         });
 
         // Check if there is an onLoad action and execute it
         if (panel.onLoad) {
-            panel.onLoad();
+            panel.onLoad(panel);
         }
     } else {
         console.error('Panel not found:', panelId);

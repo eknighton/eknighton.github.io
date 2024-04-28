@@ -12,11 +12,15 @@ let panels = [
     options: [
       {
             text: 'Play Game',
-            action: () => {goPanel("Goblin Math")}
+            action: (thisPanel) => {
+                console.log(thisPanel.id);
+                goPanel("Goblin Math"); 
+
+            }
       },
       {
             text: 'Fuck This',
-            action: () => {goPanel("Goblin Math")}
+            action: (thisPanel) => {goPanel("Goblin Math")}
       }
     ]
   }
