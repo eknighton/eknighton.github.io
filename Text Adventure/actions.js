@@ -4,11 +4,22 @@ function idle(){
 
 }
 
-function goPanel(paramOne) {
-    displayPanel(paramOne); 
+function goPanel(panel) {
+    displayPanel(panel); 
 }
 
-function queuePanel(panelId, delay) {
+function queuePanel(panel, delay) {
+    setTimeout(() => {
+        goPanel(panel);
+    }, delay);
+}
+
+
+function goPanelId(panelId) {
+    displayPanel(panelId); 
+}
+
+function queuePanelId(panelId, delay) {
     setTimeout(() => {
         goPanel(panelId);
     }, delay);
@@ -16,12 +27,18 @@ function queuePanel(panelId, delay) {
 
 //Modify Player Values
 
-function takeDamage(paramOne) {
-    console.log('Took ' + paramOne + ' Damage!')
+function takeDamage(amount) {
+    console.log('Took ' + amount + ' Damage!')
     //Nothing yet!
 }
 
-function gainGold(paramOne) {
-    console.log('Gained ' + paramOne +' Gold!')
+function gainGold(amount) {
+    console.log('Gained ' + amount +' Gold!')
     //Nothing yet!
+}
+
+//Transactions
+
+function tryBuy(cost, stocked) {
+    return
 }
