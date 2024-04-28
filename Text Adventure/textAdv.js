@@ -1,16 +1,6 @@
 const storyElement = document.getElementById('story');
 let currentState = 0;
 
-function processActions(actions) {
-    actions.forEach(action => {
-        if (action && typeof window[action.func] === 'function') {
-            window[action.func](...action.params);
-        } else {
-            console.error('No function found for action:', action.func);
-        }
-    });
-}
-
 function displayPanel(panelId) {
     const panel = panels.find(p => p.id === panelId);
     if (panel) {
@@ -25,15 +15,13 @@ function displayPanel(panelId) {
         panel.options.forEach(option => {
             const button = document.createElement('button');
             button.innerHTML = option.text;
-            button.onclick = () => processActions(option.actions);
+            button.onclick = () => option.action();
             optionsContainer.appendChild(button);
         });
 
         // Check if there is an onLoad action and execute it
         if (panel.onLoad) {
-            panel.onLoad.forEach(action => {
-                window[action.func](...action.params);
-            });
+            panel.onLoad();
         }
     } else {
         console.error('Panel not found:', panelId);

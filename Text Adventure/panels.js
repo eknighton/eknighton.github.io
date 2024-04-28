@@ -10,8 +10,14 @@ let panels = [
     onLoad: null, //[{ func: 'goPanel', params: ['Goblin Math'] }],
     text: 'Welcome to the game!',
     options: [
-      { text: 'Play Game', actions: [{ func: 'goPanel', params: ['Goblin Math'] }] },
-      { text: 'F u!', actions: [{ func: 'endGame', params: ['1'] }] }
+      {
+            text: 'Play Game',
+            action: () => {goPanel("Goblin Math")}
+      },
+      {
+            text: 'Fuck This',
+            action: () => {goPanel("Goblin Math")}
+      }
     ]
   }
 ]

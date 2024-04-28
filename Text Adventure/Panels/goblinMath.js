@@ -9,17 +9,21 @@
     onLoad: null,
     text: "Quick, what's 27 x 12?",
     options: [
-      { text: 'An equation', actions: [
-            { func: 'takeDamage', params: [5] },
-            { func: 'goPanel', params: ['Goblin Punch'] },
-            { func: 'queuePanel', params: ['Start', 1800] }
-        ] 
+      {
+            text: 'An equation',
+            action: () => {
+              takeDamage(5)
+              goPanel("Goblin Punch")
+              queuePanel('Start', 1800)
+            }
       },
-      { text: '324', actions: [
-            { func: 'gainGold', params: [324] },
-            { func: 'goPanel', params: ['Goblin Gold'] },
-            { func: 'queuePanel', params: ['Goblin Shop One', 1800] }
-        ] 
+      {
+            text: '324',
+            action: () => {
+              gainGold(324)
+              goPanel("Goblin Gold")
+              queuePanel('Goblin Shop One', 1800)
+            }
       }
     ]
   });

@@ -6,13 +6,29 @@ panels.push({
       offsetX: '-50%', // Horizontal offset
       offsetY: '-20%' // Vertical offset
     },
+    data: {"Stock 1" : 1},
     onLoad: null,
     text: 'Buy anything mate?',
     options: [
-      { text: 'Sword 5g', actions: [{ func: 'goPanel', params: ['Goblin Math'] }] },
-      { text: 'Bow 5g', actions: [{ func: 'endGame', params: ['1'] }] },
-      { text: 'Wand 5g', actions: [{ func: 'endGame', params: ['1'] }] },
-      { text: 'Shield 5g', actions: [{ func: 'endGame', params: ['1'] }] },
-      { text: 'Leave', actions: [{ func: 'goPanel', params: ['Start'] }] }
+            {
+                text: 'Sword 5g',
+                action: () => {tryBuy(5, "Goblin Shop One", 'Stock 1')}
+            },
+            {
+                text: 'Bow 5g',
+                action: () => endGame('1')
+            },
+            {
+                text: 'Wand 5g',
+                action: () => endGame('1')
+            },
+            {
+                text: 'Shield 5g',
+                action: () => endGame('1')
+            },
+            {
+                text: 'Leave',
+                action: () => goPanel('Start')
+            }
     ]
   });
