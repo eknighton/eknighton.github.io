@@ -1,9 +1,16 @@
 const storyElement = document.getElementById('story');
 let currentState = 0;
 
-function displayPanel(panelId) {
-    importPanelIfNeeded(panelId);
-    const panel = panels[panelId];
+function displayPanel(p) {
+    let panel = {}
+    if (p.id){
+        //If it has an id, it is a panel
+        panel = p;  
+    } else {
+        //If it doesn't, it is an ID
+        importPanelIfNeeded(p);
+        panel = panels[p];
+    }
     if (panel) {
         document.getElementById('story').innerHTML = panel.text;
         const img = document.getElementById('panelImage');

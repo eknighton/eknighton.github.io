@@ -4,18 +4,20 @@ function idle(){
 
 }
 
-function goPanel(panelId) {
-    displayPanel(panelId); 
+function goPanel(panel) {
+    displayPanel(panel); 
 }
 
-function queuePanel(panelId, delay) {
+function queuePanel(panel, delay) {
+
     setTimeout(() => {
-        goPanel(panelId);
+        goPanel(panel);
     }, delay);
+   
 }
 
 function resetPanel(panelId){
-    
+
 }
 
 
