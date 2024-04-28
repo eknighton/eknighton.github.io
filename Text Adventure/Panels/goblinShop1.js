@@ -4,7 +4,7 @@ panels.push({
       src: "Images/GoblinAndSon.webp",
       size: '100%', // Scale the image
       offsetX: '-50%', // Horizontal offset
-      offsetY: '-20%' // Vertical offset
+      offsetY: '-50%' // Vertical offset
     },
     data: {"Stock 1" : 1},
     onLoad: (thisPanel) => { 
