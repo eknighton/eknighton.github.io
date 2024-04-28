@@ -14,7 +14,7 @@ function processActions(actions) {
 function displayPanel(panelId) {
     const panel = panels.find(p => p.id === panelId);
     if (panel) {
-        document.getElementById('story').innerText = panel.text;
+        document.getElementById('story').innerHTML = panel.text;
         const img = document.getElementById('panelImage');
         img.src = panel.imageData.src;
         img.style.width = panel.imageData.size;
@@ -24,10 +24,17 @@ function displayPanel(panelId) {
         optionsContainer.innerHTML = ''; // Clear previous options
         panel.options.forEach(option => {
             const button = document.createElement('button');
-            button.innerText = option.text;
+            button.innerHTML = option.text;
             button.onclick = () => processActions(option.actions);
             optionsContainer.appendChild(button);
         });
+
+        // Check if there is an onLoad action and execute it
+        if (panel.onLoad) {
+            panel.onLoad.forEach(action => {
+                window[action.func](...action.params);
+            });
+        }
     } else {
         console.error('Panel not found:', panelId);
     }

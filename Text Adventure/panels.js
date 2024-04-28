@@ -7,11 +7,11 @@ let panels = [
       offsetX: '-50%', // Horizontal offset
       offsetY: '-40%' // Vertical offset
     },
-    timer: -1,
+    onLoad: [{ func: 'goPanel', params: ['Goblin Math'] }],
     text: 'Welcome to the game!',
     options: [
       { text: 'Play Game', actions: [{ func: 'goPanel', params: ['Goblin Math'] }] },
-      { text: 'F u!', actions: [{ func: 'endGame', params: [] }] }
+      { text: 'F u!', actions: [{ func: 'endGame', params: ['1'] }] }
     ]
   }
 ]

@@ -1,5 +1,7 @@
-function greet() {
-    displayPanel('Next'); 
+//Core
+
+function idle(){
+
 }
 
 function goPanel(paramOne) {
@@ -11,6 +13,8 @@ function queuePanel(panelId, delay) {
         goPanel(panelId);
     }, delay);
 }
+
+//Modify Player Values
 
 function takeDamage(paramOne) {
     console.log('Took ' + paramOne + ' Damage!')

@@ -6,7 +6,7 @@
       offsetX: '-50%', // Horizontal offset
       offsetY: '-50%' // Vertical offset
     },
-    timer: -1,
+    onLoad: null,
     text: "Quick, what's 27 x 12?",
     options: [
       { text: 'An equation', actions: [
@@ -31,8 +31,8 @@
       offsetX: '-50%', // Horizontal offset
       offsetY: '-50%' // Vertical offset
     },
-    timer: -1,
-    text: "No! It's an expression! There's no equals sign!",
+    onLoad: null,
+    text: "No! It's an expression! <b>There's no equals sign!</b>",
     options: [
     ]
   });
@@ -41,10 +41,10 @@
     imageData: {
       src: "Images/GoldAdobe.jpeg",
       size: '100%', // Scale the image
-      offsetX: '-50%', // Horizontal offset
-      offsetY: '-40%' // Vertical offset
+      offsetX: '-50%', // Negative is left
+      offsetY: '-40%' // Negative is up
     },
-    timer: -1,
+    onLoad: null,
     text: "The goblin gives you 324 gold...",
     options: [
     ]
