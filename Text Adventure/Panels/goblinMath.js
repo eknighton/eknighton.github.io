@@ -4,22 +4,32 @@ function GoblinMath() {
 
   return {
     id: 'Goblin Math',
+    myMaker: GoblinMath,
     imageData: {
       src: "Images/Goblin.jpg",
       size: '100%', // Scale the image
       offsetX: '-50%', // Horizontal offset
       offsetY: '-50%' // Vertical offset
     },
-    onLoad: null,
-    text: "Quick, what's 27 x 12?",
+    onLoad: () => {
+      startCountdown(7,"timer",() => { 
+        panels = {};
+        let temp = GoblinPunch()
+        temp.text = "Too slow!"
+        goPanel(temp);
+        queuePanel("Start", 1000)}
+      );
+    },
+    text: "Quick, what's 27 x 12? <div id='timer' style = 'color: red;'>10s</div>",
     options: [
       {
-            text: 'An equation',
+            text: "An equation",
             action: () => {
               takeDamage(5)
               goPanel("Goblin Punch")
+              panels = {};
               queuePanel('Start', 1800)
-            }
+            },
       },
       {
             text: '324',
