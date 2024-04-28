@@ -1,0 +1,56 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  background-color: black;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#story {
+  position: absolute;
+  width: 100%;
+  bottom: 10%; /* Adjust the text position over the image */
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for text */
+}
+
+#options button {
+  margin: 5px;
+  background-color: #444;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+#gameContainer {
+    width: calc(80vh * 1.333); /* Width as a function of height; 1.333 is the aspect ratio for 4:3 */
+    max-width: 600px; /* Maximum size */
+    height: 80vh; /* 80% of viewport height */
+    max-height: 450px; /* Maximum height corresponding to max width to maintain aspect ratio */
+    margin: auto; /* Centering the game container */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden; /* Ensures nothing spills out */
+}
+
+#imageContainer {
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 aspect ratio, adjust this value for different ratios */
+    position: relative; /* This makes it a containing block for absolute positioning */
+    overflow: hidden;
+}
+
+#panelImage {
+    position: absolute;
+    top: 50%; /* Center the image vertically */
+    left: 50%; /* Center the image horizontally */
+    transform: translate(-50%, -50%); /* Align the center of the image with the container center */
+    width: 100%; /* Default size */
+    height: auto;
+    object-fit: cover;
+}
