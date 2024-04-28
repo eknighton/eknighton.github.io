@@ -26,6 +26,7 @@ function GoblinMath() {
             text: "An equation",
             action: () => {
               takeDamage(5)
+              player.HP = 0;
               goPanel("Goblin Punch")
               panels = {};
               queuePanel('Start', 1800)
