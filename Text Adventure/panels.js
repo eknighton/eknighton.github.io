@@ -27,7 +27,8 @@ let panels = [
     options: [
       { text: 'An equation', actions: [
             { func: 'takeDamage', params: [5] },
-            { func: 'goPanel', params: ['Start'] }
+            { func: 'goPanel', params: ['Goblin Punch'] },
+            { func: 'queuePanel', params: ['Start', 1800] }
         ] 
       },
       { text: '324', actions: [
@@ -35,6 +36,19 @@ let panels = [
             { func: 'goPanel', params: ['Start'] },
         ] 
       }
+    ]
+  },
+  {
+    id: 'Goblin Punch',
+    imageData: {
+      src: "Images/KnightSlays.gif",
+      size: '100%', // Scale the image
+      offsetX: '-50%', // Horizontal offset
+      offsetY: '-50%' // Vertical offset
+    },
+    timer: -1,
+    text: "No! It's an expression! There's no equals sign!",
+    options: [
     ]
   }
 ];

@@ -26,7 +26,7 @@ body, html {
   cursor: pointer;
 }
 
-#gameContainer {
+#panelContainer {
     width: calc(80vh * 1.333); /* Width as a function of height; 1.333 is the aspect ratio for 4:3 */
     max-width: 600px; /* Maximum size */
     height: 80vh; /* 80% of viewport height */
