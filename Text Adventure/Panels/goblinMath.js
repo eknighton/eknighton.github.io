@@ -18,7 +18,7 @@
       { text: '324', actions: [
             { func: 'gainGold', params: [324] },
             { func: 'goPanel', params: ['Goblin Gold'] },
-            { func: 'queuePanel', params: ['Start', 1800] }
+            { func: 'queuePanel', params: ['Goblin Shop One', 1800] }
         ] 
       }
     ]
