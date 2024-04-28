@@ -1,5 +1,7 @@
 const storyElement = document.getElementById('story');
 let currentState = 0;
+let panels = {}
+let panelMakes = {}
 
 function displayPanel(p) {
     let panel = {}

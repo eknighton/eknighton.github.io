@@ -1,6 +1,3 @@
-let panels = {}
-let panelMakes = {}
-
 panelMakes["Start"] = MakeStartPanel;
 function MakeStartPanel(){
     return {
