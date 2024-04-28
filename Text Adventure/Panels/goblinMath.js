@@ -1,7 +1,5 @@
-  panelMakes['Goblin Math'] = GoblinMath
-
+panelMakes['Goblin Math'] = GoblinMath
 function GoblinMath() {
-
   return {
     id: 'Goblin Math',
     myMaker: GoblinMath,

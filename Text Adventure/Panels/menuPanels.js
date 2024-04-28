@@ -5,10 +5,13 @@ function MakeStartPanel(){
         mediaData: {
           src: "Images/GoblinAndSon.webp",
           size: '100%', // Scale the image
-          offsetX: '-50%', // Horizontal offset
-          offsetY: '-40%' // Vertical offset
+          offsetX: '-50%', // Negative is LEFT
+          offsetY: '-40%' // Negative is UP
         },
-        onLoad: () => {player.HP = 50;},
+        onLoad: (thisPanel) => {
+            player.HP = 50;
+
+        },
         text: 'Welcome to town!',
         options: [
           {

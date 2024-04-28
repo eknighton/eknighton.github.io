@@ -27,11 +27,18 @@ function displayPanel(p) {
         const fileExtension = mediaSrc.split('.').pop().toLowerCase();
         const mediaContainer = document.getElementById('mediaContainer');
 
-        //Deletes previous media element
+        /*
+            Deletes previous media element
+        */
         const element = document.getElementById('panelMedia');
         if (element) {
             element.remove();
         }
+
+        /*
+            Interprets file type, 
+            adds new "panelMedia" element of appropriate type.
+        */
         if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(fileExtension)) {
             const img = document.createElement('img');
             img.src = panel.mediaData.src;
@@ -49,7 +56,6 @@ function displayPanel(p) {
             video.style.transform = `translate(${panel.mediaData.offsetX}, ${panel.mediaData.offsetY})`;
             video.load();  // To ensure the video updates with the new source
             mediaContainer.appendChild(video);
-           
         } else {
             window.alert("Game Error: Panel.mediaData.src has File type not included in textAdv.js > displayPanel > media setter")
         }

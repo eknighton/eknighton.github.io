@@ -1,8 +1,42 @@
+WELCOME
+
+This is a flexible engine for visual novel webgames. It is built around 'Panels' which can be dynamically rewritten during runtime. Each panel calls 
+
+PANELS
+
+Panels are our "scenes". Panels are defined by writing a constructor- a function that makes an instance of them. This instance can be dynamically modified. Remember that in javascript, objects are always passed by reference- if you pass a panel as a parameter, you are passing a reference to it. This makes instances easy to modify, but hard to properly copy. 
+
+Generally, you'll want to add the panel's constructor to the panelMakes dict, under an entry with its id, so it can be easily found by that name. Otherwise, you won't be able to load the panel by ID unless there is already an instance in the panels dict under its ID.
+
+The panels dict stores panel instances under names. Some processes will initialize a panel and add an instance to panels under a name matching its default ID.
+
+Panels have:
+.mediaData, an img, gif, or video
+-
+.text, a string (HTML can be included) for display in the "story" element
+-
+.onLoad, a function variable called at the end of "displayPanel" and which receives a reference to the panel instance when called, 
+-
+.actions, a list used to create buttons, determine what happens when they are clicked
+
+ACTIONS
+
+Most panels have Actions, objects that used to generate the buttons displayed on that panel. Actions can by dynamically added, removed, and/or altered. Beware of mistaking a pointer to an action for a copy of it. 
+
+Actions have:
+.text, a string (HTML can be included) for display on the button's element
+-
+.action, an function variable, which is called when the button is clicked. It receives a pointer to it's parent panel as a paremeter. When calling a .action directly, you can pass a reference to any panel instance as a parameter.
+
+PLAYER
+
+Right now, the player is an object instance. Eventually there will be player constructors. Currently, function writeHUD() is coded in terms of the global player object instance, and updates the rightHUD's innerHTML.
+
 TODO
+1. Figure out how to do/support audio
+2. Create player constructor system
 3. Expand player HUD
-4. Support gifs/videos/sounds
-5. Improve support for non-panel displays (ex.canvas)
-6. Remove the less reliable self-refence systems for panels
+4. Improve support for non-panel displays (ex.canvas)
 
 
 INCOMPLETE FEATURES
