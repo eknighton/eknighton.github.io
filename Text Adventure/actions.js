@@ -4,26 +4,21 @@ function idle(){
 
 }
 
-function goPanel(panel) {
-    displayPanel(panel); 
-}
-
-function queuePanel(panel, delay) {
-    setTimeout(() => {
-        goPanel(panel);
-    }, delay);
-}
-
-
-function goPanelId(panelId) {
+function goPanel(panelId) {
     displayPanel(panelId); 
 }
 
-function queuePanelId(panelId, delay) {
+function queuePanel(panelId, delay) {
     setTimeout(() => {
         goPanel(panelId);
     }, delay);
 }
+
+function resetPanel(panelId){
+    
+}
+
+
 
 //Modify Player Values
 

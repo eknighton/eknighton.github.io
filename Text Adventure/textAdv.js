@@ -2,7 +2,8 @@ const storyElement = document.getElementById('story');
 let currentState = 0;
 
 function displayPanel(panelId) {
-    const panel = panels.find(p => p.id === panelId);
+    importPanelIfNeeded(panelId);
+    const panel = panels[panelId];
     if (panel) {
         document.getElementById('story').innerHTML = panel.text;
         const img = document.getElementById('panelImage');
@@ -25,6 +26,22 @@ function displayPanel(panelId) {
         }
     } else {
         console.error('Panel not found:', panelId);
+    }
+}
+
+function importPanelIfNeeded(panelId) {
+    // Check if the panelId is not present in 'panels'
+    if (!(panelId in panels)) {
+        // Check if the panelId exists in 'panelArchive'
+        if (panelId in panelMakes) {
+            // Import the panel definition from 'panelArchive' to 'panels'
+            panels[panelId] = panelMakes[panelId]();
+            console.log(`New Panel of ID ${panelId} created.`);
+        } else {
+            console.log(`Initializer for Panel ID ${panelId} not found.`);
+        }
+    } else {
+        console.log(`Panel ID ${panelId} already exists in 'panels'.`);
     }
 }
 

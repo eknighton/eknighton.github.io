@@ -1,5 +1,8 @@
-panels.push({
-    id: "Goblin Shop One",
+ panelMakes["Goblin Shop One"] = GoblinShopOne;
+
+ function GoblinShopOne() {
+    return {
+      id: "Goblin Shop One",
     imageData: {
       src: "Images/GoblinAndSon.webp",
       size: '100%', // Scale the image
@@ -13,8 +16,6 @@ panels.push({
       } else {
         thisPanel.text = "Sweet gear dude, where'd you get it?"
       }
-      
-
     },
     text: 'Buy anything mate?',
     options: [
@@ -67,4 +68,5 @@ panels.push({
                 action: (thisPanel) => goPanel('Start')
             }
     ]
-  });
+  }
+};
