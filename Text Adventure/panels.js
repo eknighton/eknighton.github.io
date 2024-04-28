@@ -26,7 +26,9 @@ function MakeStartPanel(){
                 text: 'Fuck This',
                 action: (thisPanel) => { 
                     panels = {};
-                    goPanel("Goblin Punch");
+                    let temp = GoblinPunch()
+                    temp.text = "No, fuck you!"
+                    goPanel(temp);
                     queuePanel("Start", 1000);
                 }
           }
