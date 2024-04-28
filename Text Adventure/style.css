@@ -9,11 +9,12 @@ body, html {
 }
 
 #story {
-  position: absolute;
-  width: 100%;
-  bottom: 10%; /* Adjust the text position over the image */
-  padding: 10px;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for text */
+    position: absolute;
+    width: 100%;
+    bottom: 0; /* Ensures it is at the very bottom of the container */
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for text */
+    z-index: 2; /* Make sure it's above the image */
 }
 
 #options button {
@@ -31,7 +32,7 @@ body, html {
     height: 80vh; /* 80% of viewport height */
     max-height: 450px; /* Maximum height corresponding to max width to maintain aspect ratio */
     margin: auto; /* Centering the game container */
-    position: relative;
+    position: absolute;
     display: flex;
     flex-direction: column;
     align-items: center;
