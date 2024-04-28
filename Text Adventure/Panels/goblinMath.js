@@ -5,7 +5,7 @@ function GoblinMath() {
   return {
     id: 'Goblin Math',
     myMaker: GoblinMath,
-    imageData: {
+    mediaData: {
       src: "Images/Goblin.jpg",
       size: '100%', // Scale the image
       offsetX: '-50%', // Horizontal offset
@@ -48,7 +48,7 @@ panelMakes["Goblin Punch"] = GoblinPunch;
 function GoblinPunch(){
   return {
       id: 'Goblin Punch',
-      imageData: {
+      mediaData: {
         src: "Images/KnightSlays.gif",
         size: '100%', // Scale the image
         offsetX: '-50%', // Horizontal offset
@@ -65,7 +65,7 @@ panelMakes["Goblin Gold"] =
 function GoblinGold(){
   return {
       id: 'Goblin Gold',
-      imageData: {
+      mediaData: {
         src: "Images/GoldAdobe.jpeg",
         size: '100%', // Scale the image
         offsetX: '-50%', // Negative is left

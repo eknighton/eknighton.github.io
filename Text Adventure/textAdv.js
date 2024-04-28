@@ -4,22 +4,51 @@ let panels = {}
 let panelMakes = {}
 
 function displayPanel(p) {
-    let panel = {}
-    if (p.id){
-        //If it has an id, it is a panel
-        panel = p;  
-    } else {
-        //If it doesn't, it is an ID
-        importPanelIfNeeded(p);
-        panel = panels[p];
-    }
-    if (panel) {
-        document.getElementById('story').innerHTML = panel.text;
-        const img = document.getElementById('panelImage');
-        img.src = panel.imageData.src;
-        img.style.width = panel.imageData.size;
-        img.style.transform = `translate(${panel.imageData.offsetX}, ${panel.imageData.offsetY})`;
-        
+
+    /*
+        Check if P is a PanelID or a Panel
+    */
+        let panel = {}
+        if (p.id){
+            //If it has an id, it is a panel
+            panel = p;  
+        } else {
+            //If it doesn't, it is an ID
+            importPanelIfNeeded(p);
+            panel = panels[p];
+        }
+        if (panel) {
+            document.getElementById('story').innerHTML = panel.text;
+
+    /*
+        Set Media Element
+    */
+        const mediaSrc = panel.mediaData.src;
+        const fileExtension = mediaSrc.split('.').pop().toLowerCase();
+        const mediaContainer = document.getElementById('mediaContainer');
+         if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(fileExtension)) {
+            const img = document.createElement('img');
+            img.src = panel.mediaData.src;
+            img.id = "panelMedia";
+            img.style.width = panel.mediaData.size;
+            img.style.transform = `translate(${panel.mediaData.offsetX}, ${panel.mediaData.offsetY})`;
+            mediaContainer.appendChild(img);
+        } else if (['mp4', 'webm', 'ogg'].includes(fileExtension)){
+            const video = document.getElementById('panelMedia');
+            video.src = mediaSrc;
+            video.id = "panelMedia";
+            video.style.width = panel.mediaData.size;
+            video.controls = true;
+            video.style.transform = `translate(${panel.mediaData.offsetX}, ${panel.mediaData.offsetY})`;
+            mediaContainer.appendChild(video);
+            video.load();  // To ensure the video updates with the new source
+        } else {
+            window.alert("Game Error: Panel.mediaData.src has File type not included in textAdv.js > displayPanel > media setter")
+        }
+
+    /*
+        Create Buttons
+    */
         const optionsContainer = document.getElementById('options');
         optionsContainer.innerHTML = ''; // Clear previous options
         panel.options.forEach(option => {
@@ -29,7 +58,9 @@ function displayPanel(p) {
             optionsContainer.appendChild(button);
         });
 
-        // Check if there is an onLoad action and execute it
+    /*
+        Call onLoad
+    */
         if (panel.onLoad) {
             panel.onLoad(panel);
         }

@@ -5,7 +5,8 @@ function StrangerOne() {
   return {
     id: 'StrangerOne',
     myMaker: GoblinMath,
-    imageData: {
+    mediaData: {
+      type: "Image"
       src: "Images/Goblin.jpg",
       size: '100%', // Scale the image
       offsetX: '-50%', // Horizontal offset

@@ -2,7 +2,7 @@ panelMakes["Start"] = MakeStartPanel;
 function MakeStartPanel(){
     return {
         id: 'Start',
-        imageData: {
+        mediaData: {
           src: "Images/GoblinAndSon.webp",
           size: '100%', // Scale the image
           offsetX: '-50%', // Horizontal offset
