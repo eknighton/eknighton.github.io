@@ -1,20 +1,20 @@
 TODO
-1. Add support for timer display on panel, button text.
-	Reformat elements that can contain timer divs
-	Improve access to callbacks
-2. Add player variables
-3. Add player HUD
-4. Make gifs play properly
-5. Add support for non-panel displays (ex.canvas)
-6. 
+3. Expand player HUD
+4. Support gifs/videos/sounds
+5. Improve support for non-panel displays (ex.canvas)
+6. Remove the less reliable self-refence systems for panels
 
+Sounds
+
+GIFS
+1. Gif / video support would be sweet!
+
+TIMER
+1. May not always correct initial number.
+
+SCOPE
+1. Panels can access themselves by ID, and several other extraneously added methods- these should be removed.
 
 Features
 1. Each button can execute custom code on click
 2. Each panel automatically saves, and can be dynamically edited, reset.
-
-
-WARNINGS
-1. 'me' will not be set for dynamically created Panels
-2. Timers won't always successfully set first value.
-3. Timers may sometimes cause console error logs
