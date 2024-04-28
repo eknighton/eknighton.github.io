@@ -36,6 +36,7 @@ function displayPanel(p) {
     } else {
         console.error('Panel not found:', panelId);
     }
+    writeHUD();
 }
 
 function importPanelIfNeeded(panelId) {

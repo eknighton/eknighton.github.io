@@ -55,3 +55,12 @@ body, html {
     height: auto;
     object-fit: cover;
 }
+
+#RightHUD {
+    color:  white;
+    z-index: 100;
+    position: absolute;
+    display: block;
+    top: 20%;
+    left:  80%;
+}
