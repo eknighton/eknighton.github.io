@@ -1,7 +1,7 @@
  panelMakes["Goblin Shop One"] = GoblinShopOne;
 
  function GoblinShopOne() {
-    return {
+  let ret = {
       id: "Goblin Shop One",
     mediaData: {
       src: "Images/GoblinAndSon.webp",
@@ -73,5 +73,7 @@
                 action: (thisPanel) => goPanel('Start')
             }
     ]
-  }
+  };
+  ret.self = ret;
+  return ret;
 };

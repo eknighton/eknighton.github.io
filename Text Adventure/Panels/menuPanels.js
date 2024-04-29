@@ -1,6 +1,6 @@
 panelMakes["Start"] = MakeStartPanel;
 function MakeStartPanel(){
-    return {
+    let ret = {
         id: 'Start',
         mediaData: {
           src: "Images/GoblinAndSon.webp",
@@ -40,5 +40,7 @@ function MakeStartPanel(){
           }
         ]
     };
+    ret.self = ret;
+    return ret;
 }
 

@@ -1,7 +1,8 @@
 panelMakes['Goblin Math'] = GoblinMath
 function GoblinMath() {
-  return {
+  let ret = {
     id: 'Goblin Math',
+    self: null,
     myMaker: GoblinMath,
     mediaData: {
       src: "Images/Goblin.jpg",
@@ -15,7 +16,7 @@ function GoblinMath() {
         let temp = GoblinPunch()
         temp.text = "Too slow!"
         goPanel(temp);
-        queuePanel("Start", 1000)}
+        queuePanel("Start", 2000)}
       );
     },
     text: "Quick, what's 27 x 12? <div id='timer' style = 'color: red;'>10s</div>",
@@ -40,11 +41,13 @@ function GoblinMath() {
       }
     ]
   }
+  ret.self = ret;
+  return ret;
 }
 
 panelMakes["Goblin Punch"] = GoblinPunch;
 function GoblinPunch(){
-  return {
+  let ret = {
       id: 'Goblin Punch',
       mediaData: {
         src: "Images/KnightSlays.gif",
@@ -57,11 +60,13 @@ function GoblinPunch(){
       options: [
       ]
   };
+  ret.self = ret;
+  return ret;
 }
 
-panelMakes["Goblin Gold"] = 
+panelMakes["Goblin Gold"] = GoblinGold
 function GoblinGold(){
-  return {
+  let ret = {
       id: 'Goblin Gold',
       mediaData: {
         src: "Images/GoldAdobe.jpeg",
@@ -74,4 +79,6 @@ function GoblinGold(){
       options: [
       ]
   };
+  ret.self = ret;
+  return ret;
 }

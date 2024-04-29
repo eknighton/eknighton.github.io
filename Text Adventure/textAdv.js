@@ -2,10 +2,11 @@ const storyElement = document.getElementById('story');
 
 
 let currPanel = null;
-let panels = {}
-let panelMakes = {}
+let panels = {};
+let panelMakes = {};
 
 let player = null;
+let players = {};
 
 let countdowns = [];
 
@@ -15,10 +16,8 @@ window.onload = () => {
 
 function startGame(){
     //Set initial player
-    player = playerNoob();
-    player.maker = playerNoob;
-
-    player.self = player;
+    player = PlayerNoob();
+    
     player.initHUD();
 
     displayPanel('Start');
