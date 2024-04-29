@@ -27,7 +27,8 @@
                   thisPanel.text = "You have a sword now. Trust me m8."
                   thisPanel.data["Stock 1"] = 0
                   thisPanel.options = thisPanel.options.filter(item => item.id !== "Sword 5g");
-                  goPanel(thisPanel.id)
+                  giveItem(sword());
+                  displayPanel(thisPanel.id, false)
                 }
             },
             {
@@ -38,7 +39,8 @@
                   thisPanel.text = "Nice bow, bro."
                   thisPanel.data["Stock 2"] = 0
                   thisPanel.options = thisPanel.options.filter(item => item.id !== "Bow 5g");
-                  goPanel(thisPanel.id)
+                  giveItem(bow());
+                  displayPanel(thisPanel.id, false)
                 }
             },
             {
@@ -49,7 +51,9 @@
                   thisPanel.text = "Nice wand fam."
                   thisPanel.data["Stock 3"] = 0
                   thisPanel.options = thisPanel.options.filter(item => item.id !== "Wand 5g");
-                  goPanel(thisPanel.id)
+                  giveItem(wand());
+                  displayPanel(thisPanel.id, false)
+                  //goPanel(thisPanel.id)
                 }
             },
             {
@@ -60,7 +64,8 @@
                   thisPanel.text = "Woo, boi got a shield."
                   thisPanel.data["Stock 4"] = 0
                   thisPanel.options = thisPanel.options.filter(item => item.id !== "Shield 5g");
-                  goPanel(thisPanel.id)
+                  giveItem(shield());
+                  displayPanel(thisPanel.id, false)
                 }
             },
             {

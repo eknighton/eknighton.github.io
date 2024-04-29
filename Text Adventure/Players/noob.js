@@ -3,18 +3,19 @@ function playerNoob() {
 
 	//Util
 	Self: null,
+	maker: null,
 	HUD: defaultPlayerHUD, //Function that updates HUD
 	initHUD: defaultPlayerInitHUD, //Function that inits HUD elements as children of rightHUD
 
 	//Health
-	MaxHP : 100,
+	maxHP : 100,
 	HP : 50,
-	Regen : 0,
+	regen : 0,
 
 	//Inventory
-	Potions: {},
-	Equiped: {},
-	Items: {},
+	potions: [],
+	equiped: {},
+	items: [],
 
 	//Abilities
 

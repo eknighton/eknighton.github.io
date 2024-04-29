@@ -1,3 +1,13 @@
+function giveItem(item, p = player){
+	item.possesor = p;
+	p.items.push(item);
+	item.onGet(p);
+}
+
+function killPlayer(p = player){
+	
+}
+
 function initPlayerHUD(){
 	player.initHUD(player);
 }
@@ -12,14 +22,11 @@ function playerHUD(){
 */
 function defaultPlayerHUD(ref) {
 	ref.txt = 
-	"❤️"+ref.HP+"/"+ref.MaxHP + "\n"+
-	"🪄"+ref.wand+"\n"+
-	"🏹"+ref.bow+"\n"+
-	"⚔"+ref.sword+"\n"+
-	"🛡"+ref.shield+"\n";
+	"❤️"+ref.HP+"/"+ref.maxHP + "\n"+concatItems(ref)
 	return ref.txt
 }
 
 function defaultPlayerInitHUD(ref){
 	return
 }
+

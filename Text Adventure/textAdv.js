@@ -16,6 +16,7 @@ window.onload = () => {
 function startGame(){
     //Set initial player
     player = playerNoob();
+    player.maker = playerNoob;
 
     player.self = player;
     player.initHUD();
@@ -23,7 +24,7 @@ function startGame(){
     displayPanel('Start');
 }
 
-function displayPanel(p) {
+function displayPanel(p, funcs = true) {
 
     /*
         Check if P is a PanelID or a Panel
@@ -39,7 +40,7 @@ function displayPanel(p) {
         }
 
     if (panel) {
-        if (panel.preLoad) {
+        if (panel.preLoad && funcs) {
             panel.preLoad(panel);
         }
         currPanel = panel;
@@ -100,7 +101,7 @@ function displayPanel(p) {
     /*
         Call onLoad
     */
-        if (panel.onLoad) {
+        if (panel.onLoad && funcs) {
             panel.onLoad(panel);
         }
     } else {

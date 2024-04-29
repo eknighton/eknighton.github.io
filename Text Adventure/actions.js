@@ -16,12 +16,6 @@ function queuePanel(panel, delay) {
    
 }
 
-function resetPanel(panel){
-
-}
-
-
-
 //Modify Player Values
 
 function takeDamage(amount) {

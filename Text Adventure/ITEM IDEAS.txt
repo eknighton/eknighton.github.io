@@ -17,7 +17,7 @@ Insight : See if an option would do damage to you
 ----
 
 Concerns
-2. How does an item interact with timeouts? 
+2. How does an item interact with timeouts? (Countdowns are supported)
 4. How does an item undo scripts?
 5. 
 

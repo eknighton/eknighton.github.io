@@ -36,3 +36,12 @@ function requestAudio(req){
         console.log("Function requestAudio is not implemented yet.")
     }
 }
+
+function concatItems(player){
+    let text = ""
+    player.items.forEach(item => {
+        text = text + item.html;
+    }
+    );
+    return text;
+}
