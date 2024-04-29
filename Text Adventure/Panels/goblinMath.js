@@ -15,7 +15,7 @@ class GoblinMath {
                 let temp = new GoblinPunch();
                 temp.text = "Too slow!";
                 goPanel(temp);
-                queuePanel("Start", 2000);
+                queuePanel(Start, 2000);
             });
         };
         this.text = "Quick, what's 27 x 12? <div id='timer' style = 'color: red;'>10s</div>";
@@ -25,17 +25,17 @@ class GoblinMath {
                 action: () => {
                     takeDamage(5);
                     player.HP = 0;
-                    goPanel("Goblin Punch");
+                    goPanel(GoblinPunch);
                     panels = {};
-                    queuePanel('Start', 1800);
+                    queuePanel(Start, 1800);
                 },
             },
             {
                 text: '324',
                 action: () => {
                     gainGold(324);
-                    goPanel("Goblin Gold");
-                    queuePanel('Goblin Shop One', 1800);
+                    goPanel(GoblinGold);
+                    queuePanel(GoblinShopOne, 1800);
                 }
             }
         ];

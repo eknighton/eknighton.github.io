@@ -33,12 +33,13 @@ function displayPanel(p, funcs = true) {
         if (p.type){
             //If it has a type, it is a panel
             panel = p;  
-        } else if (!p.length) { 
-            //If P is a function, it is a constructor
-            panel = importPanelIfNeeded(p);
-        } else {
-            //If has neither, it is an ID
+        } else if (p.length) { 
+            //If P has a length, it is a string/ID
             panel = panels[p];
+        } else {
+            //If has neither, it is a constructor
+            panel = importPanelIfNeeded(p);
+           
         }
 
     if (panel) {
@@ -121,7 +122,7 @@ function importPanelIfNeeded(conName) {
         panels[conName.toString()] = new conName()
         return panels[conName.toString()]
     } else {
-        console.log(`Panel ID ${panelId} already exists in 'panels'.`);
+        console.log(`Panel ID ${conName} already exists in 'panels'.`);
         return panels[conName.toString()]
     }
 }

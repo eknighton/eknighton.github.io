@@ -33,6 +33,12 @@ PLAYER
 Right now, the player is an object instance. Eventually there will be player constructors. Currently, function writeHUD() is coded in terms of the global player object instance, and updates the rightHUD's innerHTML.
 
 TODO
+1. Solve ID system for panels.
+
+
+
+
+TODO
 1. Figure out how to do/support audio
 2. Create player constructor system
 3. Expand player HUD

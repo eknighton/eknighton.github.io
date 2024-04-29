@@ -27,7 +27,7 @@ class GoblinShopOne {
                   this.data["Stock 1"] = 0
                   this.options = this.options.filter(item => item.id !== "Sword 5g");
                   giveItem(new Sword());
-                  displayPanel(this.id, false)
+                  displayPanel(this.constructor, false)
                 }
             },
             {
@@ -39,7 +39,7 @@ class GoblinShopOne {
                   this.data["Stock 2"] = 0
                   this.options = this.options.filter(item => item.id !== "Bow 5g");
                   giveItem(new Bow());
-                  displayPanel(this.id, false)
+                  displayPanel(this.constructor, false)
                 }
             },
             {
@@ -51,7 +51,7 @@ class GoblinShopOne {
                   this.data["Stock 3"] = 0
                   this.options = this.options.filter(item => item.id !== "Wand 5g");
                   giveItem(new Wand());
-                  displayPanel(this.id, false)
+                  displayPanel(this.constructor, false)
                 }
             },
             {
@@ -63,12 +63,12 @@ class GoblinShopOne {
                   this.data["Stock 4"] = 0
                   this.options = this.options.filter(item => item.id !== "Shield 5g");
                   giveItem(new Shield());
-                  displayPanel(this.id, false)
+                  displayPanel(this.constructor, false)
                 }
             },
             {
                 text: 'Leave',
-                action: () => goPanel('Start')
+                action: () => goPanel(Start)
             }
         ];
     }
