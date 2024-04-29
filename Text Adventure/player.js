@@ -12,6 +12,7 @@ function respawnPlayer(p = player){
 	player = new p.type();
 	panels = {};
 	initPlayerHUD(player);
+	playerHUD(player);
 }
 
 function initPlayerHUD(p = player){
