@@ -1,0 +1,29 @@
+ITEM IDEAS
+
+Escape Pearl : Escape to a specific scene
+
+Rewind Watch : Undo your last action
+
+Insight : See if an option would do damage to you
+
+!!Obliterate: Remove the current scene from the game
+
+!!Escape Plan: See if an option leaves you in another scene
+
+!!Doomsday Clock: Reveal any timers / timeouts 
+
+
+
+----
+
+Concerns
+2. How does an item interact with timeouts? 
+4. How does an item undo scripts?
+5. 
+
+Resolved Concerns
+1. How does an item find the current panel?
+3. How does an item view the text content of a function? 
+(.toString())
+
+^ All timeouts are made through UTIL function

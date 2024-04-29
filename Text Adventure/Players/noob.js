@@ -3,8 +3,8 @@ function playerNoob() {
 
 	//Util
 	Self: null,
-	HUD: defaultPlayerHUD,
-	initHUD: defaultPlayerInitHUD,
+	HUD: defaultPlayerHUD, //Function that updates HUD
+	initHUD: defaultPlayerInitHUD, //Function that inits HUD elements as children of rightHUD
 
 	//Health
 	MaxHP : 100,

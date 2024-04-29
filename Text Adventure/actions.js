@@ -16,7 +16,7 @@ function queuePanel(panel, delay) {
    
 }
 
-function resetPanel(panelId){
+function resetPanel(panel){
 
 }
 
