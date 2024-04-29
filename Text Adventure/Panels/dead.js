@@ -20,8 +20,8 @@ class Dead {
                 text: 'Live',
                 action: () => {
                     console.log(this.id);
-                    goPanel(Start);
                     respawnPlayer();
+                    goPanel(Start);
                 }
             }
         ];
