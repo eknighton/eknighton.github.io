@@ -1,24 +1,25 @@
-
-let player = {
-
-	//Health
-	MaxHP : 100,
-	HP : 50,
-	Regen : 0,
-
-	//Inventory
-	Potions: {},
-	Equiped: {},
-	Items: {},
-
-	//Abilities
-
-	//Text Display
-	txt : ""
-}
-function writeHUD(){
-	player.txt = "❤️"+player.HP+"/"+player.MaxHP
-	document.getElementById("RightHUD").innerHTML = player.txt
+function initPlayerHUD(){
+	player.initHUD(player);
 }
 
+function playerHUD(){
+	//HUD functions take a player as a parameter.
+	document.getElementById("RightHUD").innerHTML = player.HUD(player);
+}
 
+/*
+	This function will become more complex
+*/
+function defaultPlayerHUD(ref) {
+	ref.txt = 
+	"❤️"+ref.HP+"/"+ref.MaxHP + "\n"+
+	"🪄"+ref.wand+"\n"+
+	"🏹"+ref.bow+"\n"+
+	"⚔"+ref.sword+"\n"+
+	"🛡"+ref.shield+"\n";
+	return ref.txt
+}
+
+function defaultPlayerInitHUD(ref){
+	return
+}

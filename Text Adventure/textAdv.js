@@ -3,6 +3,20 @@ let currentState = 0;
 let panels = {}
 let panelMakes = {}
 
+let player = null;
+
+window.onload = () => {
+    startGame();
+};
+
+function startGame(){
+    player = playerNoob();
+    player.self = player;
+    player.initHUD();
+
+    displayPanel('Start');
+}
+
 function displayPanel(p) {
 
     /*
@@ -81,7 +95,7 @@ function displayPanel(p) {
     } else {
         console.error('Panel not found:', panelId);
     }
-    writeHUD();
+    playerHUD();
 }
 
 function importPanelIfNeeded(panelId) {
@@ -100,8 +114,3 @@ function importPanelIfNeeded(panelId) {
         console.log(`Panel ID ${panelId} already exists in 'panels'.`);
     }
 }
-
-// Initial setup to display the start panel
-window.onload = () => {
-    displayPanel('Start');
-};
