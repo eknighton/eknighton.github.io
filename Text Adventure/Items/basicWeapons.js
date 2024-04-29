@@ -1,61 +1,63 @@
-function sword(){
-	return {
-		possesor: null,
-		html :"⚔",
-		onGet : () => {
-
-		},
-		onClick : () => {
-
-		},
-		update : () => {
-
-		}
-	};
+class Sword {
+    constructor() {
+        this.possessor = null;
+        this.html = "⚔";
+        this.onGet = () => {
+            // Actions when the sword is obtained
+        };
+        this.onClick = () => {
+            // Actions when the sword is clicked
+        };
+        this.update = () => {
+            // Update logic for the sword
+        };
+    }
 }
 
-function bow(){
-	return {
-		possesor: null,
-		html :"🏹",
-		onGet : () => {
-
-		},
-		onClick : () => {
-
-		},
-		update : () => {
-
-		}
-	};
+class Bow {
+    constructor() {
+        this.possessor = null;
+        this.html = "🏹";
+        this.onGet = () => {
+            // Actions when the bow is obtained
+        };
+        this.onClick = () => {
+            // Actions when the bow is clicked
+        };
+        this.update = () => {
+            // Update logic for the bow
+        };
+    }
 }
-function wand(){
-	return {
-		possesor: null,
-		html :"🪄",
-		onGet : () => {
 
-		},
-		onClick : () => {
-
-		},
-		update : () => {
-
-		}
-	};
+class Wand {
+    constructor() {
+        this.possessor = null;
+        this.html = "🪄";
+        this.onGet = () => {
+            // Actions when the wand is obtained
+        };
+        this.onClick = () => {
+            // Actions when the wand is clicked
+        };
+        this.update = () => {
+            // Update logic for the wand
+        };
+    }
 }
-function shield(){
-	return {
-		possesor: null,
-		html :"🛡",
-		onGet : () => {
 
-		},
-		onClick : () => {
-
-		},
-		update : () => {
-
-		}
-	};
+class Shield {
+    constructor() {
+        this.possessor = null;
+        this.html = "🛡";
+        this.onGet = () => {
+            // Actions when the shield is obtained
+        };
+        this.onClick = () => {
+            // Actions when the shield is clicked
+        };
+        this.update = () => {
+            // Update logic for the shield
+        };
+    }
 }

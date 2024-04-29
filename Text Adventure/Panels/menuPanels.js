@@ -1,46 +1,43 @@
-panelMakes["Start"] = MakeStartPanel;
-function MakeStartPanel(){
-    let ret = {
-        id: 'Start',
-        mediaData: {
-          src: "Images/GoblinAndSon.webp",
-          size: '100%', // Scale the image
-          offsetX: '-50%', // Negative is LEFT
-          offsetY: '-40%' // Negative is UP
-        },
-        onLoad: (thisPanel) => {
+class MakeStartPanel {
+    constructor() {
+        this.id = 'Start';
+        this.self = this;
+        this.mediaData = {
+            src: "Images/GoblinAndSon.webp",
+            size: '100%',
+            offsetX: '-50%',
+            offsetY: '-40%'
+        };
+        this.onLoad = () => {
             player.HP = 50;
-            requestAudio({src: "none", slot: "Panel", priorty: "1", loop: false});
-        },
-        preLoad: (thisPanel) => {
-
-        },
-        text: 'Welcome to town!',
-        options: [
-          {
+            requestAudio({src: "none", slot: "Panel", priority: "1", loop: false});
+        };
+        this.preLoad = () => {
+            // Empty as in the original function
+        };
+        this.text = 'Welcome to town!';
+        this.options = [
+            {
                 text: 'Enter',
-                action: (thisPanel) => {
-                    console.log(thisPanel.id);
-                    goPanel("Goblin Math"); 
-
+                action: () => {
+                    console.log(this.id);
+                    goPanel("Goblin Math");
                 }
-          },
-          {
+            },
+            {
                 text: 'Attack this dude',
-                action: (thisPanel) => { 
+                action: () => {
                     panels = {};
-                    let temp = GoblinPunch()
+                    let temp = new GoblinPunch();  // Assuming GoblinPunch is a class as refactored previously
                     player.HP = 0;
-                    temp.mediaData.src = "Images/Float%20Jump%20Float.MP4"
-                    temp.mediaData.size = "150%"
-                    temp.text = "You are slain by the goblin"
+                    temp.mediaData.src = "Images/Float%20Jump%20Float.MP4";
+                    temp.mediaData.size = "150%";
+                    temp.text = "You are slain by the goblin";
                     goPanel(temp);
                     queuePanel("Start", 5000);
                 }
-          }
-        ]
-    };
-    ret.self = ret;
-    return ret;
+            }
+        ];
+    }
 }
-
+panelMakes["Start"] = MakeStartPanel;

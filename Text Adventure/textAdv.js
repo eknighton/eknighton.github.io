@@ -16,8 +16,8 @@ window.onload = () => {
 
 function startGame(){
     //Set initial player
-    player = PlayerNoob();
-    
+    player = new PlayerNoob();
+
     player.initHUD();
 
     displayPanel('Start');
@@ -115,8 +115,7 @@ function importPanelIfNeeded(panelId) {
         // Check if the panelId exists in 'panelArchive'
         if (panelId in panelMakes) {
             // Import the panel definition from 'panelArchive' to 'panels'
-            panels[panelId] = panelMakes[panelId]();
-            panels[panelId].me = panels[panelId];
+            panels[panelId] = new panelMakes[panelId]();
             console.log(`New Panel of ID ${panelId} created.`);
         } else {
             console.log(`Initializer for Panel ID ${panelId} not found.`);

@@ -1,79 +1,77 @@
- panelMakes["Goblin Shop One"] = GoblinShopOne;
-
- function GoblinShopOne() {
-  let ret = {
-      id: "Goblin Shop One",
-    mediaData: {
-      src: "Images/GoblinAndSon.webp",
-      size: '100%', // Scale the image
-      offsetX: '-50%', // Horizontal offset
-      offsetY: '-50%' // Vertical offset
-    },
-    data: {"Stock 1" : 1},
-    onLoad: (thisPanel) => { 
-      if (thisPanel.options.length > 1){
-        thisPanel.text = "Buy anything mate?"
-      } else {
-        thisPanel.text = "Sweet gear dude, where'd you get it?"
-      }
-    },
-    text: 'Buy anything mate?',
-    options: [
+class GoblinShopOne {
+    constructor() {
+        this.id = "Goblin Shop One";
+        this.self = this;
+        this.mediaData = {
+            src: "Images/GoblinAndSon.webp",
+            size: '100%',
+            offsetX: '-50%',
+            offsetY: '-50%'
+        };
+        this.data = {"Stock 1": 1};
+        this.onLoad = () => { 
+            if (this.options.length > 1) {
+                this.text = "Buy anything mate?";
+            } else {
+                this.text = "Sweet gear dude, where'd you get it?";
+            }
+        };
+        this.text = 'Buy anything mate?';
+        this.options = [
             {
                 text: 'Sword 5g',
                 id: 'Sword 5g',
-                action: (thisPanel) => {
-                  tryBuy(5, "Goblin Shop One", 'Stock 1');
-                  thisPanel.text = "You have a sword now. Trust me m8."
-                  thisPanel.data["Stock 1"] = 0
-                  thisPanel.options = thisPanel.options.filter(item => item.id !== "Sword 5g");
+                action: () => {
+                  tryBuy(5, this.id, 'Stock 1');
+                  this.text = "You have a sword now. Trust me m8."
+                  this.data["Stock 1"] = 0
+                  this.options = this.options.filter(item => item.id !== "Sword 5g");
                   giveItem(sword());
-                  displayPanel(thisPanel.id, false)
+                  displayPanel(this.id, false)
                 }
             },
             {
                 text: 'Bow 5g',
                 id: 'Bow 5g',
-                action: (thisPanel) => {
-                  tryBuy(5, "Goblin Shop One", 'Stock 1');
-                  thisPanel.text = "Nice bow, bro."
-                  thisPanel.data["Stock 2"] = 0
-                  thisPanel.options = thisPanel.options.filter(item => item.id !== "Bow 5g");
+                action: () => {
+                  tryBuy(5, this.id, 'Stock 1');
+                  this.text = "Nice bow, bro."
+                  this.data["Stock 2"] = 0
+                  this.options = this.options.filter(item => item.id !== "Bow 5g");
                   giveItem(bow());
-                  displayPanel(thisPanel.id, false)
+                  displayPanel(this.id, false)
                 }
             },
             {
                 text: 'Wand 5g',
                 id: 'Wand 5g',
-                action: (thisPanel) => {
-                  tryBuy(5, "Goblin Shop One", 'Stock 1');
-                  thisPanel.text = "Nice wand fam."
-                  thisPanel.data["Stock 3"] = 0
-                  thisPanel.options = thisPanel.options.filter(item => item.id !== "Wand 5g");
+                action: () => {
+                  tryBuy(5, this.id, 'Stock 1');
+                  this.text = "Nice wand fam."
+                  this.data["Stock 3"] = 0
+                  this.options = this.options.filter(item => item.id !== "Wand 5g");
                   giveItem(wand());
-                  displayPanel(thisPanel.id, false)
-                  //goPanel(thisPanel.id)
+                  displayPanel(this.id, false)
                 }
             },
             {
                 text: 'Shield 5g',
                 id: 'Shield 5g',
-                action: (thisPanel) => {
-                  tryBuy(5, "Goblin Shop One", 'Stock 1');
-                  thisPanel.text = "Woo, boi got a shield."
-                  thisPanel.data["Stock 4"] = 0
-                  thisPanel.options = thisPanel.options.filter(item => item.id !== "Shield 5g");
+                action: () => {
+                  tryBuy(5, this.id, 'Stock 1');
+                  this.text = "Woo, boi got a shield."
+                  this.data["Stock 4"] = 0
+                  this.options = this.options.filter(item => item.id !== "Shield 5g");
                   giveItem(shield());
-                  displayPanel(thisPanel.id, false)
+                  displayPanel(this.id, false)
                 }
             },
             {
                 text: 'Leave',
-                action: (thisPanel) => goPanel('Start')
+                action: () => goPanel('Start')
             }
-    ]
-  };
-  ret.self = ret;
-  return ret;
-};
+        ];
+    }
+}
+
+panelMakes["Goblin Shop One"] = GoblinShopOne;
