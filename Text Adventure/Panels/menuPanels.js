@@ -12,6 +12,9 @@ function MakeStartPanel(){
             player.HP = 50;
             requestAudio({src: "none", slot: "Panel", priorty: "1", loop: false});
         },
+        preLoad: (thisPanel) => {
+
+        },
         text: 'Welcome to town!',
         options: [
           {

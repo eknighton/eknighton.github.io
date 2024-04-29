@@ -1,16 +1,22 @@
 const storyElement = document.getElementById('story');
-let currentState = 0;
+
+
+let currPanel = null;
 let panels = {}
 let panelMakes = {}
 
 let player = null;
+
+let countdowns = [];
 
 window.onload = () => {
     startGame();
 };
 
 function startGame(){
+    //Set initial player
     player = playerNoob();
+
     player.self = player;
     player.initHUD();
 
@@ -31,8 +37,13 @@ function displayPanel(p) {
             importPanelIfNeeded(p);
             panel = panels[p];
         }
-        if (panel) {
-            document.getElementById('story').innerHTML = panel.text;
+
+    if (panel) {
+        if (panel.preLoad) {
+            panel.preLoad(panel);
+        }
+        currPanel = panel;
+        document.getElementById('story').innerHTML = panel.text;
 
     /*
         Set Media Element

@@ -14,14 +14,18 @@ function startCountdown(seconds, elementId, callback, update) {
         countdownElement = document.getElementById(elementId);
         if (countdownElement === null) {
             clearInterval(intervalId);
+            countdowns = countdowns.filter(item => item !== intervalId);
         } else if (seconds <= 0){
-            callback();
             clearInterval(intervalId);
+            callback();
+            countdowns = countdowns.filter(item => item !== intervalId);
         } else {
             countdownElement.textContent = seconds+"s";  // Update the display
         }
 
     }, 1000);  // Update every 1000 milliseconds (1 second)
+
+    countdowns.push(intervalId);
 }
 
 function requestAudio(req){
