@@ -18,7 +18,12 @@ function queuePanel(panel, delay) {
 
 //Modify Player Values
 
-function takeDamage(amount) {
+function takeDamage(amount, p = player) {
+    p.HP = p.HP - amount;
+    playerHUD(p);
+    if (p.HP <= 0){
+        dead(p);
+    }
     console.log('Took ' + amount + ' Damage!')
     //Nothing yet!
 }

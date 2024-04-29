@@ -1,6 +1,6 @@
 class GoblinShopOne {
     constructor() {
-        this.type = this.constructor.name;
+        this.make = this.constructor;
         this.self = this;
         this.mediaData = {
             src: "Images/GoblinAndSon.webp",

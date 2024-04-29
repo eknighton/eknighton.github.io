@@ -30,8 +30,8 @@ function displayPanel(p, funcs = true) {
         We only want to load panels when necessary
     */
         let panel = {}
-        if (p.type){
-            //If it has a type, it is a panel
+        if (p.make){
+            //If it has a make, it is a panel
             panel = p;  
         } else if (p.length) { 
             //If P has a length, it is a string/ID
@@ -115,14 +115,12 @@ function displayPanel(p, funcs = true) {
 
 function importPanelIfNeeded(conName) {
 
-    //Check if a panel of that type exists
-
-    // Check if the panelId is not present in 'panels'
-    if (!(conName.toString() in panels)) {
-        panels[conName.toString()] = new conName()
-        return panels[conName.toString()]
+    // Check if the constructor's panelId is not present in 'panels'
+    if (!(conName.name in panels)) {
+        panels[conName.name] = new conName()
+        return panels[conName.name]
     } else {
-        console.log(`Panel ID ${conName} already exists in 'panels'.`);
-        return panels[conName.toString()]
+        console.log(`Panel ID ${conName.name} already exists in 'panels'.`);
+        return panels[conName.name]
     }
 }

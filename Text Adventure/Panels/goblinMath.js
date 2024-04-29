@@ -1,7 +1,7 @@
 
 class GoblinMath {
     constructor() {
-        this.type = this.constructor.name
+        this.make = this.constructor
         this.self = this;
         this.mediaData = {
             src: "Images/Goblin.jpg",
@@ -23,11 +23,8 @@ class GoblinMath {
             {
                 text: "An equation",
                 action: () => {
-                    takeDamage(5);
-                    player.HP = 0;
+                    setTimeout(() => {takeDamage(50)}, 1500);
                     goPanel(GoblinPunch);
-                    panels = {};
-                    queuePanel(Start, 1800);
                 },
             },
             {
@@ -44,7 +41,7 @@ class GoblinMath {
 
 class GoblinPunch {
     constructor() {
-        this.type = this.constructor.name
+        this.make = this.constructor;
         this.self = this;
         this.mediaData = {
             src: "Images/KnightSlays.gif",
@@ -60,7 +57,7 @@ class GoblinPunch {
 
 class GoblinGold {
     constructor() {
-        this.type = this.constructor.name
+        this.make = this.constructor;
         this.self = this;
         this.mediaData = {
             src: "Images/GoldAdobe.jpeg",

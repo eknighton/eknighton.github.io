@@ -1,7 +1,7 @@
 class PlayerNoob {
     constructor() {
         // Utility
-        this.type = this.constructor.name;
+        this.type = this.constructor;
 
         // Presuming defaultPlayerHUD and defaultPlayerInitHUD are defined somewhere in your scope
         this.HUD = defaultPlayerHUD; // Function that updates HUD

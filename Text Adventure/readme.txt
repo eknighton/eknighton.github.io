@@ -34,6 +34,9 @@ Right now, the player is an object instance. Eventually there will be player con
 
 TODO
 1. Solve ID system for panels.
+2. Create panel / item lists?
+3. Implement player death?
+4. Way to deal damage to player
 
 
 

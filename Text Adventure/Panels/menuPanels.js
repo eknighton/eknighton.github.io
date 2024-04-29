@@ -1,6 +1,6 @@
 class Start {
     constructor() {
-        this.type = this.constructor.name;
+        this.make = this.constructor;
         this.self = this;
         this.mediaData = {
             src: "Images/GoblinAndSon.webp",
@@ -27,14 +27,14 @@ class Start {
             {
                 text: 'Attack this dude',
                 action: () => {
-                    panels = {};
                     let temp = new GoblinPunch();  // Assuming GoblinPunch is a class as refactored previously
-                    player.HP = 0;
                     temp.mediaData.src = "Images/Float%20Jump%20Float.MP4";
                     temp.mediaData.size = "150%";
                     temp.text = "You are slain by the goblin";
                     goPanel(temp);
-                    queuePanel(Start, 5000);
+                    setTimeout(()=>{
+                        takeDamage(50, player);
+                    },1500);
                 }
             }
         ];

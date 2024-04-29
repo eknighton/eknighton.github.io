@@ -4,17 +4,23 @@ function giveItem(item, p = player){
 	item.onGet(p);
 }
 
-function killPlayer(p = player){
-	
+function dead(p = player){
+	goPanel(Dead);
 }
 
-function initPlayerHUD(){
-	player.initHUD(player);
+function respawnPlayer(p = player){
+	player = new p.type();
+	panels = {};
+	initPlayerHUD(player);
 }
 
-function playerHUD(){
+function initPlayerHUD(p = player){
+	player.initHUD(p);
+}
+
+function playerHUD(p = player){
 	//HUD functions take a player as a parameter.
-	document.getElementById("RightHUD").innerHTML = player.HUD(player);
+	document.getElementById("RightHUD").innerHTML = player.HUD(p);
 }
 
 /*
