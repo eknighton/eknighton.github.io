@@ -26,7 +26,7 @@ class GoblinShopOne {
                   this.text = "You have a sword now. Trust me m8."
                   this.data["Stock 1"] = 0
                   this.options = this.options.filter(item => item.id !== "Sword 5g");
-                  giveItem(sword());
+                  giveItem(new Sword());
                   displayPanel(this.id, false)
                 }
             },
@@ -38,7 +38,7 @@ class GoblinShopOne {
                   this.text = "Nice bow, bro."
                   this.data["Stock 2"] = 0
                   this.options = this.options.filter(item => item.id !== "Bow 5g");
-                  giveItem(bow());
+                  giveItem(new Bow());
                   displayPanel(this.id, false)
                 }
             },
@@ -50,7 +50,7 @@ class GoblinShopOne {
                   this.text = "Nice wand fam."
                   this.data["Stock 3"] = 0
                   this.options = this.options.filter(item => item.id !== "Wand 5g");
-                  giveItem(wand());
+                  giveItem(new Wand());
                   displayPanel(this.id, false)
                 }
             },
@@ -62,7 +62,7 @@ class GoblinShopOne {
                   this.text = "Woo, boi got a shield."
                   this.data["Stock 4"] = 0
                   this.options = this.options.filter(item => item.id !== "Shield 5g");
-                  giveItem(shield());
+                  giveItem(new Shield());
                   displayPanel(this.id, false)
                 }
             },
