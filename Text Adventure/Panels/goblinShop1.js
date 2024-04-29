@@ -1,6 +1,6 @@
 class GoblinShopOne {
     constructor() {
-        this.id = "Goblin Shop One";
+        this.type = this.constructor.name;
         this.self = this;
         this.mediaData = {
             src: "Images/GoblinAndSon.webp",
@@ -73,5 +73,3 @@ class GoblinShopOne {
         ];
     }
 }
-
-panelMakes["Goblin Shop One"] = GoblinShopOne;

@@ -20,21 +20,24 @@ function startGame(){
 
     player.initHUD();
 
-    displayPanel('Start');
+    displayPanel(Start);
 }
 
 function displayPanel(p, funcs = true) {
 
     /*
-        Check if P is a PanelID or a Panel
+        Check if P is a PanelID, constructor, or a Panel
+        We only want to load panels when necessary
     */
         let panel = {}
-        if (p.id){
-            //If it has an id, it is a panel
+        if (p.type){
+            //If it has a type, it is a panel
             panel = p;  
+        } else if (!p.length) { 
+            //If P is a function, it is a constructor
+            panel = importPanelIfNeeded(p);
         } else {
-            //If it doesn't, it is an ID
-            importPanelIfNeeded(p);
+            //If has neither, it is an ID
             panel = panels[p];
         }
 
@@ -104,23 +107,21 @@ function displayPanel(p, funcs = true) {
             panel.onLoad(panel);
         }
     } else {
-        console.error('Panel not found:', panelId);
+        console.error('Panel not found:', p);
     }
     playerHUD();
 }
 
-function importPanelIfNeeded(panelId) {
+function importPanelIfNeeded(conName) {
+
+    //Check if a panel of that type exists
+
     // Check if the panelId is not present in 'panels'
-    if (!(panelId in panels)) {
-        // Check if the panelId exists in 'panelArchive'
-        if (panelId in panelMakes) {
-            // Import the panel definition from 'panelArchive' to 'panels'
-            panels[panelId] = new panelMakes[panelId]();
-            console.log(`New Panel of ID ${panelId} created.`);
-        } else {
-            console.log(`Initializer for Panel ID ${panelId} not found.`);
-        }
+    if (!(conName.toString() in panels)) {
+        panels[conName.toString()] = new conName()
+        return panels[conName.toString()]
     } else {
         console.log(`Panel ID ${panelId} already exists in 'panels'.`);
+        return panels[conName.toString()]
     }
 }

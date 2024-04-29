@@ -1,7 +1,7 @@
 
 class GoblinMath {
     constructor() {
-        this.id = 'Goblin Math';
+        this.type = this.constructor.name
         this.self = this;
         this.mediaData = {
             src: "Images/Goblin.jpg",
@@ -41,11 +41,10 @@ class GoblinMath {
         ];
     }
 }
-panelMakes['Goblin Math'] = GoblinMath;
 
 class GoblinPunch {
     constructor() {
-        this.id = 'Goblin Punch';
+        this.type = this.constructor.name
         this.self = this;
         this.mediaData = {
             src: "Images/KnightSlays.gif",
@@ -58,11 +57,10 @@ class GoblinPunch {
         this.options = [];
     }
 }
-panelMakes["Goblin Punch"] = GoblinPunch;
 
 class GoblinGold {
     constructor() {
-        this.id = 'Goblin Gold';
+        this.type = this.constructor.name
         this.self = this;
         this.mediaData = {
             src: "Images/GoldAdobe.jpeg",
@@ -75,4 +73,3 @@ class GoblinGold {
         this.options = [];
     }
 }
-panelMakes["Goblin Gold"] = GoblinGold

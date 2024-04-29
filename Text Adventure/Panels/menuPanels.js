@@ -1,6 +1,6 @@
-class MakeStartPanel {
+class Start {
     constructor() {
-        this.id = 'Start';
+        this.type = this.constructor.name;
         this.self = this;
         this.mediaData = {
             src: "Images/GoblinAndSon.webp",
@@ -21,7 +21,7 @@ class MakeStartPanel {
                 text: 'Enter',
                 action: () => {
                     console.log(this.id);
-                    goPanel("Goblin Math");
+                    goPanel(GoblinMath);
                 }
             },
             {
@@ -34,10 +34,9 @@ class MakeStartPanel {
                     temp.mediaData.size = "150%";
                     temp.text = "You are slain by the goblin";
                     goPanel(temp);
-                    queuePanel("Start", 5000);
+                    queuePanel(Start, 5000);
                 }
             }
         ];
     }
 }
-panelMakes["Start"] = MakeStartPanel;
