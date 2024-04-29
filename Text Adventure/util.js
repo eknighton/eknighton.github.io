@@ -23,3 +23,12 @@ function startCountdown(seconds, elementId, callback, update) {
 
     }, 1000);  // Update every 1000 milliseconds (1 second)
 }
+
+function requestAudio(req){
+    // Format for req {src,slot, priorty, loop}
+    if (req.slot == "Panel"){
+        console.log("Function requestAudio is not implemented yet.") 
+    } else {
+        console.log("Function requestAudio is not implemented yet.")
+    }
+}

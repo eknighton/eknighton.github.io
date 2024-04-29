@@ -10,7 +10,7 @@ function MakeStartPanel(){
         },
         onLoad: (thisPanel) => {
             player.HP = 50;
-
+            requestAudio({src: "none", slot: "Panel", priorty: "1", loop: false});
         },
         text: 'Welcome to town!',
         options: [
