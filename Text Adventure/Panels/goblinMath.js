@@ -14,8 +14,8 @@ class GoblinMath {
                 panels = {};
                 let temp = new GoblinPunch();
                 temp.text = "Too slow!";
+                setTimeout(() => {takeDamage(50)}, 1500);
                 goPanel(temp);
-                queuePanel(Start, 2000);
             });
         };
         this.text = "Quick, what's 27 x 12? <div id='timer' style = 'color: red;'>10s</div>";
