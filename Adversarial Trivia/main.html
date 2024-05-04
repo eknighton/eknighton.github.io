@@ -22,6 +22,8 @@
 <body>
     <h1>Pick one that will Stump Them!</h1>
     <div id="questionsContainer"></div>
+    <button class="question" onclick="loadTriviaQuestions()">Try To Refresh Questions (Database access has a cooldown)</button>
+
 
     <script>
         async function fetchQuestions() {
@@ -56,14 +58,6 @@
                 container.appendChild(questionButton);
             });
         }
-
-        // Event listener for the spacebar to reload questions
-        document.body.addEventListener('keydown', function(event) {
-            if (event.code === 'Space') {
-                event.preventDefault(); // Prevent the default action (scrolling)
-                loadTriviaQuestions();
-            }
-        });
 
         // Load the trivia questions initially
         window.alert("Pick one true/false question to ask your opponent!\nRefresh the page to get a new list.")
