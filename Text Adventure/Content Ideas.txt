@@ -1,0 +1,44 @@
+Content Ideas
+
+Goblin Math
+-> You are asked a math question, then must pick between a snarky retort, a numerical answer, and saying nothing. Sometimes the number is right, sometimes it is wrong. Sometimes the retort is technically incorrect, sometimes it is not. You must pick one of these that is not wrong. If both are wrong, you must wait and say nothing.
+
+
+Memory Minotaur
+-> A minotaur asks you a question about something you have learned.
+
+Advise Alan
+-> Alan asks you for advice, your choice affects the probability of certain encounters occuring in the future.
+
+Mysterious Stranger
+-> You see a stranger with their back turned, you can attack them before they turn around, or do nothing. 
+
+Fight Scene
+-> Choose which way to dodge.
+
+Sooth Sayer
+-> Decide whether to believe her prophecy.
+
+Parallel Universe Transport Service
+-> Hey bro, hate your life? Want to travel to another universe?
+
+
+
+----
+
+General Design Principles
+
+Encounters, Options, Outcomes
+
+Probability, Nature
+
+
+--->
+
+Most choices have immediate consequences, and also affect future probabilities- both for encounters and outcomes. This sounds like elysium- except it isn't about a stat system.
+
+
+
+
+
+----

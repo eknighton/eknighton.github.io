@@ -1,0 +1,3 @@
+General Concept
+
+A panel-based roguelike where you face semi-randomly selected encounters. Each action you take affects the probabilities of future events, and what outcomes your future choices will have. As you play, you build up stats, gold, and equipment. Your goal is to reach level 20.
