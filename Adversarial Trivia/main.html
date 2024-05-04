@@ -25,7 +25,8 @@
 
     <script>
         async function fetchQuestions() {
-            const url = `https://opentdb.com/api.php?amount=10&type=boolean`;
+            const url = `https://opentdb.com/api.php?amount=10&type=boolean&difficulty=easy`;
+            //`https://opentdb.com/api.php?amount=10&type=boolean`;
             try {
                 const response = await fetch(url);
                 const data = await response.json();
@@ -50,7 +51,7 @@
                 questionButton.className = 'question';
                 questionButton.textContent = `Question ${index + 1}: ${question.question}`;
                 questionButton.onclick = function() {
-                    alert(`Ask them whether the statement is true.\nIf they didn't know the statement is ${question.correct_answer}, you win!\n\nIf they got it right, it is their turn to pick a question for you!\nPress 'Space' to generate the next list.`);
+                    alert(`Ask them whether the statement is true.\nIf they didn't know the statement was ${question.correct_answer}, you win!\n\nIf they got it right, it is their turn to pick a question for you!\nPress 'Space' to generate the next list.`);
                 };
                 container.appendChild(questionButton);
             });
