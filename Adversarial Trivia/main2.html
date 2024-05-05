@@ -26,7 +26,6 @@
 
     <script>
         let currentDifficulty = 'easy';
-        let maxDifficulty = 20;
 
 let questions = [
     {"type":"boolean", "difficulty":80, "category":"Entertainment: Board Games", "question":"The board game Go has more possible legal positions than the number of atoms in the visible universe.", "correct_answer":"True", "incorrect_answers":["False"]},
@@ -61,24 +60,27 @@ let questions = [
     {"type":"boolean", "difficulty":96, "category":"Entertainment: Video Games", "question":"In 'Starbound', the track played by the Decorated Music Box is named 'Atlas'.", "correct_answer":"True", "incorrect_answers":["False"]}
 ];
 
-        function selectQuestionsBySimilarDifficulty() {
-            const validQuestions = questions.filter(q => q.difficulty > 0 && q.difficulty < maxDifficulty);
-            console.log(validQuestions);
-            const minDifficultyThreshold = maxDifficulty * 0.7;
-            console.log(minDifficultyThreshold)
-            const selectedQuestions = validQuestions.filter(q => q.difficulty >= minDifficultyThreshold);
-            console.log(selectedQuestions);
-            if (selectedQuestions.length >= 4) {
-                return selectedQuestions.slice(0, 4); // Select the first 4 questions meeting the criteria
+        questions = questions
+                .filter(q => q.difficulty > 0)
+                .sort((a, b) => a.difficulty - b.difficulty);
+
+        let currentQuestionIndex = 0;
+        function getQuestions() {
+
+            // Check if there are enough questions left to return
+            if (currentQuestionIndex + 4 > questions.length) {
+                alert('Not enough questions available. Resetting questions.');
+                currentQuestionIndex = 0; // Reset if not enough questions to show next batch
             }
-            maxDifficulty +=5
-            return selectQuestionsBySimilarDifficulty(); // Return an empty array if not enough questions meet the criteria
+
+            const selectedQuestions = questions.slice(currentQuestionIndex, currentQuestionIndex + 4);
+            currentQuestionIndex += 4; // Update the index to the next set of questions
+            return selectedQuestions;
         }
 
         async function loadTriviaQuestions() {
-            const triviaQuestions = selectQuestionsBySimilarDifficulty();
+            const triviaQuestions = getQuestions();
             displayQuestions(triviaQuestions);
-            maxDifficulty += 15;
         }
 
         function displayQuestions(triviaQuestions) {
