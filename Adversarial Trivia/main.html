@@ -9,7 +9,7 @@
             font-family: Arial, sans-serif;
             padding: 20px;
         }
-        button.question {
+        button.question, button.toggle {
             display: block;
             width: 100%;
             padding: 10px;
@@ -23,12 +23,13 @@
     <h1>Pick one that will Stump Them!</h1>
     <div id="questionsContainer"></div>
     <button class="question" onclick="loadTriviaQuestions()">Try To Refresh Questions (Database access has a cooldown)</button>
-
+    <button class="toggle" onclick="toggleDifficulty()">Toggle Requested Difficulty</button>
 
     <script>
+        let currentDifficulty = 'easy';
+
         async function fetchQuestions() {
-            const url = `https://opentdb.com/api.php?amount=4&type=boolean&difficulty=easy`;
-            //`https://opentdb.com/api.php?amount=10&type=boolean`;
+            const url = `https://opentdb.com/api.php?amount=4&type=boolean&difficulty=${currentDifficulty}`;
             try {
                 const response = await fetch(url);
                 const data = await response.json();
@@ -57,6 +58,14 @@
                 };
                 container.appendChild(questionButton);
             });
+        }
+
+        function toggleDifficulty() {
+            const difficulties = ['easy', 'medium', 'hard'];
+            let currentIndex = difficulties.indexOf(currentDifficulty);
+            currentIndex = (currentIndex + 1) % difficulties.length;
+            currentDifficulty = difficulties[currentIndex];
+            document.getElementById('difficultyDisplay').textContent = `Difficulty: ${currentDifficulty.charAt(0).toUpperCase() + currentDifficulty.slice(1)}`;
         }
 
         // Load the trivia questions initially

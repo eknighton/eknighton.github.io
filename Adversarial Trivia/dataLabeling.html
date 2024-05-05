@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Label Trivia Difficulty</title>
+</head>
+<body>
+    <h1>Label Trivia Question Difficulty</h1>
+    <div id="questionText"></div>
+    <button onclick="revealAnswer()">Reveal Answer</button>
+    <input type="number" id="difficultyRating" min="0" max="99" placeholder="Enter difficulty 0-99">
+    <!--Difficulty = % who don't know  -->
+    <button onclick="saveRating()">Save and Next</button>
+
+    <script>
+        let currentQuestionIndex = 0;
+        let questions = [];
+        let seenQuestions = new Set();  // Store identifiers of seen questions
+
+        async function fetchQuestions() {
+            const response = await fetch('https://opentdb.com/api.php?amount=10&type=boolean');
+            const data = await response.json();
+            const newQuestions = data.results.filter(q => {
+                const identifier = q.question + '|' + q.correct_answer; // Use question and answer as identifier
+                if (!seenQuestions.has(identifier)) {
+                    seenQuestions.add(identifier);
+                    return true;
+                }
+                return false;
+            });
+            questions = [...questions, ...newQuestions.map(q => ({...q, difficulty: undefined}))];
+            displayQuestion();
+        }
+
+        function displayQuestion() {
+            if (currentQuestionIndex < questions.length) {
+                const question = questions[currentQuestionIndex];
+                document.getElementById('questionText').innerText = question.question;
+            } else {
+                alert('No more questions. Refresh the page or fetch more.');
+            }
+        }
+
+        function revealAnswer() {
+            if (currentQuestionIndex < questions.length) {
+                const answer = questions[currentQuestionIndex].correct_answer;
+                alert(`The correct answer is: ${answer}`);
+            }
+        }
+
+        function saveRating() {
+            const rating = document.getElementById('difficultyRating').value;
+            if (rating) {
+                questions[currentQuestionIndex].difficulty = rating;
+                localStorage.setItem('labeledQuestions', JSON.stringify(questions));
+                currentQuestionIndex++;
+                document.getElementById('difficultyRating').value = ''; // Reset the input
+                if (currentQuestionIndex >= questions.length) {
+                    fetchQuestions(); // Fetch more questions automatically if at the end
+                } else {
+                    displayQuestion();
+                }
+            } else {
+                alert('Please enter a difficulty rating.');
+            }
+        }
+
+        fetchQuestions();
+    </script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stump Them</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        button.question, button.toggle {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pick one that will Stump Them!</h1>
+    <div id="questionsContainer"></div>
+    <button class="question" onclick="loadTriviaQuestions()">End Turn Turn</button>
+
+    <script>
+        let currentDifficulty = 'easy';
+        let maxDifficulty = 20;
+
+let questions = [
+    {"type":"boolean", "difficulty":80, "category":"Entertainment: Board Games", "question":"The board game Go has more possible legal positions than the number of atoms in the visible universe.", "correct_answer":"True", "incorrect_answers":["False"]},
+    {"type":"boolean", "difficulty":10, "category":"Entertainment: Music", "question":"Green Day's album 'American Idiot' is considered a 'punk rock opera.'", "correct_answer":"True", "incorrect_answers":["False"]},
+    {"type":"boolean", "difficulty":25, "category":"Vehicles", "question":"The majority of Subaru vehicles are made in China.", "correct_answer":"False", "incorrect_answers":["True"]},
+    {"type":"boolean", "difficulty":90, "category":"General Knowledge", "question":"Ping-Pong originated in England", "correct_answer":"True", "incorrect_answers":["False"]},
+    {"type":"boolean", "difficulty":99, "category":"Entertainment: Japanese Anime & Manga", "question":"The animated film 'Spirited Away' won the Academy Award for Best Animated Feature at the 75th Academy Awards in 2003.", "correct_answer":"True", "incorrect_answers":["False"]},
+    {"type":"boolean", "difficulty":0, "category":"General Knowledge", "question":"Sitting for more than three hours a day can cut two years off a person's life expectancy.", "correct_answer":"True", "incorrect_answers":["False"]},
+    {"type":"boolean", "difficulty":96, "category":"Vehicles", "question":"The term 'GTO' was originated by Ferrari?", "correct_answer":"True", "incorrect_answers":["False"]},
+    {"type":"boolean", "difficulty":1, "category":"Science & Nature", "question":"Psychology is the science of behavior and mind.", "correct_answer":"True", "incorrect_answers":["False"]},
+    {"type":"boolean", "difficulty":0, "category":"Entertainment: Video Games", "question":"In 'Team Fortress 2', the 'Bill's Hat' is a reference to the game 'Dota 2'.", "correct_answer":"False", "incorrect_answers":["True"]},
+    {"type":"boolean", "difficulty":98, "category":"Science: Computers", "question":"Time on Computers is measured via the EPOX System.", "correct_answer":"False", "incorrect_answers":["True"]},
+    {"type":"boolean", "difficulty":97, "category":"Entertainment: Japanese Anime & Manga", "question":"In the 'Kagerou Daze' series, Shintaro Kisaragi is prominently shown with the color red.", "correct_answer":"True", "incorrect_answers":["False"]},
+    {"type":"boolean", "difficulty":40, "category":"General Knowledge", "question":"On average, at least 1 person is killed by a drunk driver in the United States every hour.", "correct_answer":"True", "incorrect_answers":["False"]},
+    {"type":"boolean", "difficulty":15, "category":"History", "question":"Adolf Hitler was accepted into the Vienna Academy of Fine Arts.", "correct_answer":"False", "incorrect_answers":["True"]},
+    {"type":"boolean", "difficulty":35, "category":"Entertainment: Books", "question":"'Green Eggs and Ham' consists of only 50 different words.", "correct_answer":"True", "incorrect_answers":["False"]},
+    {"type":"boolean", "difficulty":20, "category":"Science & Nature", "question":"Centripetal force is an apparent force that acts outward on a body moving around a center, arising from the body's inertia.", "correct_answer":"False", "incorrect_answers":["True"]},
+    {"type":"boolean", "difficulty":92, "category":"History", "question":"Adolf Hitler was a German soldier in World War I.", "correct_answer":"True", "incorrect_answers":["False"]},
+    {"type":"boolean", "difficulty":0, "category":"Science: Gadgets", "question":"The Western Electric Model 500 telephone uses tone dialing to dial phone numbers.", "correct_answer":"False", "incorrect_answers":["True"]},
+    {"type":"boolean", "difficulty":80, "category":"Science: Computers", "question":"MacOS is based on Linux.", "correct_answer":"False", "incorrect_answers":["True"]},
+    {"type":"boolean", "difficulty":94, "category":"Animals", "question":"Rabbits can see what's behind themselves without turning their heads.", "correct_answer":"True", "incorrect_answers":["False"]},
+    {"type":"boolean", "difficulty":90, "category":"Science & Nature", "question":"The planet Mars has two moons orbiting it.", "correct_answer":"True", "incorrect_answers":["False"]},
+    {"type":"boolean", "difficulty":0, "category":"Entertainment: Comics", "question":"The 'Pepe' meme originated from a comic drawn by Matt Furie called 'Boy's Club'?", "correct_answer":"True", "incorrect_answers":["False"]},
+    {"type":"boolean", "difficulty":97, "category":"Entertainment: Music", "question":"'Twenty One Pilots' made the song 'The Motion' featuring Sampha.", "correct_answer":"False", "incorrect_answers":["True"]},
+    {"type":"boolean", "difficulty":0, "category":"General Knowledge", "question":"There are 86400 seconds in a day.", "correct_answer":"True", "incorrect_answers":["False"]},
+    {"type":"boolean", "difficulty":14, "category":"Entertainment: Television", "question":"In 'Star Trek', Klingons are aliens.", "correct_answer":"True", "incorrect_answers":["False"]},
+    {"type":"boolean", "difficulty":96, "category":"Entertainment: Video Games", "question":"In the Monster Hunter Series, it is possible to capture Elder Dragons.", "correct_answer":"False", "incorrect_answers":["True"]},
+    {"type":"boolean", "difficulty":16, "category":"General Knowledge", "question":"When you cry in space, your tears stick to your face.", "correct_answer":"True", "incorrect_answers":["False"]},
+    {"type":"boolean", "difficulty":94, "category":"Entertainment: Video Games", "question":"Activision created Battlefield 1.", "correct_answer":"False", "incorrect_answers":["True"]},
+    {"type":"boolean", "difficulty":99, "category":"Politics", "question":"Helen Clark was the 37th Prime Minister of Australia.", "correct_answer":"False", "incorrect_answers":["True"]},
+    {"type":"boolean", "difficulty":95, "category":"Entertainment: Music", "question":"Daft Punk originated in France.", "correct_answer":"True", "incorrect_answers":["False"]},
+    {"type":"boolean", "difficulty":96, "category":"Entertainment: Video Games", "question":"In 'Starbound', the track played by the Decorated Music Box is named 'Atlas'.", "correct_answer":"True", "incorrect_answers":["False"]}
+];
+
+        function selectQuestionsBySimilarDifficulty() {
+            const validQuestions = questions.filter(q => q.difficulty > 0 && q.difficulty < maxDifficulty);
+            console.log(validQuestions);
+            const minDifficultyThreshold = maxDifficulty * 0.7;
+            console.log(minDifficultyThreshold)
+            const selectedQuestions = validQuestions.filter(q => q.difficulty >= minDifficultyThreshold);
+            console.log(selectedQuestions);
+            if (selectedQuestions.length >= 4) {
+                return selectedQuestions.slice(0, 4); // Select the first 4 questions meeting the criteria
+            }
+            maxDifficulty +=5
+            return selectQuestionsBySimilarDifficulty(); // Return an empty array if not enough questions meet the criteria
+        }
+
+        async function loadTriviaQuestions() {
+            const triviaQuestions = selectQuestionsBySimilarDifficulty();
+            displayQuestions(triviaQuestions);
+            maxDifficulty += 15;
+        }
+
+        function displayQuestions(triviaQuestions) {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = ''; // Clear previous results
+
+            triviaQuestions.forEach((question, index) => {
+                const questionButton = document.createElement('button');
+                questionButton.className = 'question';
+                questionButton.textContent = `Question ${index + 1}: ${question.question}`;
+                questionButton.onclick = function() {
+                    alert(`Ask them whether the statement is true.\nIf they didn't know the statement was ${question.correct_answer}, you win!\n\nIf they got it right, it is their turn to pick a question for you!\nPress 'Space' to generate the next list.`);
+                };
+                container.appendChild(questionButton);
+            });
+        }
+
+        // Load the trivia questions initially
+        window.alert("Pick one true/false question to ask your opponent!\nRefresh the page to get a new list.")
+        loadTriviaQuestions();
+    </script>
+</body>
+</html>
