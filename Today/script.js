@@ -59,6 +59,9 @@ document.addEventListener("DOMContentLoaded", function() {
         "When did you feel love today?",
         "What inconvenienced you today?",
         "What did you criticize today?",
+        "What did you riddicule today?",
+        "What did you realize today?",
+        "What passions of your's got stronger today?",
 
 
         //Acheivement Pack
