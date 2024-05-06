@@ -53,6 +53,10 @@ document.addEventListener("DOMContentLoaded", function() {
         "What did you get exactly right today?",
         "What talents did you use today?",
         "What did you do masterfully today?",
+        "What were you confident of today?",
+        "What didn't bother you today?",
+        "When today did you take a step forward, when you should have taken a step back?",
+        "When did you feel love today?",
 
 
         //Acheivement Pack
