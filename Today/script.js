@@ -45,6 +45,15 @@ document.addEventListener("DOMContentLoaded", function() {
         "What's something you made today?",
         "What's somethign you designed today?",
         "What's something you fixed today?",
+        "What today was dangerous?",
+        "What opportunities did you have to make new friends?",
+        "How did you benefit today from humanity's collected knowledge?",
+        "When were you graceful today?",
+        "What did you do today that you're proud of?",
+        "What did you get exactly right today?",
+        "What talents did you use today?",
+        "What did you do masterfully today?",
+
 
         //Acheivement Pack
 
