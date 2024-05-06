@@ -57,6 +57,8 @@ document.addEventListener("DOMContentLoaded", function() {
         "What didn't bother you today?",
         "When today did you take a step forward, when you should have taken a step back?",
         "When did you feel love today?",
+        "What inconvenienced you today?",
+        "What did you criticize today?",
 
 
         //Acheivement Pack
