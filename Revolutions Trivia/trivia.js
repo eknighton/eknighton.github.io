@@ -2,7 +2,7 @@ let questionsPool = [];
 let selectedQuestions = []; // Store selected questions globally
 
 
-window.alert("A 3+ player trivia game.\nGet a notepad to keep score.\nPlayers can only make one answer attempt each round.");
+window.alert("A 3+ player trivia game.\nGet a notepad to keep score.\nPlay on one device, pass device at end of turn.\nPlayers can only make one answer attempt each round.");
 async function fetchQuestions() {
     const response = await fetch('https://opentdb.com/api.php?amount=100&type=multiple&difficulty=easy');
     const data = await response.json();
@@ -32,7 +32,7 @@ function drawQuestions() {
     document.getElementById("question-area").style.display = "block";
     document.getElementById("draw-button").style.display = "none";
     document.getElementById("end-turn-button").style.display = "block";
-    document.getElementById("prompt").innerText = "Pick a question. You get a point if someone gets it right, but beware- whoever gets it right will also get a point!";
+    document.getElementById("prompt").innerText = "Pick a question to ask the others. You get a point if at least one of them gets it right, but beware- whichever one gets it right will also get a point!";
 
 }
 
