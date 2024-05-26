@@ -4,10 +4,8 @@ const columns = ['a', 'b', 'c'];
 const rowMap = shuffleArray([...rows]);
 const columnMap = shuffleArray([...columns]);
 let currentPlayer = 'X';
-document.getElementById('row').value = '';
-document.getElementById('column').value = '';
-
-window.alert("Specify a row and a column to place your piece.\nLook out, the names of each row and column have been randomly shuffled!");
+let selectedRow = '';
+let selectedColumn = '';
 
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -23,16 +21,40 @@ function getCellIndex(row, column) {
     return rowIndex * 3 + columnIndex;
 }
 
+function setRow(row) {
+    selectedRow = row;
+    highlightButton('row', row);
+    updatePlaceButtonState();
+}
+
+function setColumn(column) {
+    selectedColumn = column;
+    highlightButton('column', column);
+    updatePlaceButtonState();
+}
+
+function highlightButton(type, value) {
+    const buttons = document.querySelectorAll(`#${type}-buttons button`);
+    buttons.forEach(button => {
+        if (button.textContent.toLowerCase() === value.toLowerCase()) {
+            button.classList.add('selected');
+        } else {
+            button.classList.remove('selected');
+        }
+    });
+}
+
+function updatePlaceButtonState() {
+    document.getElementById('place-button').disabled = !selectedRow || !selectedColumn;
+}
+
 function makeMove() {
-    const row = document.getElementById('row').value;
-    const column = document.getElementById('column').value;
-    
-    if (!rows.includes(row) || !columns.includes(column)) {
-        alert('Invalid input');
+    if (!selectedRow || !selectedColumn) {
+        alert('Please select both row and column');
         return;
     }
-    
-    const cellIndex = getCellIndex(row, column);
+
+    const cellIndex = getCellIndex(selectedRow, selectedColumn);
     if (board[cellIndex] !== '') {
         alert('Cell already occupied');
         return;
@@ -42,24 +64,12 @@ function makeMove() {
     document.getElementById(`cell-${cellIndex}`).textContent = currentPlayer;
 
     currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-
-    // Clear input boxes
-    document.getElementById('row').value = '';
-    document.getElementById('column').value = '';
-}
-
-function checkWin() {
-    const winPatterns = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8],
-        [0, 3, 6], [1, 4, 7], [2, 5, 8],
-        [0, 4, 8], [2, 4, 6]
-    ];
-
-    for (const pattern of winPatterns) {
-        const [a, b, c] = pattern;
-        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-            return true;
-        }
-    }
-    return false;
+    
+    // Reset selected row and column
+    selectedRow = '';
+    selectedColumn = '';
+    updatePlaceButtonState();
+    
+    // Remove highlight from buttons
+    document.querySelectorAll('button.selected').forEach(button => button.classList.remove('selected'));
 }

@@ -19,12 +19,20 @@
             <div class="cell" id="cell-7"></div>
             <div class="cell" id="cell-8"></div>
         </div>
-        <div id="input">
-            <label for="row">Row (1,2,3): </label>
-            <input type="text" id="row" maxlength="1">
-            <label for="column">Column (a,b,c): </label>
-            <input type="text" id="column" maxlength="1">
-            <button onclick="makeMove()">Place</button>
+        <div id="controls">
+            <div id="row-buttons">
+                <label>Row: </label>
+                <button onclick="setRow('1')">1</button>
+                <button onclick="setRow('2')">2</button>
+                <button onclick="setRow('3')">3</button>
+            </div>
+            <div id="column-buttons">
+                <label>Column: </label>
+                <button onclick="setColumn('a')">A</button>
+                <button onclick="setColumn('b')">B</button>
+                <button onclick="setColumn('c')">C</button>
+            </div>
+            <button id="place-button" onclick="makeMove()">Place</button>
         </div>
     </div>
     <script src="script.js"></script>
