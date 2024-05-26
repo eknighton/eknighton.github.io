@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivia Game</title>
+    <style>
+        button {
+            display: block; /* Ensures each button is on a new line */
+            width: 100%; /* Makes each button take the full width */
+            margin: 10px 0; /* Adds space between buttons */
+        }
+    </style>
+</head>
+<body>
+    <div id="prompt">Pick a player to track scores! Then, it's your turn to draw some questions!</div>
+    <div id="question-area" style="display:none;">
+        <button id="question1" onclick="selectQuestion(1)"></button>
+        <button id="question2" onclick="selectQuestion(2)"></button>
+        <button id="question3" onclick="selectQuestion(3)"></button>
+        <button id="question4" onclick="selectQuestion(4)"></button>
+    </div>
+    <button id="draw-button" onclick="drawQuestions()">Draw Questions</button>
+    <button id="end-turn-button" style="display:none;" onclick="endTurn()">End Turn</button>
+    <script src="trivia.js"></script>
+</body>
+</html>
