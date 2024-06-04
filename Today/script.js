@@ -112,3 +112,5 @@ document.addEventListener("DOMContentLoaded", function() {
     // Initial quote display
     displayNextQuote();
 });
+
+

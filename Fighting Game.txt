@@ -1,0 +1,26 @@
+Fighting Game
+
+
+Melee focuses on using enemies against eachother- deflecting attacks, baiting & dodging, and repositing enemies with kicks, grabs, throws.
+
+Additionally, exposure to magic can enable element specific ultimates.
+
+
+Fire Ultimate:
+Fire allows you to enter a rage where you build up heat. Heat decreases over time, and damages you while also improving your damage, power, and speed.
+Additionally, it replaces kicks with 'meteor' self-launch attacks. It also adds a flame cannon attack.
+
+Lightning Ultimate:
+While active, your actions become super-fast, and have shorter cooldowns. Your attacks become quicker, and combo chains longer / more complex.
+Block is replaced with a lightning bolt attack that stuns enemies, potentially causing them to misfire.
+
+Stealth Ultimate:
+Block is replaced with invisibility, and grab is replaces with throwing smoke grenades.
+
+Water Ultimate:
+Actions can now interupt themselves, ex. attack can interrupt attack, resulting in unique effects.
+
+
+
+
+
