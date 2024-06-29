@@ -1,0 +1,9 @@
+#grid {
+    display: grid;
+    gap: 2px; /* space between cells */
+}
+
+.cell {
+    width: 50px; /* width of each cell */
+    height: 50px; /* height of each cell */
+}
