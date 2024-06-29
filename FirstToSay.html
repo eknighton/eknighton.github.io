@@ -44,12 +44,12 @@
             number += Math.floor(Math.random() * 10); // Generate each digit
         }
 
-        // Format the number in 4-digit chunks
+        // Format the number in 3-digit chunks
         let formattedNumber = '';
-        for (let i = 0; i < number.length; i += 4) {
-            formattedNumber += number.substring(i, i + 4) + ' ';
+        for (let i = 0; i < number.length; i += 3) {
+            formattedNumber += number.substring(i, i + 3) + ',';
         }
-
+        formattedNumber = formattedNumber.substring(0,formattedNumber.length-1)
         return formattedNumber.trim();
     }
 
