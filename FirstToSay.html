@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Say A Number First</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f0f0f0;
+    }
+    #randomNumber {
+        font-size: 24px;
+        padding: 20px;
+        background: white;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+    }
+    #container {
+        text-align: center;
+        background: white;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+    }
+    #title {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+</style>
+</head>
+<body>
+<div id="container">
+    <div id="title">I was probably the first human to say this number:</div>
+    <div id="randomNumber"></div>
+</div>
+<script>
+    function generateRandomNumber() {
+        let number = '';
+        for (let i = 0; i < 30; i++) {
+            number += Math.floor(Math.random() * 10); // Generate each digit
+        }
+
+        // Format the number in 4-digit chunks
+        let formattedNumber = '';
+        for (let i = 0; i < number.length; i += 4) {
+            formattedNumber += number.substring(i, i + 4) + ' ';
+        }
+
+        return formattedNumber.trim();
+    }
+
+    document.getElementById('randomNumber').textContent = generateRandomNumber();
+</script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+Dungeon-crawl rogue-like where rooms contain puzzles, not enemies. Manage resources by discovering alternative solutions with distinct costs. Use rare items, and discover a hidden character. Will your secret broadcasts be answered?
+
+
+
+Dungeon-crawl rogue-like where rooms contain puzzles, not enemies. Each puzzle has numerous solutions, and the solution you choose to use affects your resources going forward. Manage resources, find rare items, and discover new solutions. Compete for time on Daily Runs. 
+
+
+Dungeon-crawl rogue-like where rooms contain puzzles, not enemies. Puzzles have many solutions, each costing different tools. Manage your resources, use rare items, and discover new solutions. Blow stuff up! Will your covert broadcasts be answered?
+
+Dungeon-crawl rogue-like where rooms contain puzzles, not enemies. Discover alternative solutions, that consume different tools. Manage you resources, use rare tools, and blow stuff up. Will your covert broadcasts be answered?
