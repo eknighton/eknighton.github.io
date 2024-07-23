@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<htmL lang="en" style="font-size: 64px;">
+<head>
+<meta charset="UTF-8">
+<title>
+Aware 2
+</title>
+  <style>
+    .number-pad-button {
+      width: 50px;
+      height: 50px;
+      font-size: 20px;
+      margin: 5px;
+    }
+    .num {
+    	overflow-wrap: break-word;
+    }
+    @keyframes flicker {
+    	0%, 59%, 100% {opacity: 1;}
+    	60%, 99% {opacity: 1;}
+    }
+
+    .flicker-element {
+    	animation: flicker 1s infinite;
+    }
+  </style>
+
+</head>
+
+<body>
+	
+	<div id="diff" align="center"></div>
+	<div id="trials" align="center">Trial 1 of 14</div>
+	<div id="score" align="center">Score: 0</div>
+	<p></p>
+	<p></p>
+	<div id="pos" align="center" style="font-family: 'Courier New', Courier, monospace;">_____</div>
+  <div id="num" align="center" style="font-family: 'Courier New', Courier, monospace;">69420</div>
+	<div id="digis" align="center"></div>
+	<p></p>
+	<p></p>
+	<div id="spd" align="center">
+		<input type="text" id="userInput" align="center">
+	</div>
+	
+	
+</body>
+<script>
+
+
+	// We will simplify it to single digit? with time delay
+
+	var difficulty = 12;
+	var round = 1;
+	var speed = 2500;
+	var spacing = 4;
+
+	var seq = null;
+
+	var count = 1;
+	var gotten = 0;
+	var number = null;
+	var numLen = null;
+	var answer = null;
+
+	var timeoutID = null;
+
+
+	var modeFlag = "none";
+	var score = 0;
+
+	window.alert("You will be shown an alphanumeric code for 2s. \nYou'll then be shown a random position, and be asked which character was at that position in the code.\nThis repeats 10 times.");
+
+	startRound();
+
+	document.addEventListener('keydown', function(event){
+		keyPress(event.key);
+	});
+
+	function keyPress(key){
+		userInput.value = '';
+		if (modeFlag != "guess"){
+			if (key.toLowerCase() == " "){
+				clearTimeout(timeoutID);
+				return test();
+			}
+			userInput.value = '';
+			return;
+		}
+		if (key.toLowerCase() == " "){
+			return;
+		}
+
+		lowKey = key.toLowerCase();
+		modeFlag = "none";
+		if (lowKey == answer.toLowerCase()){ //Nums are 48 thrru 57
+			score = score + 10
+			window.alert("Correct!");
+		} else{
+			window.alert("Wrong!");
+			//window.alert("You said " +lowKey+ ". The answer was " + answer.toLowerCase() + " The code was " + number);
+		}
+		difficulty=difficulty;
+		round += 1;
+		if (round < 11){
+				startRound();
+		}
+		else{
+			document.getElementById("score").innerText= "Score: " + score;
+			setTimeout(()=>{window.alert("You finished the game!\nYour score was: " + score + " out of 100!")}, 100);
+		}
+	}
+
+
+	function startRound(){
+		userInput.value = '';
+		speed = 2000
+		number = alphaRandom(difficulty);
+		//console.log(number);
+		numLen = number.length;;
+		answer = null;
+		document.getElementById("num").innerHTML = addSpaceEveryN(number, spacing);
+		document.getElementById("num").classList.add("flicker-element");
+		document.getElementById('pos').innerText = addSpaceEveryN(blanked(numLen), spacing);
+	
+		seq = sequence(numLen);
+		timeoutID = setTimeout(test, speed);
+		//document.getElementById("diff").innerText= "Difficulty= " + difficulty;
+		document.getElementById("score").innerText= "Score: " + score;
+		document.getElementById("trials").innerText = "Trial " + (round) + " of 20.";
+		//document.getElementById("spd").innerText= "Time= " + speed/1000+"s";
+		//document.getElementById("digis").innerText= "Digits= " + count;
+	}
+
+	function test(){
+				document.getElementById("num").classList.remove("flicker-element");
+		userInput.value = '';
+		//console.log ("testing. numlen: "+numLen+" seq.length: "+seq.length+" count: "+count);
+		if (numLen - seq.length >= count) {
+			//difficulty = difficulty+
+			startRound();
+			return;
+		}
+		var index  = seq.shift();
+		index = index-1;
+		answer = number[index];
+		console.log(answer)
+		document.getElementById('num').innerText = addSpaceEveryN(hidden(numLen), spacing);
+		document.getElementById('pos').innerText = addSpaceEveryN(blanked(numLen), spacing);
+		setTimeout(() => {document.getElementById('num').innerHTML = addSpaceEveryN(blank(numLen, index), spacing)}, 100);
+		modeFlag = "guess";
+	}
+
+
+
+	function blank(length, underscoreIndex) {
+	  if (underscoreIndex < 0 || underscoreIndex >= length) {
+	    console.error("Invalid underscore index");
+	    return null;
+	  }
+
+	  let resultString = '';
+	  for (let i = 0; i < length; i++) {
+	    if (i === underscoreIndex) {
+	      resultString += '_';
+	    } else {
+	      resultString += '#';
+	    }
+	  }
+
+	  return resultString;
+	}
+
+	function hidden(length) {
+
+	  let resultString = '';
+	  for (let i = 0; i < length; i++) {
+
+	      resultString += '#';
+	  
+	  }
+
+	  return resultString;
+	}
+
+	function blanked(length) {
+
+	  let resultString = '';
+	  for (let i = 0; i < length; i++) {
+
+	      resultString += '.';
+	  
+	  }
+
+	  return resultString;
+	}
+
+	function sequence(n) {
+	  // Create an array with numbers from 1 to n
+	  let array = Array.from({ length: n }, (_, index) => index + 1);
+
+	  // Fisher-Yates (Knuth) shuffle algorithm
+	  for (let i = array.length - 1; i > 0; i--) {
+	    const j = Math.floor(Math.random() * (i + 1));
+	    [array[i], array[j]] = [array[j], array[i]];
+	  }
+
+	  return array;
+	}
+
+
+	function bigRandom(digits) {
+  let result = '';
+  for (let i = 0; i < digits; i++) {
+    result += Math.floor(Math.random() * 10);
+  }
+  return (result);
+}
+
+
+function alphaRandom(length) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';//'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let result = '';
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    result += characters.charAt(randomIndex);
+  }
+
+  return result;
+}
+
+function addSpaceEveryN(str, N) {
+    let result = '';
+    for (let i = 0; i < str.length; i++) {
+        result += str.charAt(i);
+        if ((i + 1) % N === 0 && i + 1 !== str.length) {
+            result += ' ';
+        }
+    }
+    return result;
+}
+
+
+
+</script>
+</htmL>
+
+
