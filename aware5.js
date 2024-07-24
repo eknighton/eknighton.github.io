@@ -100,7 +100,6 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 alert('Incorrect!');
             }
-            document.getElementById('score').textContent = score;
             if (currentTrial < K) {
                 startTrial();
             } else {
