@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentTrial = 0;
     let score = 0;
     const S = 400; // Delay time in milliseconds before showing the target
-    const gridSize = 200; // Total squares in the grid
+    const gridSize = 192; // Total squares in the grid
     let trialStartTime = 0;
     let totalTime = 0;
     let startX, startY, endX, endY;

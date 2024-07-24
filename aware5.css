@@ -1,0 +1,20 @@
+#grid {
+    display: grid;
+    grid-template-columns: repeat(12, 50px); /* Change the number for a different grid size */
+    gap: 5px;
+}
+
+#grid div {
+    width: 50px;
+    height: 50px;
+    background-color: black;
+}
+
+#grid div.grey {
+    background-color: pink; /* Squares that are temporarily grey */
+}
+
+
+#scoreboard {
+    margin-bottom: 20px;
+}
