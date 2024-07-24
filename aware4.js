@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const K = 10; // Total number of trials
     let currentTrial = 0;
     let score = 0;
-    const S = 200; // Delay time in milliseconds before showing the target
+    const S = 400; // Delay time in milliseconds before showing the target
     const gridSize = 200; // Total squares in the grid
     let trialStartTime = 0;
     let totalTime = 0;
@@ -75,8 +75,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     const percentage = (score / K) * 100;
                     const averageTime = Math.trunc(totalTime / K);
-                    const performance = Math.trunc(((score - (K/2)) / (totalTime/(1000*K)))*100)
-                    alert(`Test completed. You got ${percentage}% correct. Average study time: ${averageTime.toFixed(2)} ms. Score: ${performance}`);
+                    var performance = Math.trunc(((score - (K/2)) / (totalTime/(1000*K)))*100)
+                    if (performance < 0) {
+                        performance = 0;
+                        alert(`Test completed. You got ${percentage}% correct. Average study time: ${averageTime.toFixed(2)} ms. Your score was below ${performance}, and therefore is not shown.`);
+                    } else {
+                         alert(`Test completed. You got ${percentage}% correct. Average study time: ${averageTime.toFixed(2)} ms. Score: ${performance}`);
+                    }
+                   
                     location.reload();
                 }
             }
