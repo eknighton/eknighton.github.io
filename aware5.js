@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let trialStartTime = 0;
     let totalTime = 0;
     let startX, startY, endX, endY;
+    let flag = true;
 
     alert('Tap to be tested on the current grid. Swipe right if the shown pink square was in the grid you studied, swipe left otherwise.');
 
@@ -21,6 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function startTrial() {
         currentTrial++;
+        flag = true;
         document.getElementById('trialNum').textContent = currentTrial;
         setupGrid();
 
@@ -59,14 +61,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const absDeltaX = Math.abs(deltaX);
         const absDeltaY = Math.abs(deltaY);
 
-        if (absDeltaX > absDeltaY) { // Horizontal movement
+        if (absDeltaX > absDeltaY && !flag) { // Horizontal movement
             if (deltaX > 30) { // Swipe right
                 evaluateResponse(true);
             } else if (deltaX < -30) { // Swipe left
                 evaluateResponse(false);
             }
         } else { // Vertical movement or tap
-            if (absDeltaX < 20 && absDeltaY < 20) { // Tap
+            if (absDeltaX < 20 && absDeltaY < 20 && flag) { // Tap
+                flag = false;
                 revealTarget();
             }
         }
