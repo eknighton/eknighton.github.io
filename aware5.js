@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         setTimeout(() => {
             const targetIndex = Math.floor(Math.random() * gridSize);
-            grid[targetIndex].classList.add('pink'); // Assume 'pink' class is defined
+            grid[targetIndex].classList.add('grey');
             grid[targetIndex].dataset.isTarget = 'true';
         }, S);
     }
