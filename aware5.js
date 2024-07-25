@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let startX, startY, endX, endY;
     let flag = true;
 
-    alert('Tap to be tested on the current grid. Swipe right if the shown pink square was in the grid you studied, swipe left otherwise.');
+    alert("This is a memory game!\n\nMemorize the grid, and tap it when you're ready.\nYou'll then be shown a pink cell. \nSwipe RIGHT if it was pink in the grid you studied, otherwise, swipe LEFT.");
+    // Tap to be tested on the current grid. Swipe right if the shown pink square was in the grid you studied, swipe left otherwise.");
 
     function setupGrid() {
         const grid = document.getElementById('grid');
@@ -110,13 +111,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function finalizeTest() {
         const percentage = (score / K) * 100;
-        const averageTime = Math.trunc(totalTime / K);
+        const averageTime = Math.trunc(totalTime / K)/1000;
         var performance = Math.trunc(((score - (K/2)) / (totalTime/(1000*K)))*100)
         if (performance < 0) {
             performance = 0;
-            alert(`Test completed. You got ${percentage}% correct. Average study time: ${averageTime.toFixed(2)} ms. Your score was below ${performance}, and therefore is not shown.`);
+            alert(`Test completed. You got ${percentage}% correct. Average study time: ${averageTime.toFixed(2)} s. Your score was below ${performance}, and therefore is not shown.`);
         } else {
-             alert(`Test completed. You got ${percentage}% correct. Average study time: ${averageTime.toFixed(2)} ms. Score: ${performance}`);
+             alert(`Test completed. You got ${percentage}% correct. Average study time: ${averageTime.toFixed(2)} s. Score: ${performance}`);
         }
         location.reload();
     }
