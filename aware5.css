@@ -1,11 +1,11 @@
 body {
-     background-color: lightgrey;
+     background-color: white;
 }
 
 #grid {
     display: grid;
     grid-template-columns: repeat(12, 30px); /* Change the number for a different grid size */
-    background-color: lightgrey;
+    background-color: white;
 }
 
 #grid div {
