@@ -26,6 +26,7 @@
 </head>
 <body>
     <h1>Word Shuffle Game</h1>
+    <div id="passageContainer"> </div>
     <div id="gameContainer"></div>
     <div id="wordBankContainer"></div>
 
@@ -33,6 +34,7 @@
     <script>
         let Level = [
              {
+                text : 'The periodic table, also known as the periodic table of the elements, is an ordered arrangement of the chemical elements into rows ("periods") and columns ("groups"). It is an icon of chemistry and is widely used in physics and other sciences. ',
                 words: [
                     "The", "periodic", "table", ",", "also", "known", "as", "the", "periodic", 
                     "table", "of", "the", "elements", ",", "is", "an", "ordered", "arrangement", 
@@ -66,7 +68,8 @@
                     [47, "sciences"]
                 ]
             },
-            {
+             {
+                text: "The quick brown fox jumps over the lazy dog, idiot",
                 words: ["The", "quick", "brown", "fox", "jumps", "over", "the", "lazy", "dog", ",", "idiot"],
                 replacements: [
                     [1, "brown"],
@@ -74,13 +77,10 @@
                     [4, "lazy"],
                     [7, "jumps"]
                 ]
-            },
-            {
-                words: ["Jumps", "over", "the", "lazy", "dog"],
-                replacements: [
-                    [3, "sleepy"]
-                ]
             }
+            
+           
+            
         ];
         let roundID = null;
         let roundData = []; // Used to track the text content and status of each button (0 = unaltered, 1 = altered, 2 = now a blank, 4 = corrected)
@@ -213,7 +213,15 @@
                     /*
                     * !!!!!!!
                     * Handle wordBank length being 0 here! (round win)
-                    */              
+                    */     
+
+                    if (wordBank.length == 0){
+
+                        const passage = document.getElementById('passageContainer');
+                        passage.innerHTML = passage.innerHTML + " " + Level[roundID].text;; // Clear Wordbank display
+                        startRound(roundID + 1);
+
+                    }        
                 }
 
             }
