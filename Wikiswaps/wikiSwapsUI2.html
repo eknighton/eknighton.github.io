@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Shuffle Game</title>
+    <style>
+        body{
+            font-size: 20px;
+        }
+        button {
+            margin: 0px;
+            padding: 0px;
+            background-color: transparent;
+            border: none;
+            color: inherit;
+            font-size: 20px;
+        }
+        .highlight {
+            background-color: lightblue;
+            color: black;
+        }
+        #gameContainer, #passageContainer {
+            white-space: pre-wrap;
+            font-size: 20px;
+        }
+        #wordBankContainer {
+            display: flex;  /* Enables flexbox layout */
+            flex-wrap: wrap;  /* Allows buttons to wrap to the next line */
+            gap: 10px;  /* Space between buttons */
+            white-space: normal; 
+            padding: 10px;  /* Padding inside the container */
+            font-size: inherit;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Word Shuffle Game</h1>
+    <div id="passageContainer"> </div>
+    <div id="gameContainer"></div>
+    <p><b>Word Bank</b></p>
+    <div id="wordBankContainer"></div>
+
+    <script src="roundProcessor.js"></script>
+    <script>
+        let Level = [
+            {
+                text: 'The periodic table, also known as the periodic table of the elements, is an ordered arrangement of the chemical elements into rows ("periods") and columns ("groups"). It is an icon of chemistry and is widely used in physics and other sciences. It is a depiction of the periodic law, which states that when the elements are arranged in order of their atomic numbers an approximate recurrence of their properties is evident. '
+            },
+            {
+                text: 'The table is divided into four roughly rectangular areas called blocks. Elements in the same group tend to show similar chemical characteristics. Vertical, horizontal, and diagonal trends characterize the periodic table. '
+            },
+            {
+                text: 'Metallic character increases going down a group and from right to left across a period. Nonmetallic character increases going from the bottom left of the periodic table to the top right. '
+            },
+            {
+                text: 'The first periodic table to become generally accepted was that of the Russian chemist Dmitri Mendeleev in 1869; he formulated the periodic law as a dependence of chemical properties on atomic mass. As not all elements were then known, there were gaps in his periodic table, and Mendeleev successfully used the periodic law to predict some properties of some of the missing elements. '
+            },
+            {
+                text: 'The periodic law was recognized as a fundamental discovery in the late 19th century. It was explained early in the 20th century, with the discovery of atomic numbers and associated pioneering work in quantum mechanics, both ideas serving to illuminate the internal structure of the atom. '
+            },
+            {
+                text: 'A recognizably modern form of the table was reached in 1945 with Glenn T. Seaborg\'s discovery that the actinides were in fact f-block rather than d-block elements. The periodic table and law are now a central and indispensable part of modern chemistry. '
+            },
+            {
+                text: 'The periodic table continues to evolve with the progress of science. In nature, only elements up to atomic number 94 exist; to go further, it was necessary to synthesize new elements in the laboratory. '
+            },
+            {
+                text: 'By 2010, the first 118 elements were known, thereby completing the first seven rows of the table; however, chemical characterization is still needed for the heaviest elements to confirm that their properties match their positions. '
+            },
+            {
+                text: 'New discoveries will extend the table beyond these seven rows, though it is not yet known how many more elements are possible; moreover, theoretical calculations suggest that this unknown region will not follow the patterns of the known part of the table. '
+            },
+            {
+                text: 'Some scientific discussion also continues regarding whether some elements are correctly positioned in today\'s table. Many alternative representations of the periodic law exist, and there is some discussion as to whether there is an optimal form of the periodic table.'
+            }
+        ];
+
+
+        let htmlReference = `
+<p>The <b>periodic table</b>, also known as the <b>periodic table of the elements</b>, is an ordered arrangement of the <a href="/wiki/Chemical_element" title="Chemical element">chemical elements</a> into rows ("<a href="/wiki/Period_(periodic_table)" title="Period (periodic table)">periods</a>") and columns ("<a href="/wiki/Group_(periodic_table)" title="Group (periodic table)">groups</a>"). It is an <a href="/wiki/Cultural_icon" title="Cultural icon">icon</a> of <a href="/wiki/Chemistry" title="Chemistry">chemistry</a> and is widely used in <a href="/wiki/Physics" title="Physics">physics</a> and other sciences. It is a depiction of the <a href="/wiki/Periodic_trends" title="Periodic trends">periodic law</a>, which states that when the elements are arranged in order of their <a href="/wiki/Atomic_number" title="Atomic number">atomic numbers</a> an approximate <a href="/wiki/Periodic_function" title="Periodic function">recurrence of their properties</a> is evident. The table is divided into four roughly rectangular areas called <a href="/wiki/Block_(periodic_table)" title="Block (periodic table)">blocks</a>. Elements in the same group tend to show similar chemical characteristics.</p>
+<p>Vertical, horizontal and diagonal <a href="/wiki/Periodic_trends" title="Periodic trends">trends</a> characterize the periodic table. <a href="/wiki/Metal" title="Metal">Metallic</a> character increases going down a group and from right to left across a period. <a href="/wiki/Nonmetal_(chemistry)" class="mw-redirect" title="Nonmetal (chemistry)">Nonmetallic</a> character increases going from the bottom left of the periodic table to the top right.</p>
+<p>The first periodic table to become generally accepted was that of the Russian chemist <a href="/wiki/Dmitri_Mendeleev" title="Dmitri Mendeleev">Dmitri Mendeleev</a> in 1869; he formulated the periodic law as a dependence of chemical properties on <a href="/wiki/Atomic_mass" title="Atomic mass">atomic mass</a>. As not all elements were then known, there were gaps in his periodic table, and Mendeleev successfully used the periodic law to <a href="/wiki/Mendeleev%27s_predicted_elements" title="Mendeleev's predicted elements">predict some properties of some of the missing elements</a>. The periodic law was recognized as a fundamental discovery in the late 19th century. It was explained early in the 20th century, with the discovery of <a href="/wiki/Atomic_number" title="Atomic number">atomic numbers</a> and associated pioneering work in <a href="/wiki/Quantum_mechanics" title="Quantum mechanics">quantum mechanics</a>, both ideas serving to illuminate the internal structure of the atom. A recognisably modern form of the table was reached in 1945 with <a href="/wiki/Glenn_T._Seaborg" title="Glenn T. Seaborg">Glenn T. Seaborg</a>'s discovery that the <a href="/wiki/Actinide" title="Actinide">actinides</a> were in fact f-block rather than d-block elements. The periodic table and law are now a central and indispensable part of modern chemistry.</p>
+<p>The periodic table continues to evolve with the progress of science. In nature, only elements up to atomic number 94 exist; to go further, it was necessary to <a href="/wiki/Synthetic_element" title="Synthetic element">synthesize</a> new elements in the laboratory. By 2010, the first 118 elements were known, thereby completing the first seven rows of the table; however, chemical characterization is still needed for the heaviest elements to confirm that their properties match their positions. New discoveries will extend the table <a href="/wiki/Extended_periodic_table" title="Extended periodic table">beyond these seven rows</a>, though it is not yet known how many more elements are possible; moreover, theoretical calculations suggest that this unknown region will not follow the patterns of the known part of the table. Some scientific discussion also continues regarding whether some elements are correctly positioned in today's table. Many <a href="/wiki/Alternative_periodic_tables" class="mw-redirect" title="Alternative periodic tables">alternative representations</a> of the periodic law exist, and there is some discussion as to whether there is an optimal form of the periodic table.</p>
+`;
+        let roundID = 0;
+        let roundData = []; 
+        let solution = [];
+        let passage = "";
+        let changeCount = 0;
+
+        let wordBank = [];
+        let corrected = 0;
+        let selectedGameIndex = null;
+        let selectedBankIndex = null;
+
+        function startRound(number) {
+
+            if (number >= Level.length){
+                 const gameContainer = document.getElementById('gameContainer');
+                gameContainer.innerHTML = htmlReference;
+                return;
+            }
+
+            roundID = number;
+            const roundDetails = Level[number];
+            const gameContainer = document.getElementById('gameContainer');
+            gameContainer.innerHTML = passage + '';
+
+            // This will process the text and html to get blocks marked as swapped
+            const data = processRound(roundDetails.text, htmlReference, ["periodic table"]); //We add a bonus concept
+            roundData  = data.start;
+            solution = data.solution;
+            changeCount = data.changed;
+
+            wordBank = [];
+            corrected = 0;
+            selectedGameIndex = null;
+            selectedBankIndex = null;
+
+            roundData.forEach((block, index) => {
+
+                    const button = document.createElement('button');
+                    button.textContent = block.text;
+                    button.onclick = () => handleGameWordClick(index, block.text, button);
+                    gameContainer.appendChild(button);
+
+                console.log(block);
+            });
+
+            updateWordbank();
+
+            if (changeCount == 0) {
+                startRound(number+1);
+            }
+        }
+
+
+    function handleGameWordClick(index, word, button) {
+
+        const blockData = roundData[index];
+
+        console.log("handling button click");
+
+        if (blockData.changed){
+            console.log("changed!")
+
+            if (blockData.discovered){
+                console.log("discovered!")
+                if (blockData.corrected){
+                    console.log("corrected!")
+                    return;
+                } else {
+                    const previouslySelectedButton = document.querySelector('#gameContainer button.highlight');
+                    if (previouslySelectedButton) {
+                        previouslySelectedButton.classList.remove('highlight');
+                    }
+
+                    selectedGameIndex = index;
+                    button.classList.add('highlight');
+                    checkForMatch();
+                }
+
+            } else {
+                wordBank.push(blockData.text);
+                button.textContent = '______'; 
+                blockData.discovered = true; // It is now a blank, update code
+                updateWordbank();
+
+                selectedBankIndex = null
+                let previouslySelectedButton = document.querySelector('#wordBankContainer button.highlight');
+                if (previouslySelectedButton) {
+                    previouslySelectedButton.classList.remove('highlight');
+                }
+
+                previouslySelectedButton = document.querySelector('#gameContainer button.highlight');
+                if (previouslySelectedButton) {
+                    previouslySelectedButton.classList.remove('highlight');
+                }
+
+                selectedGameIndex = index;          
+                button.classList.add('highlight');
+                }
+            }
+
+    }
+
+
+        function handleWordBankClick(word, index, wordButton) {
+
+            const previouslySelectedButton = document.querySelector('#wordBankContainer button.highlight');
+            if (previouslySelectedButton) {
+                previouslySelectedButton.classList.remove('highlight');
+            }
+
+            selectedBankIndex = index; // Set or update the selected word from the Wordbank
+            checkForMatch();
+            wordButton.classList.add('highlight');
+        }
+
+        function checkForMatch() {
+            console.log("Trying to check for match")
+            console.log(selectedGameIndex + " " + selectedBankIndex);
+            if (selectedGameIndex !== null && selectedBankIndex !== null) {
+
+
+                const originaltext = solution[selectedGameIndex].text;
+                const blocktext = wordBank[selectedBankIndex];
+
+
+                console.log("Checking for match" + blocktext + " " + originaltext);
+
+                if (blocktext === originaltext) {
+
+                    const gameButtons = document.querySelectorAll('#gameContainer button');
+                    gameButtons[selectedGameIndex].textContent = blocktext; // Restore the word at the selected index
+
+                    wordBank.splice(selectedBankIndex, 1); // Remove the word at the exact index in the Wordbank
+                    updateWordbank();
+
+                    roundData[selectedGameIndex].corrected = true;
+                    corrected+=1;
+
+                    selectedBankIndex = null; 
+                    selectedGameIndex = null; 
+
+                    let previouslySelectedButton = document.querySelector('#gameContainer button.highlight');
+                    if (previouslySelectedButton) {
+                        previouslySelectedButton.classList.remove('highlight');
+                    }
+
+                    previouslySelectedButton = document.querySelector('#wordBankContainer button.highlight');
+                    if (previouslySelectedButton) {
+                        previouslySelectedButton.classList.remove('highlight');
+                    } 
+
+                    /*
+                    * !!!!!!!
+                    * Handle wordBank length being 0 here! (round win pseudo)
+                    */     
+
+
+                    if (wordBank.length == 0 && corrected == changeCount){
+
+                        passage = passage + Level[roundID].text;; // Clear Wordbank display
+                        startRound(roundID + 1);
+
+                    }        
+                }
+
+            }
+        }
+
+        function updateWordbank() {
+            const bankContainer = document.getElementById('wordBankContainer');
+            bankContainer.innerHTML = ''; // Clear Wordbank display
+            wordBank.forEach((word, index) => {
+                const wordButton = document.createElement('button');
+                wordButton.textContent = word;
+                wordButton.onclick = () => handleWordBankClick(word, index, wordButton);
+                bankContainer.appendChild(wordButton);
+            });
+        }
+
+        window.onload = () => startRound(0); // Start the first round
+
+
+    </script>
+</body>
+</html>
+
+
+
+
+
