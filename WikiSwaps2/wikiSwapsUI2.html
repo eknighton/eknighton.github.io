@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Shuffle Game</title>
+    <style>
+        body{
+            font-size: 20px;
+        }
+        button {
+            margin: 0px;
+            padding: 0px;
+            background-color: transparent;
+            border: none;
+            color: inherit;
+            font-size: 20px;
+        }
+        .highlight {
+            background-color: lightblue;
+            color: black;
+        }
+        #gameContainer, #passageContainer {
+            white-space: pre-wrap;
+            font-size: 20px;
+        }
+
+        .passage {
+        padding-bottom: 20px; /* Add space below the passage */
+        font-style: italic; /* Example style to format the passage */
+        }
+        #wordBankContainer {
+            display: flex;  /* Enables flexbox layout */
+            flex-wrap: wrap;  /* Allows buttons to wrap to the next line */
+            gap: 10px;  /* Space between buttons */
+            white-space: normal; 
+            padding: 10px;  /* Padding inside the container */
+            font-size: inherit;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>WikiSwaps</h1>
+    <h3 id="passageTitle">Unknown Title</h3>
+    <div id="passageContainer"> </div>
+    <div id="gameContainer"></div>
+    <p><b>Word Bank</b></p>
+    <div id="wordBankContainer"></div>
+
+    <script src="getConcepts.js"></script>
+    <script src="roundProcessor.js"></script>
+    <script src="pageFetcher.js"></script>
+    <script src="tokenize.js"></script>
+    <script>
+        let roundTexts = [];
+        let roundHTMLs = ["!!! HTML not shown, parser not implemented !!!", "!!! HTML not shown, parser not implemented !!!", "!!! HTML not shown, parser not implemented !!!", "!!! HTML not shown, parser not implemented !!!", "!!! HTML not shown, parser not implemented !!!", "!!! HTML not shown, parser not implemented !!!", "!!! HTML not shown, parser not implemented !!!", "!!! HTML not shown, parser not implemented !!!", "!!! HTML not shown, parser not implemented !!!"];
+        let htmlReference = "";
+
+        let roundID = 0;
+        let roundData = []; 
+        let solution = [];
+        let passage = "";
+        let changeCount = 0;
+
+        let wordBank = [];
+        let corrected = 0;
+        let selectedGameIndex = null;
+        let selectedBankIndex = null;
+
+
+        let useRandomPage = false;
+
+        async function begin(){
+            var data;
+            if (useRandomPage) {
+                console.log("Seeking random page");
+                data = await getRandomPage();
+            } else {
+                //let options = ["Periodic_table", "DNA_nanotechnology", "Planar_transmission_line",];
+                let page = await getAFeaturedTitle()
+                console.log("Seeking Page: " + page);
+                data = await getPage(page);
+
+                document.getElementById('passageTitle').innerHTML = page;
+            }
+            roundTexts = tokenize(data.text);
+            htmlReference = data.html;
+
+            console.log(roundTexts);
+            console.log("Level is defined, starting round");
+
+            startRound(0);
+        }
+
+        function startRound(number) {
+
+            if (number >= roundTexts.length){
+                const gameContainer = document.getElementById('gameContainer');
+                gameContainer.innerHTML = htmlReference;
+                return;
+            }
+
+            roundID = number;
+            const roundText = roundTexts[number];
+            const gameContainer = document.getElementById('gameContainer');
+
+            gameContainer.innerHTML = `<div class="${passage ? 'passage' : ''}">${passage}</div><div class='spacer'></div>`;
+
+            console.log(roundText);
+
+            // This will process the text and html to get blocks marked as swapped
+            const data = processRound(roundText, htmlReference, ["Allahusnackbar"]); //We add a bonus concept
+            roundData  = data.start;
+            solution = data.solution;
+            changeCount = data.changed;
+
+            wordBank = [];
+            corrected = 0;
+            selectedGameIndex = null;
+            selectedBankIndex = null;
+            console.log("Processing Round Data!");
+
+            roundData.forEach((block, index) => {
+
+                    const span = document.createElement('span');
+                    span.textContent = block.text;
+                    span.onclick = () => handleGameWordClick(index, block.text, span);
+                    gameContainer.appendChild(span);
+
+                console.log(block);
+            });
+
+            updateWordbank();
+            console.log("Change Count: " + changeCount);
+            if (changeCount == 0) {
+                passage = passage + " " + roundTexts[roundID];
+                gameContainer.innerHTML = `<div class="${passage ? 'passage' : ''}">${passage}</div><div class='spacer'></div>`;
+                startRound(number+1);
+            }
+        }
+
+
+    let lastClickTime = 0;
+    function handleGameWordClick(index, word, button) {
+
+
+        const now = Date.now(); // Get the current timestamp in milliseconds
+
+        // Check if the last execution time was less than 2 seconds ago
+        if (now - lastClickTime < 700) {
+            console.log("Cooldown in effect. Please wait.");
+            return; // Exit the function if it's within the cooldown period
+        }
+
+        // Your function logic here
+        console.log("Function executed.");
+
+        // Update the last execution time
+        lastClickTime = now;
+
+
+        const blockData = roundData[index];
+
+        console.log("handling button click");
+
+        if (blockData.changed){
+            console.log("changed!")
+
+            if (blockData.discovered){
+                console.log("discovered!")
+                if (blockData.corrected){
+                    console.log("corrected!")
+                    return;
+                } else {
+                    const previouslySelectedButton = document.querySelector('#gameContainer span.highlight');
+                    if (previouslySelectedButton) {
+                        previouslySelectedButton.classList.remove('highlight');
+                    }
+
+                    selectedGameIndex = index;
+                    button.classList.add('highlight');
+                    checkForMatch();
+                }
+
+            } else {
+                wordBank.push(blockData.text);
+                button.textContent = '______'; 
+                blockData.discovered = true; // It is now a blank, update code
+                updateWordbank();
+
+                selectedBankIndex = null
+                let previouslySelectedButton = document.querySelector('#wordBankContainer span.highlight');
+                if (previouslySelectedButton) {
+                    previouslySelectedButton.classList.remove('highlight');
+                }
+
+                previouslySelectedButton = document.querySelector('#gameContainer span.highlight');
+                if (previouslySelectedButton) {
+                    previouslySelectedButton.classList.remove('highlight');
+                }
+
+                selectedGameIndex = index;          
+                button.classList.add('highlight');
+                }
+            }
+
+    }
+
+
+        function handleWordBankClick(word, index, wordButton) {
+
+            const previouslySelectedButton = document.querySelector('#wordBankContainer span.highlight');
+            if (previouslySelectedButton) {
+                previouslySelectedButton.classList.remove('highlight');
+            }
+
+            selectedBankIndex = index; // Set or update the selected word from the Wordbank
+            checkForMatch();
+            wordButton.classList.add('highlight');
+        }
+
+        function checkForMatch() {
+            console.log("Trying to check for match")
+            console.log(selectedGameIndex + " " + selectedBankIndex);
+            if (selectedGameIndex !== null && selectedBankIndex !== null) {
+
+
+                const originaltext = solution[selectedGameIndex].text;
+                const blocktext = wordBank[selectedBankIndex];
+
+
+                console.log("Checking for match" + blocktext + " " + originaltext);
+
+                if (blocktext === originaltext) {
+
+                    const gameButtons = document.querySelectorAll('#gameContainer span');
+                    gameButtons[selectedGameIndex].textContent = blocktext; // Restore the word at the selected index
+
+                    wordBank.splice(selectedBankIndex, 1); // Remove the word at the exact index in the Wordbank
+                    updateWordbank();
+
+                    roundData[selectedGameIndex].corrected = true;
+                    corrected+=1;
+
+                    selectedBankIndex = null; 
+                    selectedGameIndex = null; 
+
+                    let previouslySelectedButton = document.querySelector('#gameContainer span.highlight');
+                    if (previouslySelectedButton) {
+                        previouslySelectedButton.classList.remove('highlight');
+                    }
+
+                    previouslySelectedButton = document.querySelector('#wordBankContainer span.highlight');
+                    if (previouslySelectedButton) {
+                        previouslySelectedButton.classList.remove('highlight');
+                    } 
+
+                    /*
+                    * !!!!!!!
+                    * Handle wordBank length being 0 here! (round win pseudo)
+                    */     
+
+
+                    if (wordBank.length == 0 && corrected == changeCount){
+
+                        passage = passage + " " + roundTexts[roundID]; // Clear Wordbank display
+                        gameContainer.innerHTML = `<div class="${passage ? 'passage' : ''}">${passage}</div><div class='spacer'></div>`;
+                        startRound(roundID + 1);
+
+                    }        
+                }
+
+            }
+        }
+
+        function updateWordbank() {
+            const bankContainer = document.getElementById('wordBankContainer');
+            bankContainer.innerHTML = ''; // Clear Wordbank display
+            wordBank.forEach((word, index) => {
+                const wordButton = document.createElement('span');
+                wordButton.textContent = word;
+                wordButton.onclick = () => handleWordBankClick(word, index, wordButton);
+                bankContainer.appendChild(wordButton);
+            });
+        }
+
+        window.onload = () => begin();//startRound(0); // Start the first round
+
+
+    </script>
+</body>
+</html>
+
+
+
+
+

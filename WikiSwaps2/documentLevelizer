@@ -1,0 +1,29 @@
+/*
+	Document Level-izer
+
+	Takes in a wikipage identifier, outputs a level object.
+*/
+
+
+/*
+
+	Document Processing:
+	1. Break the document into atoms
+	2. Identify all concept words, and all their locations
+
+*/
+
+
+/*
+	Level object has rounds / atoms which have 
+*/
+
+
+
+
+let documentRef = chemistry;
+
+
+function analyzeDocument(){
+	
+}
