@@ -144,12 +144,14 @@
     let lastClickTime = 0;
     function handleGameWordClick(index, word, button) {
 
+        const blockData = roundData[index];
+
 
         const now = Date.now(); // Get the current timestamp in milliseconds
 
         // Check if the last execution time was less than 2 seconds ago
-        if (now - lastClickTime < 700) {
-            console.log("Cooldown in effect. Please wait.");
+        if (now - lastClickTime < 700 && !blockData.discovered && !blockData.corrected) {
+            alert("Cooldown in effect. Please wait.");
             return; // Exit the function if it's within the cooldown period
         }
 
@@ -160,7 +162,7 @@
         lastClickTime = now;
 
 
-        const blockData = roundData[index];
+      
 
         console.log("handling button click");
 

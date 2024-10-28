@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Shuffle Game</title>
+    <style>
+        button {
+            margin: 2px;
+            padding: 10px;
+            font-size: 15px;
+            background-color: transparent; /* Make the button background transparent */
+            border: none; /* Remove the border to make the button look like plain text */
+            color: inherit; /* Ensure the text color matches the surrounding text or specify a color */
+        }
+
+
+        .round-container {
+            padding: 20px;
+            border: 1px solid #ccc;
+            margin-top: 20px;
+        }
+        .highlight {
+          background-color: lightblue; /* Change this to your preferred highlight color */
+          color: black; /* Change text color if needed */
+         /* border: 2px solid orange; /* Optional: add a border to make the highlight more distinct */
+        }
+
+
+    </style>
+</head>
+<body>
+    <h1>Word Shuffle Game</h1>
+    <div id="passageContainer"> </div>
+    <div id="gameContainer"></div>
+    <p><b>Word Bank</b></p>
+    <div id="wordBankContainer"></div>
+
+  
+    <script>
+        let Level = [
+             {
+                text : 'The  <b>periodic table</b>, also known as the <b>periodic table of the elements</b>, is an ordered arrangement of the <a href="/wiki/Chemical_element" title="Chemical element">chemical elements</a> into rows ("<a href="/wiki/Period_(periodic_table)" title="Period (periodic table)">periods</a>") and columns ("<a href="/wiki/Group_(periodic_table)" title="Group (periodic table)">groups</a>"). It is an <a href="/wiki/Cultural_icon" title="Cultural icon">icon</a> of <a href="/wiki/Chemistry" title="Chemistry">chemistry</a> and is widely used in <a href="/wiki/Physics" title="Physics">physics</a> and other sciences.',
+                words: [
+                    "The", "periodic", "table", ",", "also", "known", "as", "the", "periodic", 
+                    "table", "of", "the", "elements", ",", "is", "an", "ordered", "arrangement", 
+                    "of", "the", "chemical", "elements", "into", "rows", "(\"", "periods", "\")", 
+                    "and", "columns", "(\"", "groups", "\")", ".", "It", "is", "an", "icon", "of", 
+                    "chemistry", "and", "is", "widely", "used", "in", "physics", "and", "other", "sciences", "."
+                ],
+                /* I did this by hand, so I made an unusedList with words and their locs, then shuffled the words*/
+                unusedList: [
+                    [1, "periodic"],
+                    [8, "periodic"],
+                    [12, "elements"],
+                    [20, "chemical"],
+                    [25, "periods"],
+                    [30, "groups"],
+                    [36, "icon"],
+                    [38, "chemistry"],
+                    [44, "physics"],
+                    [47, "sciences"]
+                ],
+                replacements: [
+                    [1, "chemistry"],
+                    [8, "periods"],
+                    [12, "physics"],
+                    [20, "groups"],
+                    [25, "periodic"],
+                    [30, "chemical"],
+                    [38, "periodic"],
+                    [44, "elements"],
+                ]
+            },
+             {
+                text: "The quick brown fox jumps over the lazy dog, idiot",
+                words: ["The", "quick", "brown", "fox", "jumps", "over", "the", "lazy", "dog", ",", "idiot"],
+                replacements: [
+                    [1, "brown"],
+                    [2, "quick"],
+                    [4, "lazy"],
+                    [7, "jumps"]
+                ]
+            },
+            {
+                text: 'The periodic table, also known as the periodic table of the elements, is an ordered arrangement of the chemical elements into rows ("periods") and columns ("groups"). It is an icon of chemistry and is widely used in physics and other sciences.',
+
+                html: 'The  <b>periodic table</b>, also known as the <b>periodic table of the elements</b>, is an ordered arrangement of the <a href="/wiki/Chemical_element" title="Chemical element">chemical elements</a> into rows ("<a href="/wiki/Period_(periodic_table)" title="Period (periodic table)">periods</a>") and columns ("<a href="/wiki/Group_(periodic_table)" title="Group (periodic table)">groups</a>"). It is an <a href="/wiki/Cultural_icon" title="Cultural icon">icon</a> of <a href="/wiki/Chemistry" title="Chemistry">chemistry</a> and is widely used in <a href="/wiki/Physics" title="Physics">physics</a> and other sciences.'
+            }
+            
+           
+            
+        ];
+        let roundID = null;
+        let roundData = []; // Used to track the text content and status of each button (0 = unaltered, 1 = altered, 2 = now a blank, 4 = corrected)
+        let solution = [];
+
+        
+        let wordBank = [];
+        let selectedGameIndex = null;
+        let selectedBankIndex = null;
+
+        function newLevel(){
+            /*
+            * Stub: Will be used set Level variable.
+            */
+        }
+
+        function startRound(number) {
+            roundID = number;
+            const roundDetails = Level[number]; // Get the round details from Level data
+            const gameContainer = document.getElementById('gameContainer');
+            gameContainer.innerHTML = ''; // Clear previous contents
+
+            roundData = []; // Reset the roundData for the new round
+
+            roundDetails.words.forEach((word, index) => {
+                const button = document.createElement('button');
+                const replacement = roundDetails.replacements.find(rep => rep[0] === index);
+                const isReplacement = replacement ? 1 : 0; // 1 if it's a replacement, 0 if it's the original word
+                const displayWord = replacement ? replacement[1] : word; // Use replacement word if exists, otherwise original word
+
+                // Store word data for the round
+                roundData.push({
+                    word: displayWord,
+                    code: isReplacement
+                });
+
+                button.textContent = displayWord; // Set the button text to the display word
+                button.onclick = () => handleGameWordClick(index, displayWord, button);
+                gameContainer.appendChild(button);
+            });
+
+            updateWordbank(); // Update the word bank based on the new round
+        }
+
+
+    function handleGameWordClick(index, word, button) {
+
+        const wordData = roundData[index];
+
+        if (wordData.code === 1) {  
+
+            wordBank.push(word);
+            button.textContent = '______'; 
+            wordData.code = 2; // It is now a blank, update code
+            updateWordbank();
+
+            selectedBankIndex = null
+            let previouslySelectedButton = document.querySelector('#wordBankContainer button.highlight');
+            if (previouslySelectedButton) {
+                previouslySelectedButton.classList.remove('highlight');
+            }
+
+            previouslySelectedButton = document.querySelector('#gameContainer button.highlight');
+            if (previouslySelectedButton) {
+                previouslySelectedButton.classList.remove('highlight');
+            }
+
+            selectedGameIndex = index;          
+            button.classList.add('highlight');
+
+        } else if (wordData.code === 2) {
+
+            const previouslySelectedButton = document.querySelector('#gameContainer button.highlight');
+            if (previouslySelectedButton) {
+                previouslySelectedButton.classList.remove('highlight');
+            }
+
+            selectedGameIndex = index;
+            button.classList.add('highlight');
+            checkForMatch();
+
+
+        }
+        // If the code is 0 or 4, ignore the click
+    }
+
+
+        function handleWordBankClick(word, index, wordButton) {
+
+            const previouslySelectedButton = document.querySelector('#wordBankContainer button.highlight');
+            if (previouslySelectedButton) {
+                previouslySelectedButton.classList.remove('highlight');
+            }
+
+            selectedBankIndex = index; // Set or update the selected word from the Wordbank
+            checkForMatch();
+            wordButton.classList.add('highlight');
+        }
+
+        function checkForMatch() {
+            console.log("Trying to check for match")
+            if (selectedGameIndex !== null && selectedBankIndex !== null) {
+
+
+                const word = wordBank[selectedBankIndex];
+                const originalWord = Level[roundID].words[selectedGameIndex];
+
+                console.log("Checking for match" + word + " " + originalWord);
+
+                if (word === originalWord) {
+
+                    const gameButtons = document.querySelectorAll('#gameContainer button');
+                    gameButtons[selectedGameIndex].textContent = word; // Restore the word at the selected index
+
+                    wordBank.splice(selectedBankIndex, 1); // Remove the word at the exact index in the Wordbank
+                    updateWordbank();
+
+                    roundData[selectedGameIndex].code = 4;
+
+                    selectedBankIndex = null; 
+                    selectedGameIndex = null; 
+
+                    let previouslySelectedButton = document.querySelector('#gameContainer button.highlight');
+                    if (previouslySelectedButton) {
+                        previouslySelectedButton.classList.remove('highlight');
+                    }
+
+                    previouslySelectedButton = document.querySelector('#wordBankContainer button.highlight');
+                    if (previouslySelectedButton) {
+                        previouslySelectedButton.classList.remove('highlight');
+                    } 
+
+                    /*
+                    * !!!!!!!
+                    * Handle wordBank length being 0 here! (round win)
+                    */     
+
+                    if (wordBank.length == 0){
+
+                        const passage = document.getElementById('passageContainer');
+                        passage.innerHTML = passage.innerHTML + " " + Level[roundID].text;; // Clear Wordbank display
+                        startRound(roundID + 1);
+
+                    }        
+                }
+
+            }
+        }
+
+        function updateWordbank() {
+            const bankContainer = document.getElementById('wordBankContainer');
+            bankContainer.innerHTML = ''; // Clear Wordbank display
+            wordBank.forEach((word, index) => {
+                const wordButton = document.createElement('button');
+                wordButton.textContent = word;
+                wordButton.onclick = () => handleWordBankClick(word, index, wordButton);
+                bankContainer.appendChild(wordButton);
+            });
+        }
+
+        window.onload = () => startRound(0); // Start the first round
+
+
+    </script>
+</body>
+</html>
+
+
+
+
+
