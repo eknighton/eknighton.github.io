@@ -42,11 +42,13 @@
 </head>
 <body>
     <h1>WikiSwaps</h1>
+    <input type="text" size=60 placeholder="Enter a page title manually here! Your progress will be reset." onkeypress="loadPageFromInput(this)"/> 
     <h3 id="passageTitle">Unknown Title</h3>
     <div id="passageContainer"> </div>
     <div id="gameContainer"></div>
     <p><b>Word Bank</b></p>
     <div id="wordBankContainer"></div>
+    <div id="progressBar"></div>
 
     <script src="getConcepts.js"></script>
     <script src="roundProcessor.js"></script>
@@ -67,7 +69,6 @@
         let corrected = 0;
         let selectedGameIndex = null;
         let selectedBankIndex = null;
-
 
         let useRandomPage = false;
 
@@ -92,6 +93,21 @@
 
             startRound(0);
         }
+
+        async function loadPageFromInput(pageTitleElement) {
+            if (event.key == 'Enter') {
+                console.log("Attempting to load page from input: " + pageTitleElement.value);
+                let data = await getPage(pageTitleElement.value);
+                document.getElementById('passageTitle').innerHTML = pageTitleElement.value;
+                roundTexts = tokenize(data.text);
+                htmlReference = data.html;
+                console.log(roundTexts);
+                console.log("Level is defined, starting round");
+                startRound(0);
+
+            }
+        }
+
 
         function startRound(number) {
 
@@ -131,13 +147,26 @@
                 console.log(block);
             });
 
+            const span = document.createElement('span');
+            span.textContent = "  Proceed >>";
+            span.onclick = () =>  {  
+                if (corrected == changeCount){
+                    passage = passage + " " + roundTexts[roundID];
+                    gameContainer.innerHTML = `<div class="${passage ? 'passage' : ''}">${passage}</div><div class='spacer'></div>`;
+                    startRound(number+1);
+                } else {
+                    alert("There are still more errors to find!");
+                }
+            };
+            gameContainer.appendChild(span);
+
+
+            const progressBar = document.getElementById('progressBar');
+            progressBar.innerHTML = "<i>" + Math.floor(roundID / roundTexts.length * 100) + "% complete<i>";
+
             updateWordbank();
             console.log("Change Count: " + changeCount);
-            if (changeCount == 0) {
-                passage = passage + " " + roundTexts[roundID];
-                gameContainer.innerHTML = `<div class="${passage ? 'passage' : ''}">${passage}</div><div class='spacer'></div>`;
-                startRound(number+1);
-            }
+
         }
 
 
@@ -265,10 +294,11 @@
 
 
                     if (wordBank.length == 0 && corrected == changeCount){
-
-                        passage = passage + " " + roundTexts[roundID]; // Clear Wordbank display
-                        gameContainer.innerHTML = `<div class="${passage ? 'passage' : ''}">${passage}</div><div class='spacer'></div>`;
-                        startRound(roundID + 1);
+                        /*
+                            passage = passage + " " + roundTexts[roundID]; // Clear Wordbank display
+                            gameContainer.innerHTML = `<div class="${passage ? 'passage' : ''}">${passage}</div><div class='spacer'></div>`;
+                            startRound(roundID + 1);
+                        */
 
                     }        
                 }
