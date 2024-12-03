@@ -1,9 +1,3 @@
-/**
- * Fetches text and HTML content of a Wikipedia page.
- * @param {string} pageTitle - The title of the Wikipedia page to fetch.
- */
-
-
 async function getAFeaturedTitle() {
     const endpoint = 'https://en.wikipedia.org/w/api.php';
     const url = new URL(endpoint);
@@ -32,6 +26,10 @@ async function getAFeaturedTitle() {
     }
 }
 
+/**
+ * Fetches text and HTML content of a Wikipedia page.
+ * @param {string} pageTitle - The title of the Wikipedia page to fetch.
+ */
 async function getPage(pageTitle) {
     const endpoint = 'https://en.wikipedia.org/w/api.php';
 
