@@ -85,9 +85,12 @@
 
                 document.getElementById('passageTitle').innerHTML = page;
             }
-            roundTexts = tokenize(data.text);
+            const sectionsToCut = ['See also', 'References', 'Notes', 'Reference notes', 'Selected recordings', 'External links'];
+            const trimmedText = trimAfterSections(data.text, sectionsToCut);
+            roundTexts = tokenize(trimmedText);
             htmlReference = data.html;
 
+            console.log(data.text);
             console.log(roundTexts);
             console.log("Level is defined, starting round");
 
