@@ -85,7 +85,7 @@
 
                 document.getElementById('passageTitle').innerHTML = page;
             }
-            const sectionsToCut = ['See also', 'References', 'Notes', 'Reference notes', 'Selected recordings', 'External links'];
+            const sectionsToCut = ['See also', 'References', 'Notes', 'Reference notes', 'Selected recordings', 'External links', 'Footnotes', 'Bibliography'];
             const trimmedText = trimAfterSections(data.text, sectionsToCut);
             roundTexts = tokenize(trimmedText);
             htmlReference = data.html;
