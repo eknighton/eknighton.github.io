@@ -19,3 +19,19 @@ function groupSentencesIntoBlocks(sentences) {
     }
     return blocks;
 }
+
+
+/**
+ * Trims text after specified section headers.
+ * @param {string} text - The Wikipedia page text to process.
+ * @param {string[]} sectionsToCut - Section titles to stop at (e.g., "See Also", "References").
+ * @returns {string} The trimmed text.
+ */
+
+function trimAfterSections(text, sectionsToCut) {
+    const sectionPattern = sectionsToCut
+        .map(section => `==\\s*${section}\\s*==`) // Match "== Section Name =="
+        .join('|');
+    const regex = new RegExp(`(${sectionPattern})[\\s\\S]*`, 'i'); // Case insensitive, match everything after
+    return text.replace(regex, '').trim();
+}

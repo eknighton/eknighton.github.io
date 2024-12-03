@@ -94,15 +94,35 @@ function createTextBlocks(text, occurrences) {
     let lastIndex = 0;
     const blocks = [];
     const sortedOccurrences = occurrences.sort((a, b) => a.index - b.index);
+    const exclusionList = [
+    	", ", 
+    	", and",
+    	" or ",
+    	"- ",
+    	"\n",
+    	"\n-",
+    	"\n*"
+    	];
 
     sortedOccurrences.forEach((occurrence, index) => {
-        // Text before the concept
-        if (occurrence.index > lastIndex) {
-            blocks.push({ text: text.substring(lastIndex, occurrence.index), type: 0 });
-        }
-        // The concept itself
-        blocks.push({ text: occurrence.text, type: 1 });
-        lastIndex = occurrence.index + occurrence.text.length;
+
+    	if (occurence.index > lastIndex) {
+
+	    	const substringBetween = text.substring(lastIndex, occurrence.index).trim();
+
+		    if (!exclusionList.includes(substringBetween)){
+
+				// Text before the concept
+		        blocks.push({ text: text.substring(lastIndex, occurrence.index), type: 0 });
+
+		        // The concept itself
+		        blocks.push({ text: occurrence.text, type: 1 });
+		        lastIndex = occurrence.index + occurrence.text.length;
+	    	}
+	    }
+
+    	
+
     });
 
     // Remaining text after the last concept
