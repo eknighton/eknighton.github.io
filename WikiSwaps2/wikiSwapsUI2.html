@@ -138,7 +138,7 @@
                 proceedSpan.onclick = () => {
                     if (corrected === changeCount) {
                         passage = passage + " " + roundTexts[roundID];
-                        gameContainer.innerHTML = `<div class="${passage ? 'passage' : ''}">${passage}</div><div class='spacer'></div>`;
+                        gameContainer.innerHTML = `<div id="passage" class="${passage ? 'passage' : ''}">${passage}</div><div class='spacer'></div>`;
                         startRound(roundID + 1);
                     } else {
                         alert("There are either more errors to find or unfilled blanks!");
@@ -181,7 +181,6 @@
         }
 
 
-        // Initialize the game state
         const gameState = loadGameState();
 
         // Assign loaded or default values
@@ -202,7 +201,6 @@
 
         let useRandomPage = gameState.useRandomPage;
 
-        // Restore HTML elements
         restoreHTMLElements(gameState);
 
 
@@ -237,15 +235,28 @@
 
         async function loadPageFromInput(pageTitleElement) {
             if (event.key == 'Enter') {
+
                 console.log("Attempting to load page from input: " + pageTitleElement.value);
-                let data = await getPage(pageTitleElement.value);
-                document.getElementById('passageTitle').innerHTML = pageTitleElement.value;
-                roundTexts = tokenize(data.text);
+
+                try {
+                    let data = await getPage(pageTitleElement.value);
+                 } catch {
+                    let page = await getAFeaturedTitle()
+                    console.log("Seeking Page: " + page);
+                    data = await getPage(page);
+                    console.log("Failed, loading random featured page.");
+                 }
+
+                document.getElementById('passageTitle').innerHTML = data.title;
+                document.getElementById('passage').innerHTML = '';
+                const sectionsToCut = ['See also', 'References', 'Notes', 'Reference notes', 'Selected recordings', 'External links', 'Footnotes', 'Bibliography'];
+                const trimmedText = trimAfterSections(data.text, sectionsToCut);
+                roundTexts = tokenize(trimmedText);
                 htmlReference = data.html;
+
                 console.log(roundTexts);
                 console.log("Level is defined, starting round");
                 startRound(0);
-
             }
         }
 
@@ -262,7 +273,7 @@
             const roundText = roundTexts[number];
             const gameContainer = document.getElementById('gameContainer');
 
-            gameContainer.innerHTML = `<div class="${passage ? 'passage' : ''}">${passage}</div><div class='spacer'></div>`;
+            gameContainer.innerHTML = `<div id="passage" class="${passage ? 'passage' : ''}">${passage}</div><div class='spacer'></div>`;
 
             console.log(roundText);
 
@@ -295,7 +306,7 @@
             span.onclick = () =>  {  //WARNING: Don't edit without changing restoreHTMLElements
                 if (corrected == changeCount){
                     passage = passage + " " + roundTexts[roundID];
-                    gameContainer.innerHTML = `<div class="${passage ? 'passage' : ''}">${passage}</div><div class='spacer'></div>`;
+                    gameContainer.innerHTML = `<div id="passage" class="${passage ? 'passage' : ''}">${passage}</div><div class='spacer'></div>`;
                     startRound(number+1);
                 } else {
                     alert("There more either errors to find or there are unfilled blanks!");
