@@ -54,24 +54,157 @@
     <script src="roundProcessor.js"></script>
     <script src="pageFetcher.js"></script>
     <script src="tokenize.js"></script>
-    
+
     <script>
-        let roundTexts = [];
-        let roundHTMLs = ["!!! HTML not shown, parser not implemented !!!", "!!! HTML not shown, parser not implemented !!!", "!!! HTML not shown, parser not implemented !!!", "!!! HTML not shown, parser not implemented !!!", "!!! HTML not shown, parser not implemented !!!", "!!! HTML not shown, parser not implemented !!!", "!!! HTML not shown, parser not implemented !!!", "!!! HTML not shown, parser not implemented !!!", "!!! HTML not shown, parser not implemented !!!"];
-        let htmlReference = "";
+        // Default values
+        let defaultRoundTexts = [];
+        let defaultRoundHTMLs = Array(10).fill("!!! HTML not shown, parser not implemented !!!");
+        let defaultHtmlReference = "";
 
-        let roundID = 0;
-        let roundData = []; 
-        let solution = [];
-        let passage = "";
-        let changeCount = 0;
+        let defaultRoundID = -1;
+        let defaultRoundData = [];
+        let defaultSolution = [];
+        let defaultPassage = "";
+        let defaultChangeCount = 0;
 
-        let wordBank = [];
-        let corrected = 0;
-        let selectedGameIndex = null;
-        let selectedBankIndex = null;
+        let defaultWordBank = [];
+        let defaultCorrected = 0;
+        let defaultSelectedGameIndex = null;
+        let defaultSelectedBankIndex = null;
 
-        let useRandomPage = false;
+        let defaultUseRandomPage = false;
+
+        // Default values for HTML elements
+        let defaultPassageTitle = "Unknown Title";
+        let defaultPassageContainer = "";
+        let defaultGameContainer = "";
+        let defaultWordBankContainer = "";
+        let defaultProgressBar = "";
+
+        // Load data from local storage, or use defaults if not found
+        function loadGameState() {
+            const savedState = localStorage.getItem('gameState');
+
+
+
+            if (savedState) {
+                return JSON.parse(savedState);
+            }
+            // If nothing is saved, return defaults
+            return {
+                roundTexts: defaultRoundTexts,
+                roundHTMLs: defaultRoundHTMLs,
+                htmlReference: defaultHtmlReference,
+                roundID: defaultRoundID,
+                roundData: defaultRoundData,
+                solution: defaultSolution,
+                passage: defaultPassage,
+                changeCount: defaultChangeCount,
+                wordBank: defaultWordBank,
+                corrected: defaultCorrected,
+                selectedGameIndex: defaultSelectedGameIndex,
+                selectedBankIndex: defaultSelectedBankIndex,
+                useRandomPage: defaultUseRandomPage,
+
+                // HTML element defaults
+                passageTitle: defaultPassageTitle,
+                passageContainer: defaultPassageContainer,
+                gameContainer: defaultGameContainer,
+                wordBankContainer: defaultWordBankContainer,
+                progressBar: defaultProgressBar,
+            };
+
+        }
+
+        // Restore HTML elements from saved state
+        function restoreHTMLElements(state) {
+            document.getElementById("passageTitle").innerText = state.passageTitle || defaultPassageTitle;
+            document.getElementById("passageContainer").innerHTML = state.passageContainer || defaultPassageContainer;
+            document.getElementById("gameContainer").innerHTML = state.gameContainer || defaultGameContainer;
+            document.getElementById("wordBankContainer").innerHTML = state.wordBankContainer || defaultWordBankContainer;
+            document.getElementById("progressBar").innerHTML = state.progressBar || defaultProgressBar;
+
+            updateWordbank();
+
+            // Reattach roundData spans
+            const roundDataSpans = gameContainer.querySelectorAll("span:not(:last-child)");
+            roundDataSpans.forEach((span, index) => {
+                span.onclick = () => handleGameWordClick(index, span.textContent, span);
+            });
+
+            // Reattach the "Proceed >>" span
+            const proceedSpan = gameContainer.querySelector("span:last-child");
+            if (proceedSpan && proceedSpan.textContent.includes("Proceed >>")) {
+                proceedSpan.onclick = () => {
+                    if (corrected === changeCount) {
+                        passage = passage + " " + roundTexts[roundID];
+                        gameContainer.innerHTML = `<div class="${passage ? 'passage' : ''}">${passage}</div><div class='spacer'></div>`;
+                        startRound(roundID + 1);
+                    } else {
+                        alert("There are either more errors to find or unfilled blanks!");
+                    }
+                };
+            }
+        }
+
+        // Save the current state to local storage
+        function saveGameState(state) {
+            localStorage.setItem('gameState', JSON.stringify(state));
+        }
+
+        // Example: Save state when something changes
+        function updateAndSaveState() {
+            const currentState = {
+                roundTexts,
+                roundHTMLs,
+                htmlReference,
+                roundID,
+                roundData,
+                solution,
+                passage,
+                changeCount,
+                wordBank,
+                corrected,
+                selectedGameIndex,
+                selectedBankIndex,
+                useRandomPage,
+
+                // Save the current content of HTML elements
+                passageTitle: document.getElementById("passageTitle").innerText,
+                passageContainer: document.getElementById("passageContainer").innerHTML,
+                gameContainer: document.getElementById("gameContainer").innerHTML,
+                wordBankContainer: document.getElementById("wordBankContainer").innerHTML,
+                progressBar: document.getElementById("progressBar").innerHTML,
+            
+            };
+            saveGameState(currentState);
+        }
+
+
+        // Initialize the game state
+        const gameState = loadGameState();
+
+        // Assign loaded or default values
+        let roundTexts = gameState.roundTexts;
+        let roundHTMLs = gameState.roundHTMLs;
+        let htmlReference = gameState.htmlReference;
+
+        let roundID = gameState.roundID;
+        let roundData = gameState.roundData;
+        let solution = gameState.solution;
+        let passage = gameState.passage;
+        let changeCount = gameState.changeCount;
+
+        let wordBank = gameState.wordBank;
+        let corrected = gameState.corrected;
+        let selectedGameIndex = gameState.selectedGameIndex;
+        let selectedBankIndex = gameState.selectedBankIndex;
+
+        let useRandomPage = gameState.useRandomPage;
+
+        // Restore HTML elements
+        restoreHTMLElements(gameState);
+
 
         async function begin(){
             var data;
@@ -96,6 +229,10 @@
             console.log("Level is defined, starting round");
 
             startRound(0);
+        }
+
+        async function reboot(){
+
         }
 
         async function loadPageFromInput(pageTitleElement) {
@@ -141,11 +278,13 @@
             selectedBankIndex = null;
             console.log("Processing Round Data!");
 
+
+
             roundData.forEach((block, index) => {
 
                     const span = document.createElement('span');
                     span.textContent = block.text;
-                    span.onclick = () => handleGameWordClick(index, block.text, span);
+                    span.onclick = () => handleGameWordClick(index, block.text, span); //WARNING: Don't edit without changing restoreHTMLElements
                     gameContainer.appendChild(span);
 
                 console.log(block);
@@ -153,13 +292,13 @@
 
             const span = document.createElement('span');
             span.textContent = "  Proceed >>";
-            span.onclick = () =>  {  
+            span.onclick = () =>  {  //WARNING: Don't edit without changing restoreHTMLElements
                 if (corrected == changeCount){
                     passage = passage + " " + roundTexts[roundID];
                     gameContainer.innerHTML = `<div class="${passage ? 'passage' : ''}">${passage}</div><div class='spacer'></div>`;
                     startRound(number+1);
                 } else {
-                    alert("There are still more errors to find!");
+                    alert("There more either errors to find or there are unfilled blanks!");
                 }
             };
             gameContainer.appendChild(span);
@@ -170,6 +309,7 @@
 
             updateWordbank();
             console.log("Change Count: " + changeCount);
+            updateAndSaveState();
 
         }
 
@@ -239,6 +379,7 @@
                 button.classList.add('highlight');
                 }
             }
+            updateAndSaveState();
 
     }
 
@@ -253,6 +394,7 @@
             selectedBankIndex = index; // Set or update the selected word from the Wordbank
             checkForMatch();
             wordButton.classList.add('highlight');
+            updateAndSaveState();
         }
 
         function checkForMatch() {
@@ -321,7 +463,11 @@
             });
         }
 
-        window.onload = () => begin();//startRound(0); // Start the first round
+        window.onload = () => { 
+            if (roundID < 0){ 
+                begin();
+            }
+        }//startRound(0); // Start the first round
 
 
     </script>
