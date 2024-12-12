@@ -58,7 +58,7 @@
     <script>
         // Default values
         let defaultRoundTexts = [];
-        let defaultRoundHTMLs = Array(10).fill("!!! HTML not shown, parser not implemented !!!");
+        let defaultRoundHTMLs = Array(10).fill("!!Error Loading HTML!!");
         let defaultHtmlReference = "";
 
         let defaultRoundID = -1;
@@ -217,10 +217,12 @@
 
                 document.getElementById('passageTitle').innerHTML = page;
             }
+
             const sectionsToCut = ['See also', 'References', 'Notes', 'Reference notes', 'Selected recordings', 'External links', 'Footnotes', 'Bibliography'];
             const trimmedText = trimAfterSections(data.text, sectionsToCut);
             roundTexts = tokenize(trimmedText);
             htmlReference = data.html;
+            document.getElementById('passageTitle').innerHTML = data.title;
 
             console.log(data.text);
             console.log(roundTexts);
@@ -240,12 +242,12 @@
 
                 try {
                     let data = await getPage(pageTitleElement.value);
-                 } catch {
+                } catch {
                     let page = await getAFeaturedTitle()
                     console.log("Seeking Page: " + page);
                     data = await getPage(page);
                     console.log("Failed, loading random featured page.");
-                 }
+                }
 
                 document.getElementById('passageTitle').innerHTML = data.title;
                 document.getElementById('passage').innerHTML = '';
