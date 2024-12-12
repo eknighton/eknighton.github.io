@@ -59,13 +59,19 @@ async function getPage(pageTitle) {
         const textResponse = await fetch(`${endpoint}?${textParams.toString()}`);
         const textData = await textResponse.json();
         const text = textData.query.pages[0]?.extract;
+        const resolvedTitle = textData.query.pages[0]?.title;
 
         // Fetch HTML content
         const htmlResponse = await fetch(`${endpoint}?${htmlParams.toString()}`);
         const htmlData = await htmlResponse.json();
         const html = htmlData.parse?.text['*'];
+        const htmlTitle = htmlData.parse?.title;
+
+         const finalTitle = resolvedTitle || htmlTitle || pageTitle;
+
 
         return {
+            title: finalTitle,
             text,
             html
         };
