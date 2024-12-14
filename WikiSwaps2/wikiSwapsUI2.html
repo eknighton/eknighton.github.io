@@ -239,8 +239,9 @@
 
                 console.log("Attempting to load page from input: " + pageTitleElement.value);
 
+                let data = null;
                 try {
-                    let data = await getPage(pageTitleElement.value);
+                    data = await getPage(pageTitleElement.value);
                 } catch {
                     let page = await getAFeaturedTitle()
                     console.log("Seeking Page: " + page);
