@@ -251,6 +251,9 @@
                 document.getElementById('passageTitle').innerHTML = data.title;
                 document.getElementById('passage').innerHTML = '';
                 document.getElementById('passageContainer').innerHTML = '';
+                passage = '';
+
+
                 const sectionsToCut = ['See also', 'References', 'Notes', 'Reference notes', 'Selected recordings', 'External links', 'Footnotes', 'Bibliography'];
                 const trimmedText = trimAfterSections(data.text, sectionsToCut);
                 roundTexts = tokenize(trimmedText);
@@ -268,6 +271,7 @@
             if (number >= roundTexts.length){
                 const gameContainer = document.getElementById('gameContainer');
                 gameContainer.innerHTML = htmlReference;
+                updateAndSaveState();
                 return;
             }
 
