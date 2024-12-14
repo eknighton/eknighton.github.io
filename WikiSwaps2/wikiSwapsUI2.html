@@ -223,7 +223,6 @@
             roundTexts = tokenize(trimmedText);
             htmlReference = data.html;
             document.getElementById('passageTitle').innerHTML = data.title;
-
             console.log(data.text);
             console.log(roundTexts);
             console.log("Level is defined, starting round");
@@ -251,6 +250,7 @@
 
                 document.getElementById('passageTitle').innerHTML = data.title;
                 document.getElementById('passage').innerHTML = '';
+                document.getElementById('passageContainer').innerHTML = '';
                 const sectionsToCut = ['See also', 'References', 'Notes', 'Reference notes', 'Selected recordings', 'External links', 'Footnotes', 'Bibliography'];
                 const trimmedText = trimAfterSections(data.text, sectionsToCut);
                 roundTexts = tokenize(trimmedText);
