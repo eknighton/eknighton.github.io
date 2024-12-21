@@ -239,6 +239,10 @@
 
                 console.log("Attempting to load page from input: " + pageTitleElement.value);
 
+                if (pageTitleElement.value == "WS Clear"){
+                    localStorage.clear();
+                }
+
                 let data = null;
                 try {
                     data = await getPage(pageTitleElement.value);
