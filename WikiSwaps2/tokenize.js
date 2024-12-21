@@ -17,7 +17,7 @@ function groupSentencesIntoBlocks(sentences) {
     const blocks = [];
     for (let i = 0; i < sentences.length; i += 2) {
         // The last sentence of a section or of the article should be its own block if necessary.
-        if (sentences[i + 1].includes("==") || !sentences[i + 1]) {
+        if (!sentences[i + 1] || sentences[i + 1].includes("==")) {
             const block = sentences[i];
             blocks.push(block);
             i--;

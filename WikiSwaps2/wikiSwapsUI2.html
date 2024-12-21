@@ -239,22 +239,23 @@
 
                 console.log("Attempting to load page from input: " + pageTitleElement.value);
 
-                if (pageTitleElement.value == "WS Clear"){
-                    localStorage.clear();
-                }
+                //WARN: If there is any inter-round data, this will destroy it. This is kinda a garbage solution
+                //localStorage.clear();
 
                 let data = null;
                 try {
                     data = await getPage(pageTitleElement.value);
                 } catch {
+                    console.log("Failed, loading random featured page.");
                     let page = await getAFeaturedTitle()
                     console.log("Seeking Page: " + page);
                     data = await getPage(page);
-                    console.log("Failed, loading random featured page.");
+
                 }
 
                 document.getElementById('passageTitle').innerHTML = data.title;
                 document.getElementById('passage').innerHTML = '';
+                document.getElementById('passage').innerText = '';
                 document.getElementById('passageContainer').innerHTML = '';
                 passage = '';
 
