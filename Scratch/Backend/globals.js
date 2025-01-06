@@ -44,7 +44,6 @@ let scratches = 12;
 const playerItemsUI = document.getElementById('player-items')
 const playerStatuses = document.getElementById('player-statuses')
 const playerDeck = document.getElementById('fight-deck')
-const playerDeckInDraftScene = document.getElementById('draft-deck')
 
 const tooltip = document.createElement('div');
 tooltip.classList.add('tooltip');

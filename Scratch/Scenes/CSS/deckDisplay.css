@@ -6,8 +6,8 @@
      /* Give independent position, size */
     position: fixed;
     left:0vh;
-    top: 90vh;
-    height: 10vh;
+    top: 92vh;
+    height: 8vh;
     width: 100vw;
 
     /* Display Children in Grid */
@@ -18,6 +18,13 @@
     /*grid-auto-flow: column;*/
     justify-items: center;
     align-content: end;
+
+    /* Add padding for the white border and handle box sizing */
+    padding: 0vh; /* Adjust this value to your preference for border thickness */
+    box-sizing: border-box; /* Ensures padding is included in the height/width */
+
+    /* Set the border color */
+    border: .5vh solid black; /* Adjust border thickness here if needed */
 }
 
 .player-deck img {
@@ -26,6 +33,51 @@
     /* Independent Size */
     width: 6vh; 
     height: 6vh; 
+
+    /* Set cursor to Pointer */
+    cursor: pointer;
+
+    /* Spacing */
+    margin-right: 2vh;
+
+    /* Scalng For pixel art! */
+    image-rendering: crisp-edges; 
+}
+
+#player-items {
+    background-color: black;
+
+     /* Give independent position, size */
+    position: fixed;
+    left:0vh;
+    top: 86vh;
+    height: 6vh;
+    width: 100vw;
+
+    /* Display Children in Grid */
+    display: grid;
+    grid-template-columns: repeat(64, 1fr); /* 10 equal width columns */
+    grid-row-gap: 0vh;
+    grid-column-gap: 1vh;
+    /*grid-auto-flow: column;*/
+    justify-items: center;
+    align-content: end;
+
+     /* Add padding for the white border and handle box sizing */
+    padding: 0vh; /* Adjust this value to your preference for border thickness */
+    box-sizing: border-box; /* Ensures padding is included in the height/width */
+
+    /* Set the border color */
+    border: .5vh solid white; /* Adjust border thickness here if needed */
+
+}
+
+#player-items img {
+
+
+    /* Independent Size */
+    width: 5vh; 
+    height: 5vh; 
 
     /* Set cursor to Pointer */
     cursor: pointer;

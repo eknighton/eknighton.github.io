@@ -24,7 +24,6 @@ function loadFightScene(){
 
 
     player.initializeCanvas();
-    player.displayDeckFight()
 
     document.getElementById('fight-scene').style.display = 'flex';
     setupPhase();

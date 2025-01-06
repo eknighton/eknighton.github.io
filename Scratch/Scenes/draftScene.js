@@ -35,8 +35,8 @@ function loadDraftScene(){
 	document.getElementById('card3-desc').innerText = sym.desc;
 	options.push(sym);
 
-	player.displayDeckDraft();
 	document.getElementById('draft-scene').style.display = 'flex';
+
 
 
 }

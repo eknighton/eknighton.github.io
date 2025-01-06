@@ -113,7 +113,7 @@
     /* Bring to Front*/
     z-index: 1; 
 
-    background-color: none;
+    background-color: black;
 }
 
 .fight-scene-title {
@@ -296,31 +296,6 @@
 
     /* Spacing */
     margin-right: 0vh;
-
-    /* Scalng For pixel art! */
-    image-rendering: crisp-edges; 
-}
-
-
-#player-items {
-    position: relative;
-    width: 100%;
-    justify-content: left;
-    background-color: black;
-}
-
-#player-items img {
-
-
-    /* Independent Size */
-    width: 6vh; 
-    height: 6vh; 
-
-    /* Set cursor to Pointer */
-    cursor: pointer;
-
-    /* Spacing */
-    margin-right: 2vh;
 
     /* Scalng For pixel art! */
     image-rendering: crisp-edges; 

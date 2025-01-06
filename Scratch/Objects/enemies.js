@@ -134,7 +134,7 @@ function onEnemyDeath(){
 	if (lvlEnemiesAlive < 1){
 		//Change Scene
 		document.getElementById("fight-scene").style.display = 'none';
-		loadDraftScene()
+		level.reward();
 	}
 }
 
