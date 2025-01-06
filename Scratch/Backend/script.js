@@ -83,6 +83,7 @@ document.addEventListener('mousemove', (e) => {
                 const revealedPercentage = getRevealedPercentage(ctx, canvas.width, canvas.height);
                 if (revealedPercentage < canvas.symbol.getMaxReveal()){
                     scratches = scratches - 1;
+                    performScratch(e, selectedItem);
                     //document.getElementById('scratches').innerText = scratches;
                 } else {
                     revealSlot(canvas);

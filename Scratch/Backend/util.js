@@ -22,7 +22,7 @@ function getRevealedPercentage(ctx, width, height) {
         }
     }
 
-    return (transparentCount / (width * height)) * 100;
+    return Math.ceil(((transparentCount / (width * height)) *100)/4)*4;
 }
 
 function isColliding(elem1, elem2) {
@@ -78,6 +78,16 @@ function hideToolTip(){
         tooltip.style.display = 'none';
     }, 50);
 }
+
+function showToolTipHigher(element) {
+    tooltip.style.display = 'block';
+    tooltip.style.opacity = '1';
+    const rect = element.getBoundingClientRect();
+    tooltip.style.left = rect.left + 'px'; 
+    tooltip.style.top = (rect.top + window.scrollY - 80) + 'px'; 
+    tooltip.innerHTML = element.getAttribute('data-tooltip');
+}
+
 
 
 

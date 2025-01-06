@@ -31,7 +31,7 @@ let gameState = {
 
 /* Scratching */
 
-let revealThreshold = 16;
+let revealThreshold = 8; //WARN: Must match value in Symbol.js
 let revealMax = 3;
 let revealBuffer = 2.5;
 
@@ -43,6 +43,8 @@ let scratches = 12;
 
 const playerItemsUI = document.getElementById('player-items')
 const playerStatuses = document.getElementById('player-statuses')
+const playerDeck = document.getElementById('fight-deck')
+const playerDeckInDraftScene = document.getElementById('draft-deck')
 
 const tooltip = document.createElement('div');
 tooltip.classList.add('tooltip');

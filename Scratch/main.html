@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="Scenes/CSS/fightScene.css">
     <link rel="stylesheet" href="Scenes/CSS/draftScene.css">
     <link rel="stylesheet" href="Scenes/CSS/itemScene.css">
+    <link rel="stylesheet" href="Scenes/CSS/deckDisplay.css">
     <link rel="stylesheet" href="style.css">
 
 </head>
@@ -53,6 +54,7 @@
 	    <span class="scratch-percentage">0%</span>
 	</div>
 
+	<div class="player-deck" id="fight-deck"></div>
 
 </div>
 
@@ -64,6 +66,7 @@
 		<div class="draft-scene-top-text">
 		        <div class="draft-scene-title">Victory!</div>
 		        <div class="draft-scene-info">Pick a symbol to add to your pool</div>
+
 	    </div>
 
 	    <div class="cards-window">
@@ -88,10 +91,15 @@
 		    </div>
 		   	<button class="skip-button" onclick="cardSkipFunction()">Skip</button>
 		</div>
+		
+		<div class="player-deck" id="draft-deck"></div>
 
 	</div>
+
    
 </div>
+
+
 
 <div class="item-scene" id="item-scene">
 

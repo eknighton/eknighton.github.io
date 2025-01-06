@@ -11,7 +11,7 @@ class Player{
 
 
 		//Run Variables
-		this.items = [];
+		this.items = [shield];
 
 		//Turn variablles
 		this.statuses = [];
@@ -84,6 +84,7 @@ class Player{
 
         /* Eventually, call updateDisplay() instead. */
         this.displayStatuses();
+        this.displayDeckFight();
     }
     startTurn(){
     	fingerNail = this.maxNail;
@@ -158,6 +159,76 @@ class Player{
 
 		});
     	console.log("That's all your statuses!");
+
+    }
+
+    displayDeckFight(){
+    	console.log("Displaying Deck")
+    	playerDeck.innerHTML = '';
+    	symbols.forEach(symbol => {
+    		// 1. Create the wrapper div
+		    const wrapperDiv = document.createElement('div');
+		    wrapperDiv.className = 'stacked-image';
+		    
+		    // 2. Create the img element as you did before
+		    const imgElement = document.createElement('img');
+		    imgElement.src = symbol.sprite;
+
+		    // 3. Create a div to display the stack number
+		    const stackNumberDiv = document.createElement('div');
+		    stackNumberDiv.className = 'stack-number';
+		    stackNumberDiv.innerText = -1;  //Figure out way to count cards in deck
+
+
+		    // 4. Append the img and stack number div to the wrapper
+		    wrapperDiv.appendChild(imgElement);
+		  // wrapperDiv.appendChild(stackNumberDiv);
+		    
+		    // 5. Append the wrapper div to the playerStatuses container
+		    playerDeck.appendChild(wrapperDiv);
+		   
+		    imgElement.setAttribute('data-tooltip',`<strong>${symbol.name}</strong><br>${symbol.desc}`);
+	     	imgElement.addEventListener('mouseenter', (e) =>{
+	     		showToolTipHigher(e.target);
+	     	});
+		  
+    	})
+    	playerDeck.addEventListener('mouseleave', hideToolTip);
+
+    }
+
+    displayDeckDraft(){
+    	console.log("Displaying Deck")
+    	playerDeckInDraftScene.innerHTML = '';
+    	symbols.forEach(symbol => {
+    		// 1. Create the wrapper div
+		    const wrapperDiv = document.createElement('div');
+		    wrapperDiv.className = 'stacked-image';
+		    
+		    // 2. Create the img element as you did before
+		    const imgElement = document.createElement('img');
+		    imgElement.src = symbol.sprite;
+
+		    // 3. Create a div to display the stack number
+		    const stackNumberDiv = document.createElement('div');
+		    stackNumberDiv.className = 'stack-number';
+		    stackNumberDiv.innerText = -1;  //Figure out way to count cards in deck
+
+
+		    // 4. Append the img and stack number div to the wrapper
+		    wrapperDiv.appendChild(imgElement);
+		  // wrapperDiv.appendChild(stackNumberDiv);
+		    
+		    // 5. Append the wrapper div to the playerStatuses container
+		    playerDeckInDraftScene.appendChild(wrapperDiv);
+		   
+		    imgElement.setAttribute('data-tooltip',`<strong>${symbol.name}</strong><br>${symbol.desc}`);
+	     	imgElement.addEventListener('mouseenter', (e) =>{
+	     		showToolTipHigher(e.target);
+	     	});
+		  
+    	})
+    	playerDeckInDraftScene.addEventListener('mouseleave', hideToolTip);
 
     }
 

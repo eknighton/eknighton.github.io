@@ -274,6 +274,11 @@
 
         function startRound(number) {
 
+            
+            roundID = number;
+            const progressBar = document.getElementById('progressBar');
+            progressBar.innerHTML = "<i>" + Math.floor(roundID / roundTexts.length * 100) + "% complete<i>";
+
             if (number >= roundTexts.length){
                 const gameContainer = document.getElementById('gameContainer');
                 gameContainer.innerHTML = htmlReference;
@@ -281,7 +286,6 @@
                 return;
             }
 
-            roundID = number;
             const roundText = roundTexts[number];
             const gameContainer = document.getElementById('gameContainer');
 
@@ -325,10 +329,6 @@
                 }
             };
             gameContainer.appendChild(span);
-
-
-            const progressBar = document.getElementById('progressBar');
-            progressBar.innerHTML = "<i>" + Math.floor(roundID / roundTexts.length * 100) + "% complete<i>";
 
             updateWordbank();
             console.log("Change Count: " + changeCount);
@@ -456,20 +456,6 @@
                         previouslySelectedButton.classList.remove('highlight');
                     } 
 
-                    /*
-                    * !!!!!!!
-                    * Handle wordBank length being 0 here! (round win pseudo)
-                    */     
-
-
-                    if (wordBank.length == 0 && corrected == changeCount){
-                        /*
-                            passage = passage + " " + roundTexts[roundID]; // Clear Wordbank display
-                            gameContainer.innerHTML = `<div class="${passage ? 'passage' : ''}">${passage}</div><div class='spacer'></div>`;
-                            startRound(roundID + 1);
-                        */
-
-                    }        
                 }
 
             }

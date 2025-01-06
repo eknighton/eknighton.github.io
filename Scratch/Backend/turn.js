@@ -2,7 +2,7 @@ let actions = 0;
 
 
 function moveSelected(e){
-    if (!selectedItem.actions || !isDragging) return; // Check the condition here
+    if (!selectedItem || !selectedItem.actions || !isDragging) return; // Check the condition here
 
     hideToolTip();
     let x = e.clientX;
@@ -63,6 +63,14 @@ function doScratch(e, canvas, x, y, safe) {
     }
 
     let ctx = canvas.getContext('2d');
+    let tileWidth = canvas.width / 5;
+    let tileHeight = canvas.height / 5;
+    let tileX = Math.floor(x / tileWidth);
+    let tileY = Math.floor(y / tileHeight);
+    let tileIndex = tileY * 5 + tileX;
+    let marginWidth = tileWidth * 0.05;  // 5% margin
+    let marginHeight = tileHeight * 0.05;  // 5% margin
+
     let revealedPercentage = getRevealedPercentage(ctx, canvas.width, canvas.height);
 
     if (safe && revealedPercentage >= canvas.symbol.getMaxReveal()){
@@ -75,7 +83,11 @@ function doScratch(e, canvas, x, y, safe) {
 
     let rect = canvas.getBoundingClientRect();
     ctx.globalCompositeOperation = 'destination-out';
-    ctx.arc(x, y, 15, 0, Math.PI * 2, false);
+    /*ctx.arc(x, y, 15, 0, Math.PI * 2, false);
+    ctx.fill();*/
+
+    ctx.rect(tileX * tileWidth + marginWidth, tileY * tileHeight + marginHeight, tileWidth - 2 * marginWidth, tileHeight - 2 * marginHeight);
+
     ctx.fill();
 
     ctx.beginPath();
@@ -85,7 +97,8 @@ function doScratch(e, canvas, x, y, safe) {
 
     //Update Fingernail
     fingerNail = fingerNail + canvas.lastRevealPercent - revealedPercentage;
-    canvas.lastRevealPercent = revealedPercentage;
+    canvas.lastRevealPercent = revealedPercentage*100;
+
     document.getElementById('finger-nail').innerText = fingerNail;
     console.log(fingerNail);
 

@@ -1,0 +1,38 @@
+
+.player-deck {
+
+    background-color: black;
+
+     /* Give independent position, size */
+    position: fixed;
+    left:0vh;
+    top: 90vh;
+    height: 10vh;
+    width: 100vw;
+
+    /* Display Children in Grid */
+    display: grid;
+    grid-template-columns: repeat(64, 1fr); /* 10 equal width columns */
+    grid-row-gap: 0vh;
+    grid-column-gap: 1vh;
+    /*grid-auto-flow: column;*/
+    justify-items: center;
+    align-content: end;
+}
+
+.player-deck img {
+
+
+    /* Independent Size */
+    width: 6vh; 
+    height: 6vh; 
+
+    /* Set cursor to Pointer */
+    cursor: pointer;
+
+    /* Spacing */
+    margin-right: 2vh;
+
+    /* Scalng For pixel art! */
+    image-rendering: crisp-edges; 
+}

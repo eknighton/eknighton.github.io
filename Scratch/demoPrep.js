@@ -4,18 +4,20 @@ player = new Player();
 
 symbols = [
 	swordSymbol,
-	shieldSymbol,
+	swordSymbol,
 	swordSymbol,
 
 	shieldSymbol,
-	swordSymbol,
+	shieldSymbol,
+	shieldSymbol,
+	shieldSymbol,
 	shieldSymbol,
 
-	swordSymbol,
-	shieldSymbol,
-	swordSymbol,
+	greatswordSymbol,
+	daggerSymbol,
 
-	shieldSymbol,
+
+
 
 ];
 

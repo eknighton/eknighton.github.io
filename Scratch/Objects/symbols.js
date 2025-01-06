@@ -27,7 +27,7 @@ class Symbol {
     	return 1;
     }
     getMaxReveal(){
-    	return 16;
+    	return 8; //Origionally 16
     }
 }
 
@@ -341,21 +341,21 @@ class CoinSymbol extends Symbol {
 }
 
 // Create instances:
-const swordSymbol = new SwordSymbol({ sprite: "./Art/Symbols-In/sword.png", id: "1" });
+const swordSymbol = new SwordSymbol({ sprite: "./Art/Symbols-Blue/sword.png", id: "1" });
 const shieldSymbol = new ShieldSymbol({ sprite: "./Art/Symbols-Blue/shield.png", id: "2" });
-const coinSymbol = new CoinSymbol({ sprite: "./Art/Symbols-Blue/coin.png", id: "3" });
+//const coinSymbol = new CoinSymbol({ sprite: "./Art/Symbols-Blue/coin.png", id: "3" });
 const staffSymbol = new StaffSymbol({ sprite: "./Art/Symbols-Blue/staff.png", id: "4" });
-const barSymbol = new BarSymbol({ sprite: "./Art/Symbols-In/spear.png", id: "5" });
+const barSymbol = new BarSymbol({ sprite: "./Art/Symbols-Blue/lowBar.png", id: "5" });
 const tonfaSymbol = new TonfaSymbol({ sprite: "./Art/Symbols-Blue/tonfa.png", id: "6" });
-const orcswordSymbol = new OrcswordSymbol({ sprite: "./Art/Symbols-In/orcsword2.png", id: "7" });
-const cutlassSymbol = new CutlassSymbol({ sprite: "./Art/Symbols-In/cutlass2.png", id: "8" });
-const daggerSymbol = new DaggerSymbol({ sprite: "./Art/Symbols-In/dagger.png", id: "9" });
+const orcswordSymbol = new OrcswordSymbol({ sprite: "./Art/Symbols-Blue/orcsword.png", id: "7" });
+const cutlassSymbol = new CutlassSymbol({ sprite: "./Art/Symbols-Blue/cutlass.png", id: "8" });
+const daggerSymbol = new DaggerSymbol({ sprite: "./Art/Symbols-Blue/dagger.png", id: "9" });
 const backwardTonfaSymbol = new BackwardTonfaSymbol({ sprite: "./Art/Symbols-Blue/ramshield.png", id: "10" });
 const scytheSymbol = new ScytheSymbol({ sprite: "./Art/Symbols-Blue/scythe.png", id: "11" });
 const polehookSymbol = new PolehookSymbol({ sprite: "./Art/Symbols-Blue/polehook.png", id: "12" });
 const disrespecterSymbol = new DisrespecterSymbol({ sprite: "./Art/Symbols-Blue/mancatcher.png", id: "13" });
 const greatswordSymbol = new GreatswordSymbol({ sprite: "./Art/Symbols-Blue/greatsword.png", id: "14" });
-const auraSymbol = new AuraSymbol({ sprite: "./Art/Symbols-Blue/aura.png", id: "15" });
+//const auraSymbol = new AuraSymbol({ sprite: "./Art/Symbols-Blue/aura.png", id: "15" });
 
 //Add all symbols to a list
 let allSymbols = [];
