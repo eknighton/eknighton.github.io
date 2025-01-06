@@ -200,6 +200,10 @@ function setupPhase() {
 
         canvas.symbol = getRandomSymbol();
         canvas.style.backgroundImage = `url(${canvas.symbol.sprite})`;
+        canvas.style.backgroundColor = 'black'; // Set the background color to gray
+        canvas.style.backgroundSize = 'calc(100% - 2px)'; // Reduce the size to create a buffer
+        canvas.style.backgroundRepeat = 'no-repeat';
+        canvas.style.backgroundPosition = 'center';
 
         ctx.fillStyle = "#333333";
         ctx.clearRect(0, 0, canvas.width, canvas.height);
