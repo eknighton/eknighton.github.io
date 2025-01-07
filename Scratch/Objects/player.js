@@ -11,7 +11,7 @@ class Player{
 
 
 		//Run Variables
-		this.items = [shield];
+		this.items = [helm];
 
 		//Turn variablles
 		this.statuses = [];
@@ -20,6 +20,7 @@ class Player{
 
 
 		this.aura = 0; // Requires tracking which enemy damaged you.
+		this.turn = 0;
 
 	}
 	/*constructor({character, mods}){
@@ -35,6 +36,7 @@ class Player{
         this.canvas.style.backgroundPosition = 'center';
         this.canvas.player = this;
 
+        this.turn = 0;
         this.statuses = [];
         this.update();
     }
@@ -92,9 +94,20 @@ class Player{
     	this.block = 0;
     	this.aura = 0;
     	this.taken = 0;
+    	this.turn+=1;
+
     	this.items.forEach(item => {
     		item.startTurn();
     	});
+
+    	if (this.turn == 1) {
+    		player.items.forEach(item => {
+	            if (item.name == "Fortress") {
+	                this.block += 5;
+	            }
+        	});
+        }
+
     	this.update();
     }
 

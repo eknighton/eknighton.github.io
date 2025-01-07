@@ -54,7 +54,14 @@ class ShieldSymbol extends Symbol {
     desc = "Tap to gain 5 Block."
 
     use() {
-        player.block += 5;
+        let bonus = 0;
+        player.items.forEach(item => {
+            if (item.name === "Shield") {
+                bonus += 1;
+            }
+        });
+
+        player.block += 5 + bonus;
         player.update();
         return true;
     }
