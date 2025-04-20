@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Star Gain Rate Calculator</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 500px;
+      margin: 2em auto;
+      padding: 1em;
+      background: #f8f8f8;
+      border-radius: 10px;
+    }
+    label {
+      display: block;
+      margin: 1em 0 0.25em;
+    }
+    input {
+      width: 100%;
+      padding: 0.5em;
+      font-size: 1em;
+    }
+    #result {
+      margin-top: 1em;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+  </style>
+</head>
+<body>
+  <h2>Star Gain Rate Calculator</h2>
+  
+  <label for="winRate">Win Rate as a Decimal (e.g., 0.55)</label>
+  <input type="number" id="winRate" step="0.01" min="0" max="1">
+
+  <label for="avgLength">Average Game Length (minutes)</label>
+  <input type="number" id="avgLength" step="0.1" min="0.1">
+
+  <div id="result">Star Gain Rate: —</div>
+
+  <script>
+    const winRateInput = document.getElementById("winRate");
+    const avgLengthInput = document.getElementById("avgLength");
+    const resultDiv = document.getElementById("result");
+
+    function calculate() {
+      const winRate = parseFloat(winRateInput.value);
+      const avgLength = parseFloat(avgLengthInput.value);
+
+      if (isNaN(winRate) || isNaN(avgLength) || avgLength <= 0) {
+        resultDiv.textContent = "Star Gain Rate: —";
+        return;
+      }
+
+      const rate = ((1 + winRate) * winRate - (1 - winRate)) / avgLength;
+      resultDiv.textContent = `Star Gain Rate: ${rate.toFixed(4)} per minute`;
+    }
+
+    winRateInput.addEventListener("input", calculate);
+    avgLengthInput.addEventListener("input", calculate);
+  </script>
+</body>
+</html>
