@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daily Grid Game</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="start-screen" class="screen active">
+    <button id="start-button">Daily</button>
+  </div>
+
+  <div id="game-screen" class="screen">
+    <div class="header">
+      <div id="score-display">Score: 0</div>
+      <div id="date-display">Date: --</div>
+    </div>
+    <div class="grid" id="game-grid"></div>
+  </div>
+
+  <div id="win-screen" class="screen">
+    <div>Congratulations!</div>
+    <div id="final-score">Score: 0</div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
