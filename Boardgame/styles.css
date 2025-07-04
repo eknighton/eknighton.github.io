@@ -1,11 +1,17 @@
-body {
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+html, body {
   margin: 0;
+  padding: 0;
   font-family: 'Press Start 2P', monospace;
   background: #1e1e1e;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
   image-rendering: pixelated;
 }
 
@@ -23,14 +29,13 @@ body {
 }
 
 button {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 1.5rem;
+  font-size: 1rem;
   padding: 1rem 2rem;
   border: 2px solid #fff;
-  border-radius: 0;
   background: #ff4f4f;
   color: white;
   cursor: pointer;
+  font-family: 'Press Start 2P', monospace;
 }
 
 .header {
@@ -38,7 +43,7 @@ button {
   justify-content: space-between;
   width: 90%;
   margin-bottom: 1rem;
-  font-size: 1rem;
+  font-size: 0.75rem;
   color: white;
 }
 
@@ -55,14 +60,13 @@ button {
 .square {
   width: 32px;
   height: 32px;
-  background: #4fc3f7; /* light blue default */
-  transition: background 0.2s;
-  image-rendering: pixelated;
+  background: #4fc3f7; /* light blue */
   border: 1px solid #222;
+  transition: background 0.2s;
 }
 
 .square.tap-available {
-  background: #ef5350; /* bright red tap-ready */
+  background: #ef5350; /* bright red */
   cursor: pointer;
 }
 
@@ -70,8 +74,14 @@ button {
   background: #d32f2f;
 }
 
+#date-display {
+  margin-top: 1rem;
+  color: white;
+  font-size: 0.75rem;
+}
+
 #final-score {
-  font-size: 2rem;
+  font-size: 1rem;
   color: white;
   margin-top: 1rem;
 }
