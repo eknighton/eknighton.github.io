@@ -15,11 +15,11 @@ const seedScreen = document.getElementById('seed-screen');
 const seedInput = document.getElementById('seed-input');
 
 const musicStart = new Audio('');
-const musicGame = new Audio('audio/medieval2.wav');
+const musicGame = new Audio('audio/Medieval2.wav');
 const musicWin = new Audio('audio/DanceEnergetic.wav');
 const musicSeed = new Audio('audio/DanceEnergetic.wav');
 
-const sfxBomb= new Audio('audio/pew2.wav');
+const sfxBomb= new Audio('audio/Pew2.wav');
 const sfxClock= new Audio('audio/MagicSpell.wav');
 const sfxBoing= new Audio('audio/BigBoing.wav');
 const sfxIce= new Audio('audio/Plunge.wav');
