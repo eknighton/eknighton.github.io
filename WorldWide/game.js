@@ -62,6 +62,10 @@ const TileBehaviors = {
     onPlayerEnter() {
       if (!this.conquered) {
         this.conquered = true;
+        if (checkWinCondition()){
+          winGame();
+          return;
+        } 
       }
 
       //playSoundEffect(sfxCrank, .5);
@@ -97,6 +101,10 @@ const TileBehaviors = {
       this.stepCount = (this.stepCount || 0) + 1;
       if (this.stepCount === 2 && !this.conquered) {
         this.conquered = true;
+        if (checkWinCondition()){
+          winGame();
+          return;
+        } 
       }
     },
     showValidMoves(cell) {
@@ -107,6 +115,10 @@ const TileBehaviors = {
     onPlayerEnter() {
       if (!this.conquered) {
         this.conquered = true;
+        if (checkWinCondition()){
+          winGame();
+          return;
+        } 
       }
 
       isLocked = true;
@@ -122,7 +134,6 @@ const TileBehaviors = {
         updateScore();
         isLocked = false;
 
-        if (checkWinCondition()) winGame();
       }, 100);
     },
 
@@ -134,6 +145,10 @@ const TileBehaviors = {
     onPlayerEnter(cell) {
       if (!this.conquered) {
         this.conquered = true;
+        if (checkWinCondition()){
+          winGame();
+          return;
+        } 
       }
       time = Math.max(0, time - 1); // Reduce time
       playSoundEffect(sfxClock);
@@ -146,6 +161,10 @@ const TileBehaviors = {
     onPlayerEnter(cell) {
       if (!this.conquered) {
         this.conquered = true;
+        if (checkWinCondition()){
+          winGame();
+          return;
+        } 
       }
     },
     showValidMoves(cell) {
@@ -162,6 +181,10 @@ const TileBehaviors = {
     onPlayerEnter(cell) {
       if (!this.conquered) {
         this.conquered = true;
+        if (checkWinCondition()){
+          winGame();
+          return;
+        } 
       }
       let flag = false;
       const adjacent = [
@@ -201,6 +224,10 @@ const TileBehaviors = {
     onPlayerEnter(cell) {
       if (!this.conquered) {
         this.conquered = true;
+        if (checkWinCondition()){
+          winGame();
+          return;
+        } 
       }
     },
     showValidMoves(cell) {
@@ -211,6 +238,10 @@ const TileBehaviors = {
     onPlayerEnter(cell) {
       if (!this.conquered) {
         this.conquered = true;
+        if (checkWinCondition()){
+          winGame();
+          return;
+        } 
       }
     },
     showValidMoves(cell) {
@@ -221,6 +252,10 @@ const TileBehaviors = {
     onPlayerEnter() {
       if (!this.conquered) {
         this.conquered = true;
+        if (checkWinCondition()){
+          winGame();
+          return;
+        } 
       }
 
       if (this.direction) {
@@ -248,7 +283,6 @@ const TileBehaviors = {
             updateScore();
             isLocked = false;
 
-            if (checkWinCondition()) winGame();
           }, 100); // ~1 frame delay for effect
         }
       }
@@ -264,6 +298,10 @@ const TileBehaviors = {
     onPlayerEnter() {
       if (!this.conquered) {
         this.conquered = true;
+        if (checkWinCondition()){
+          winGame();
+          return;
+        } 
       }
 
       const delta = {
@@ -295,7 +333,6 @@ const TileBehaviors = {
         updateScore();
         isLocked = false;
 
-        if (checkWinCondition()) winGame();
       }, 100);
     } else {
       return;
@@ -429,7 +466,7 @@ function generateRandomSeed() {
 ///// Daily Helpers
 
 function startDaily() {
-
+  isDaily = true;
   if (isFirstDailyToday()) {
     hasWonDaily = false;
     time = 0;
@@ -441,7 +478,6 @@ function startDaily() {
      moves = 0;
   }
   console.log(hasWonDaily)
-  isDaily = true;
   updateScore();
   dateDisplay.textContent = 'Date: ' + getTodayDate();
   currentDate = getTodayDate();
@@ -631,7 +667,6 @@ function updateAllCells() {
           el.classList.add("damaged");
         }
       }
-
 
       if (cellData.conquered) el.classList.add("stepped");
       if (playerPos.x === x && playerPos.y === y) el.classList.add("player-location");
