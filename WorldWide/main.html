@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Daily Grid Game</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+
+</head>
+<body>
+  <div id="start-screen" class="screen active">
+    <div id="game-title">Mr. Worldwide</div>
+    <p></p>
+    <button id="daily-button">Daily</button>
+    <p></p>
+    <button id="start-button">Rando</button>
+    <p></p>
+    <button id="seed-button">Fixed</button>
+  </div>
+
+  <div id="game-screen" class="screen">
+    <div class="header">
+      <div id="score-display">Score: 0</div>
+    </div>
+    <div class="grid" id="game-grid"></div>
+    <div id="date-display">Date: --</div>
+    <p> </p>
+    <button id="bail-button">Concede</button>
+  </div>
+
+  <div id="win-screen" class="screen">
+    <div>Mr. Worldwide!</div>
+    <p> </p>
+    <div id="final-score">Score: 0</div>
+    <p></p>
+    <div id="final-moves">Moves: 0</div>
+    <p></p>
+    <div id="final-seed">Seed: 0</div>
+    <p> </p>
+    <button id="bail-button2">Back</button>
+  </div>
+
+  <div id="seed-screen" class="screen">
+    <div>Enter Seed</div>
+    <input id="seed-input" type="text" placeholder="Enter seed..." />
+    <p></p>
+    <button id="bail-button3">Back</button>
+  </div>
+
+
+  <script src="game.js"></script>
+</body>
+</html>
