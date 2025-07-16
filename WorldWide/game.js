@@ -15,16 +15,16 @@ const seedScreen = document.getElementById('seed-screen');
 const seedInput = document.getElementById('seed-input');
 
 const musicStart = new Audio('');
-const musicGame = new Audio('audio/Medieval2.wav');
-const musicWin = new Audio('audio/DanceEnergetic.wav');
-const musicSeed = new Audio('audio/DanceEnergetic.wav');
+const musicGame = new Audio('Audio/Medieval2.wav');
+const musicWin = new Audio('Audio/DanceEnergetic.wav');
+const musicSeed = new Audio('Audio/DanceEnergetic.wav');
 
-const sfxBomb= new Audio('audio/Pew2.wav');
-const sfxClock= new Audio('audio/MagicSpell.wav');
-const sfxBoing= new Audio('audio/BigBoing.wav');
-const sfxIce= new Audio('audio/Plunge.wav');
-const sfxJump= new Audio('audio/Jump.wav');
-const sfxCrank= new Audio('audio/Crank.wav');
+const sfxBomb= new Audio('Audio/Pew2.wav');
+const sfxClock= new Audio('Audio/MagicSpell.wav');
+const sfxBoing= new Audio('Audio/BigBoing.wav');
+const sfxIce= new Audio('Audio/Plunge.wav');
+const sfxJump= new Audio('Audio/Jump.wav');
+const sfxCrank= new Audio('Audio/Crank.wav');
 
 [musicStart, musicGame, musicWin, musicSeed].forEach(music => {
   music.loop = true;
@@ -645,7 +645,7 @@ function updateAllCells() {
       el.classList.remove("tappable", "player-location", "stepped");
 
       // Apply tile image
-      el.style.backgroundImage = `url(tiles/${cellData.type}.png)`;
+      el.style.backgroundImage = `url(Tiles/${cellData.type}.png)`;
       el.style.backgroundSize = "cover";
       el.style.transform = ""; // reset
 
