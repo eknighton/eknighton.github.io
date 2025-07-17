@@ -157,7 +157,7 @@ const TileBehaviors = {
       showCardinalMoves(this.x, this.y);
     }
   },
-  Wingshoe: {
+  WingShoe: {
     onPlayerEnter(cell) {
       if (!this.conquered) {
         this.conquered = true;
@@ -568,7 +568,7 @@ function createCellData(x, y, rng) {
     { name: "Shield", weight: 4 },
     { name: "Back", weight: 3 },
     { name: "Clock", weight: 1 },
-    { name: "Wingshoe", weight: 1 },
+    { name: "WingShoe", weight: 1 },
     { name: "Bomb", weight: 1 },
     { name: "Bishop", weight: 2 },
     { name: "Rook", weight: 2 },
