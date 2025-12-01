@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hofstede: Your effect on culture</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.12);
+      --card-bg: rgba(15, 23, 42, 0.9);
+      --border-subtle: rgba(148, 163, 184, 0.4);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 900px;
+      background: radial-gradient(circle at top, rgba(56,189,248,0.12), transparent 55%),
+                  radial-gradient(circle at bottom, rgba(129,140,248,0.12), transparent 55%),
+                  #020617;
+      border-radius: 24px;
+      padding: 24px 20px 28px;
+      box-shadow:
+        0 20px 60px rgba(15,23,42,0.85),
+        0 0 0 1px rgba(148,163,184,0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .app::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 0 0, rgba(148,163,184,0.22), transparent 55%);
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .app-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      font-size: clamp(1.6rem, 2vw + 1.2rem, 2.1rem);
+      margin: 0 0 4px;
+      letter-spacing: 0.03em;
+      display: flex;
+      align-items: center;
+      gap: 0.4em;
+    }
+
+    h1 span.logo-dot {
+      display: inline-flex;
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      background: conic-gradient(from 210deg, #38bdf8, #a855f7, #22c55e, #38bdf8);
+      box-shadow: 0 0 16px rgba(56,189,248,0.9);
+    }
+
+    .subtitle {
+      margin: 0 0 20px;
+      font-size: 0.92rem;
+      color: #cbd5f5;
+      max-width: 40rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.5);
+      font-size: 0.75rem;
+      color: #e5e7eb;
+      background: radial-gradient(circle at 0 0, rgba(56,189,248,0.16), transparent 60%);
+      margin-bottom: 12px;
+    }
+
+    .pill span.dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 10px rgba(34,197,94,0.9);
+    }
+
+    .sections {
+      margin-top: 10px;
+    }
+
+    section {
+      display: none;
+    }
+
+    section.active {
+      display: block;
+    }
+
+    .card {
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(15,23,42,0.9), rgba(15,23,42,0.9));
+      border: 1px solid rgba(148,163,184,0.35);
+      padding: 20px 18px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+      background: radial-gradient(circle at 0 0, rgba(248,250,252,0.2), transparent 55%),
+                  linear-gradient(135deg, #38bdf8, #6366f1);
+      color: #0b1120;
+      box-shadow:
+        0 12px 30px rgba(56,189,248,0.4),
+        0 0 0 1px rgba(15,23,42,0.7);
+      transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+      box-shadow:
+        0 14px 40px rgba(56,189,248,0.55),
+        0 0 0 1px rgba(15,23,42,0.9);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+      box-shadow:
+        0 8px 18px rgba(56,189,248,0.4),
+        0 0 0 1px rgba(15,23,42,1);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.6);
+      box-shadow: none;
+      color: #e5e7eb;
+      padding-inline: 14px;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(15,23,42,0.9);
+      transform: none;
+      box-shadow: 0 0 0 1px rgba(148,163,184,0.6);
+    }
+
+    .intro-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    @media (max-width: 720px) {
+      .intro-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .intro-list {
+      margin: 10px 0 0;
+      padding-left: 1rem;
+      font-size: 0.9rem;
+      color: #cbd5f5;
+    }
+
+    .intro-list li {
+      margin-bottom: 4px;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+      font-size: 0.75rem;
+    }
+
+    .badge {
+      padding: 3px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: rgba(15,23,42,0.9);
+    }
+
+    /* Questionnaire */
+
+    .question {
+      border-radius: 14px;
+      border: 1px solid rgba(51,65,85,0.9);
+      padding: 12px 10px;
+      margin-bottom: 10px;
+      background: radial-gradient(circle at 0 0, rgba(56,189,248,0.08), transparent 55%);
+    }
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: baseline;
+      margin-bottom: 6px;
+    }
+
+    .question-label {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #e5e7eb;
+    }
+
+    .question-dim {
+      font-size: 0.76rem;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .scale-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+      font-size: 0.8rem;
+    }
+
+    .scale-row label {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(55,65,81,0.9);
+      cursor: pointer;
+      user-select: none;
+      background: rgba(15,23,42,0.9);
+    }
+
+    .scale-row input[type="radio"] {
+      accent-color: var(--accent);
+    }
+
+    .scale-captions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 4px;
+      font-size: 0.7rem;
+      color: #9ca3af;
+    }
+
+    .question-group-title {
+      margin: 16px 2px 6px;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #a5b4fc;
+    }
+
+    .question-group-title span {
+      opacity: 0.85;
+    }
+
+    .question-group-heading {
+      border-radius: 14px;
+      border: 1px solid rgba(51,65,85,0.9);
+      padding: 12px 10px;
+      margin-bottom: 10px;
+      background: radial-gradient(circle at 0 0, rgba(56,189,248,0.08), transparent 55%);
+      font-weight: 600;
+      font-size: 1.05rem;
+      line-height: 1.4;
+    }
+
+    .questionnaire-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    /* Results */
+
+    .results-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    #countriesMessage {
+      font-weight: 600;
+      font-size: 1rem;
+      color: #fde68a;
+    }
+
+    .results-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.2fr);
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 780px) {
+      .results-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .results-card {
+      border-radius: 14px;
+      border: 1px solid rgba(51,65,85,0.9);
+      padding: 12px 10px;
+      background: rgba(15,23,42,0.9);
+    }
+
+    .results-card h3 {
+      margin: 0 0 6px;
+      font-size: 0.9rem;
+      color: #e5e7eb;
+    }
+
+    .dim-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+
+    .dim-table th,
+    .dim-table td {
+      padding: 4px 6px;
+      text-align: left;
+      border-bottom: 1px solid rgba(30,41,59,0.9);
+    }
+
+    .dim-table th {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #9ca3af;
+    }
+
+    .dim-key {
+      font-weight: 600;
+      color: #e5e7eb;
+      white-space: nowrap;
+    }
+
+    .dim-name {
+      color: #9ca3af;
+      font-size: 0.8rem;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      border: 1px solid rgba(148,163,184,0.6);
+      color: #e5e7eb;
+    }
+
+    .tag-up {
+      border-color: rgba(52,211,153,0.7);
+      color: #bbf7d0;
+    }
+
+    .tag-down {
+      border-color: rgba(248,113,113,0.8);
+      color: #fecaca;
+    }
+
+    .tag-equal {
+      border-color: rgba(129,140,248,0.8);
+      color: #c7d2fe;
+    }
+
+    .country-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+      font-size: 0.8rem;
+    }
+
+    .chip {
+      padding: 3px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.5);
+      background: rgba(15,23,42,0.9);
+    }
+
+    .chip-active {
+      background: #374151;        /* dark slate gray */
+      color: #f3f4f6;             /* light gray text */
+      border-color: #4b5563;
+      box-shadow: 0 0 0 2px #9ca3af55;
+      transform: translateY(-1px);
+      transition: all 0.15s ease-in-out;
+    }
+
+    #countriesList .chip:hover {
+      background: #4b5563;
+      cursor: pointer;
+    }
+
+    .results-note {
+      font-size: 0.72rem;
+      color: #9ca3af;
+      margin-top: 8px;
+      line-height: 1.3;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="app-inner">
+      <div class="pill">
+        <span class="dot"></span>
+        Experimental self-reflection using Hofstede’s national culture scores
+      </div>
+      <h1>
+        <span class="logo-dot"></span>
+        Hofstede: Your effect on culture
+      </h1>
+      <p class="subtitle">
+        See how your data might affect a model of your country's
+        cultural dimensions, and explore the countries you might make the U.S. more similar to.
+      </p>
+
+      <div class="sections">
+        <!-- Intro -->
+        <section id="introSection" class="active">
+          <div class="card">
+            <div class="intro-grid">
+              <div>
+                <h2 style="font-size:1rem;margin:0 0 6px;color:#e5e7eb;">
+                  What this page does
+                </h2>
+                <ol class="intro-list">
+                  <li>You rate statements on a 1–5 scale.</li>
+                  <li>We estimate your Hofstede-style scores for six dimensions.</li>
+                  <li>We compare you to the U.S. and to a set of countries from Hofstede’s dataset.</li>
+                  <li>We find countries that differ from the U.S. in the <em>same direction</em> as you on all dimensions.</li>
+                  <li>While calibrated so country scores tend to fall between 0-100, an individual's score may be negative or several hundred</li>
+                </ol>
+                <div class="badge-row">
+                  <div class="badge">6 dimensions: PDI, IDV, MAS, UAI, LTO, IVR</div>
+                  <div class="badge">Based on Hofstede national scores (educational use)</div>
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;justify-content:space-between;gap:12px;">
+                <div style="font-size:0.85rem;color:#cbd5f5;">
+                  <strong>Important:</strong> Hofstede’s model was built for comparing
+                  <em>countries</em>, not individuals. Your score may fluctuate greatly, and differ wildly from your nation's average.<p> 
+
+                  <strong>Disclaimer:</strong> To compare your scores, we had to infer a shift constant not provided by Hofstede. Additionally, understand that adding you to the data properly would involve removing someone of your same demographics. We are unable to do this.
+
+                </div>
+                <div>
+                  <button class="btn" type="button" onclick="startQuestionnaire()">
+                    <span>Take the questionnaire</span>
+                    <span aria-hidden="true">→</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Questionnaire -->
+        <section id="questionnaireSection">
+          <div class="card">
+            <form id="questionnaireForm">
+              <!-- Questions will be injected here -->
+            </form>
+          </div>
+        </section>
+
+        <!-- Results -->
+        <section id="resultsSection">
+          <div class="card">
+            <div class="results-header">
+              <div>
+                <div id="countriesMessage"></div>
+                <div style="font-size:0.82rem;color:#9ca3af;margin-top:4px;" id="patternSummary"></div>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <button type="button" class="btn-secondary" onclick="restart()">
+                  ← Start over
+                </button>
+              </div>
+            </div>
+
+            <div class="results-layout">
+              <div class="results-card">
+                <h3>Your scores vs. U.S.A.</h3>
+                <table class="dim-table" id="dimTable">
+                  <thead>
+                    <tr>
+                      <th>Dim</th>
+                      <th>You</th>
+                      <th>U.S.A.</th>
+                      <th>Direction</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Filled in by JS -->
+                  </tbody>
+                </table>
+                <div class="results-note">
+                  Scores are scaled from your 1–5 responses using the Hofstede proceedure, and shifting using an estimate of his dataset's shift constant.
+                </div>
+              </div>
+
+              <div class="results-card">
+                <h3>Countries that differ like you</h3>
+                <div id="countriesList" class="country-chips">
+                  <!-- Chips appear here -->
+                </div>
+                <div class="results-note" id="chip-criteria">
+                  A country appears here if, for every dimension, it differs from U.S.A. in the
+                  <em>same direction</em> as you (higher, lower, or roughly equal).
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- Config & Data -------------------------------------------------------
+
+    // Hofstede-like questionnaire items.
+    // All items are scored so that higher values mean a "higher" score
+    // on that dimension in the Hofstede sense.
+    const questions = [
+  // Ideal job importance:contentReference[oaicite:3]{index=3}
+  { index: 1, text: "have sufficient time for your personal or home life", dim: "IDV", role: "negative", scale: "importance", group: "Ideal job importance" },
+  { index: 2, text: "have a boss (direct superior) you can respect", dim: "PDI", role: "negative", scale: "importance", group: "Ideal job importance" },
+  { index: 3, text: "get recognition for good performance", dim: "MAS", role: "negative", scale: "importance", group: "Ideal job importance" },
+  { index: 4, text: "have security of employment", dim: "IDV", role: "positive", scale: "importance", group: "Ideal job importance" },
+  { index: 5, text: "have pleasant people to work with", dim: "MAS", role: "positive", scale: "importance", group: "Ideal job importance" },
+  { index: 6, text: "do work that is interesting", dim: "IDV", role: "negative", scale: "importance", group: "Ideal job importance" },
+  { index: 7, text: "be consulted by your boss in decisions involving your work", dim: "PDI", role: "positive", scale: "importance", group: "Ideal job importance" },
+  { index: 8, text: "live in a desirable area", dim: "MAS", role: "positive", scale: "importance", group: "Ideal job importance" },
+  { index: 9, text: "have a job respected by your family and friends", dim: "IDV", role: "positive", scale: "importance", group: "Ideal job importance" },
+  { index: 10, text: "have chances for promotion", dim: "MAS", role: "negative", scale: "importance", group: "Ideal job importance" },
+
+  // Private life importance:contentReference[oaicite:4]{index=4}
+  { index: 11, text: "keeping time free for fun", dim: "IVR", role: "negative", scale: "importance", group: "Private life importance" },
+  { index: 12, text: "moderation: having few desires", dim: "IVR", role: "positive", scale: "importance", group: "Private life importance" },
+  { index: 13, text: "doing a service to a friend", dim: "LTO", role: "positive", scale: "importance", group: "Private life importance" },
+  { index: 14, text: "thrift (not spending more than needed)", dim: "LTO", role: "negative", scale: "importance", group: "Private life importance" },
+
+  // Personal life questions (no explicit heading in the questionnaire; general life/feelings) 
+  { index: 15, text: "How often do you feel nervous or tense?", dim: "UAI", role: "negative", scale: "frequency", group: "Personal life questions" },
+  { index: 16, text: "Are you a happy person?", dim: "IVR", role: "negative", scale: "frequency", group: "Personal life questions" },
+  { index: 17, text: "Do other people or circumstances ever prevent you from doing what you really want to?", dim: "IVR", role: "positive", scale: "yes_no", group: "Personal life questions" },
+  { index: 18, text: "All in all, how would you describe your state of health these days?", dim: "UAI", role: "positive", scale: "health", group: "Personal life questions" },
+  { index: 19, text: "How proud are you to be a citizen of your country?", dim: "LTO", role: "positive", scale: "pride", group: "Personal life questions" },
+  { index: 20, text: "How often, in your experience, are subordinates afraid to contradict their boss (or students their teacher?)", dim: "PDI", role: "positive", scale: "fear", group: "Personal life questions" },
+
+  // Agreement statements:contentReference[oaicite:5]{index=5}
+  { index: 21, text: "One can be a good manager without having a precise answer to every question that a subordinate may raise about his or her work", dim: "UAI", role: "positive", scale: "agreement", group: "Agreement statements" },
+  { index: 22, text: "Persistent efforts are the surest way to results", dim: "LTO", role: "negative", scale: "agreement", group: "Agreement statements" },
+  { index: 23, text: "An organization structure in which certain subordinates have two bosses should be avoided at all cost", dim: "PDI", role: "negative", scale: "agreement", group: "Agreement statements" },
+  { index: 24, text: "A company's or organization's rules should not be broken – not even when the employee thinks breaking the rule would be in the organization's best interest", dim: "UAI", role: "negative", scale: "agreement", group: "Agreement statements" }
+];
+
+
+
+    const DIM_INFO = {
+      pdi: { name: "Power Distance", code: "PDI"},
+      idv: { name: "Individualism", code: "IDV" },
+      mas: { name: "Masculinity", code: "MAS" },
+      uai: { name: "Uncertainty Avoidance", code: "UAI" },
+      lto: { name: "Long-Term Orientation", code: "LTO" },
+      ivr: { name: "Indulgence", code: "IVR" },
+    };
+
+    // U.S.A. Hofstede scores (from Hofstede's 6-dimensions dataset).
+    const USA_SCORES = {
+      pdi: 40,
+      idv: 91,
+      mas: 62,
+      uai: 46,
+      lto: 26,
+      ivr: 68,
+    };
+
+    // Selected Hofstede country data (all 6 dimensions present).
+    // Values taken from "6 Dimensions For Website 2015-08-16" table (Hofstede data).
+    const COUNTRIES = [
+      { code: "ARA", name: "Arab countries", pdi: 80, idv: 38, mas: 53, uai: 68, lto: 23, ivr: 34 },
+      { code: "ARG", name: "Argentina",     pdi: 49, idv: 46, mas: 56, uai: 86, lto: 20, ivr: 62 },
+      { code: "AUL", name: "Australia",     pdi: 38, idv: 90, mas: 61, uai: 51, lto: 21, ivr: 71 },
+      { code: "AUT", name: "Austria",       pdi: 11, idv: 55, mas: 79, uai: 70, lto: 60, ivr: 63 },
+      { code: "BAN", name: "Bangladesh",    pdi: 80, idv: 20, mas: 55, uai: 60, lto: 47, ivr: 20 },
+      { code: "BEL", name: "Belgium",       pdi: 65, idv: 75, mas: 54, uai: 94, lto: 82, ivr: 57 },
+      { code: "BRA", name: "Brazil",        pdi: 69, idv: 38, mas: 49, uai: 76, lto: 44, ivr: 59 },
+      { code: "BUL", name: "Bulgaria",      pdi: 70, idv: 30, mas: 40, uai: 85, lto: 69, ivr: 16 },
+      { code: "CAN", name: "Canada",        pdi: 39, idv: 80, mas: 52, uai: 48, lto: 36, ivr: 68 },
+      { code: "SAL", name: "El Salvador",   pdi: 66, idv: 19, mas: 40, uai: 94, lto: 20, ivr: 89 },
+      { code: "CHL", name: "Chile",         pdi: 63, idv: 23, mas: 28, uai: 86, lto: 31, ivr: 68 },
+      { code: "CHI", name: "China",         pdi: 80, idv: 20, mas: 66, uai: 30, lto: 87, ivr: 24 },
+      { code: "COL", name: "Colombia",      pdi: 67, idv: 13, mas: 64, uai: 80, lto: 13, ivr: 83 },
+      { code: "CRO", name: "Croatia",       pdi: 73, idv: 33, mas: 40, uai: 80, lto: 58, ivr: 33 },
+      { code: "CZE", name: "Czech Rep.",    pdi: 57, idv: 58, mas: 57, uai: 74, lto: 70, ivr: 29 },
+      { code: "DEN", name: "Denmark",       pdi: 18, idv: 74, mas: 16, uai: 23, lto: 35, ivr: 70 },
+      { code: "EST", name: "Estonia",       pdi: 40, idv: 60, mas: 30, uai: 60, lto: 82, ivr: 16 },
+      { code: "FIN", name: "Finland",       pdi: 33, idv: 63, mas: 26, uai: 59, lto: 38, ivr: 57 },
+      { code: "FRA", name: "France",        pdi: 68, idv: 71, mas: 43, uai: 86, lto: 63, ivr: 48 },
+      { code: "GER", name: "Germany",       pdi: 35, idv: 67, mas: 66, uai: 65, lto: 83, ivr: 40 },
+      { code: "GBR", name: "Great Britain", pdi: 35, idv: 89, mas: 66, uai: 35, lto: 51, ivr: 69 },
+      { code: "GRE", name: "Greece",        pdi: 60, idv: 35, mas: 57, uai:112, lto: 45, ivr: 50 },
+      { code: "HOK", name: "Hong Kong",     pdi: 68, idv: 25, mas: 57, uai: 29, lto: 61, ivr: 17 },
+      { code: "HUN", name: "Hungary",       pdi: 46, idv: 80, mas: 88, uai: 82, lto: 58, ivr: 31 },
+      { code: "IND", name: "India",         pdi: 77, idv: 48, mas: 56, uai: 40, lto: 51, ivr: 26 },
+      { code: "IDO", name: "Indonesia",     pdi: 78, idv: 14, mas: 46, uai: 48, lto: 62, ivr: 38 },
+      { code: "IRA", name: "Iran",          pdi: 58, idv: 41, mas: 43, uai: 59, lto: 14, ivr: 40 },
+      { code: "IRE", name: "Ireland",       pdi: 28, idv: 70, mas: 68, uai: 35, lto: 24, ivr: 65 },
+      { code: "ITA", name: "Italy",         pdi: 50, idv: 76, mas: 70, uai: 75, lto: 61, ivr: 30 },
+      { code: "JPN", name: "Japan",         pdi: 54, idv: 46, mas: 95, uai: 92, lto: 88, ivr: 42 },
+      { code: "KOR", name: "South Korea",   pdi: 60, idv: 18, mas: 39, uai: 85, lto:100, ivr: 29 },
+      { code: "LAT", name: "Latvia",        pdi: 44, idv: 70, mas:  9, uai: 63, lto: 69, ivr: 13 },
+      { code: "LIT", name: "Lithuania",     pdi: 42, idv: 60, mas: 19, uai: 65, lto: 82, ivr: 16 },
+      { code: "LUX", name: "Luxembourg",    pdi: 40, idv: 60, mas: 50, uai: 70, lto: 64, ivr: 56 },
+      { code: "MAL", name: "Malaysia",      pdi:104, idv: 26, mas: 50, uai: 36, lto: 41, ivr: 57 },
+      { code: "MEX", name: "Mexico",        pdi: 81, idv: 30, mas: 69, uai: 82, lto: 24, ivr: 97 },
+      { code: "MOR", name: "Morocco",       pdi: 70, idv: 46, mas: 53, uai: 68, lto: 14, ivr: 25 },
+      { code: "NET", name: "Netherlands",   pdi: 38, idv: 80, mas: 14, uai: 53, lto: 67, ivr: 68 },
+      { code: "NZL", name: "New Zealand",   pdi: 22, idv: 79, mas: 58, uai: 49, lto: 33, ivr: 75 },
+      { code: "NOR", name: "Norway",        pdi: 31, idv: 69, mas:  8, uai: 50, lto: 35, ivr: 55 },
+      { code: "PAK", name: "Pakistan",      pdi: 55, idv: 14, mas: 50, uai: 70, lto: 50, ivr:  0 },
+      { code: "PER", name: "Peru",          pdi: 64, idv: 16, mas: 42, uai: 87, lto: 25, ivr: 46 },
+      { code: "PHI", name: "Philippines",   pdi: 94, idv: 32, mas: 64, uai: 44, lto: 27, ivr: 42 },
+      { code: "POL", name: "Poland",        pdi: 68, idv: 60, mas: 64, uai: 93, lto: 38, ivr: 29 },
+      { code: "POR", name: "Portugal",      pdi: 63, idv: 27, mas: 31, uai:104, lto: 28, ivr: 33 },
+      { code: "ROM", name: "Romania",       pdi: 90, idv: 30, mas: 42, uai: 90, lto: 52, ivr: 20 },
+      { code: "RUS", name: "Russia",        pdi: 93, idv: 39, mas: 36, uai: 95, lto: 81, ivr: 20 },
+      { code: "SER", name: "Serbia",        pdi: 86, idv: 25, mas: 43, uai: 92, lto: 52, ivr: 28 },
+      { code: "SIN", name: "Singapore",     pdi: 74, idv: 20, mas: 48, uai:  8, lto: 72, ivr: 46 },
+      { code: "SLK", name: "Slovak Rep.",   pdi:104, idv: 52, mas:110, uai: 51, lto: 77, ivr: 28 },
+      { code: "SLV", name: "Slovenia",      pdi: 71, idv: 27, mas: 19, uai: 88, lto: 49, ivr: 48 },
+      { code: "SPA", name: "Spain",         pdi: 57, idv: 51, mas: 42, uai: 86, lto: 48, ivr: 44 },
+      { code: "SWE", name: "Sweden",        pdi: 31, idv: 71, mas:  5, uai: 29, lto: 53, ivr: 78 },
+      { code: "SWI", name: "Switzerland",   pdi: 34, idv: 68, mas: 70, uai: 58, lto: 74, ivr: 66 },
+      { code: "TAI", name: "Taiwan",        pdi: 58, idv: 17, mas: 45, uai: 69, lto: 93, ivr: 49 },
+      { code: "THA", name: "Thailand",      pdi: 64, idv: 20, mas: 34, uai: 64, lto: 32, ivr: 45 },
+      { code: "TRI", name: "Trinidad & Tobago", pdi: 47, idv: 16, mas: 58, uai: 55, lto: 13, ivr: 80 },
+      { code: "TUR", name: "Turkey",        pdi: 66, idv: 37, mas: 45, uai: 85, lto: 46, ivr: 49 },
+      { code: "URU", name: "Uruguay",       pdi: 61, idv: 36, mas: 38, uai:100, lto: 26, ivr: 53 },
+      { code: "VEN", name: "Venezuela",     pdi: 81, idv: 12, mas: 73, uai: 76, lto: 16, ivr:100 },
+      { code: "VIE", name: "Vietnam",       pdi: 70, idv: 20, mas: 40, uai: 30, lto: 57, ivr: 35 },
+    ];
+
+    const NONTRIES = [
+      // United States baseline
+      { code: "USA", name: "United States", pdi: 40, idv: 91, mas: 62, uai: 46, lto: 26, ivr: 68 },
+
+      // These are intentionally very similar so direction matches almost never hit 6/6
+      { code: "ARA", name: "Arab countries", pdi: 60, idv: 50, mas: 50, uai: 50, lto: 50, ivr: 50 },
+      { code: "ARG", name: "Argentina",      pdi: 60, idv: 50, mas: 50, uai: 50, lto: 50, ivr: 50 },
+      { code: "AUL", name: "Australia",      pdi: 60, idv: 50, mas: 50, uai: 50, lto: 50, ivr: 50 },
+      { code: "AUT", name: "Austria",        pdi: 60, idv: 50, mas: 50, uai: 50, lto: 50, ivr: 50 },
+      { code: "BAN", name: "Bangladesh",     pdi: 60, idv: 50, mas: 50, uai: 50, lto: 50, ivr: 50 },
+      { code: "BEL", name: "Belgium",        pdi: 60, idv: 50, mas: 50, uai: 50, lto: 50, ivr: 50 },
+      { code: "BRA", name: "Brazil",         pdi: 60, idv: 50, mas: 50, uai: 50, lto: 50, ivr: 50 },
+      { code: "BUL", name: "Bulgaria",       pdi: 60, idv: 50, mas: 50, uai: 50, lto: 50, ivr: 50 },
+      { code: "CAN", name: "Canada",         pdi: 60, idv: 50, mas: 50, uai: 50, lto: 50, ivr: 50 },
+      { code: "CHI", name: "China",          pdi: 60, idv: 50, mas: 50, uai: 50, lto: 50, ivr: 50 },
+      { code: "DEN", name: "Denmark",        pdi: 60, idv: 50, mas: 50, uai: 50, lto: 50, ivr: 50 },
+      { code: "FRA", name: "France",         pdi: 60, idv: 50, mas: 50, uai: 50, lto: 50, ivr: 50 },
+      { code: "GER", name: "Germany",        pdi: 60, idv: 50, mas: 50, uai: 50, lto: 50, ivr: 50 },
+      { code: "GRE", name: "Greece",         pdi: 60, idv: 50, mas: 50, uai: 50, lto: 50, ivr: 50 },
+      { code: "IND", name: "India",          pdi: 60, idv: 50, mas: 50, uai: 50, lto: 50, ivr: 50 },
+      { code: "ITA", name: "Italy",          pdi: 60, idv: 50, mas: 50, uai: 50, lto: 50, ivr: 50 },
+      { code: "JPN", name: "Japan",          pdi: 60, idv: 50, mas: 50, uai: 50, lto: 50, ivr: 50 },
+      { code: "KOR", name: "South Korea",    pdi: 60, idv: 50, mas: 50, uai: 50, lto: 50, ivr: 50 },
+      { code: "MEX", name: "Mexico",         pdi: 60, idv: 50, mas: 50, uai: 50, lto: 50, ivr: 50 },
+      { code: "NET", name: "Netherlands",    pdi: 60, idv: 50, mas: 50, uai: 50, lto: 50, ivr: 50 },
+      { code: "NOR", name: "Norway",         pdi: 60, idv: 50, mas: 50, uai: 50, lto: 50, ivr: 50 },
+      { code: "POL", name: "Poland",         pdi: 60, idv: 50, mas: 50, uai: 50, lto: 50, ivr: 50 },
+      { code: "POR", name: "Portugal",       pdi: 60, idv: 50, mas: 50, uai: 50, lto: 50, ivr: 50 },
+      { code: "SPA", name: "Spain",          pdi: 60, idv: 50, mas: 50, uai: 50, lto: 50, ivr: 50 },
+      { code: "SWE", name: "Sweden",         pdi: 60, idv: 50, mas: 50, uai: 50, lto: 50, ivr: 50 },
+      { code: "TUR", name: "Turkey",         pdi: 60, idv: 50, mas: 50, uai: 50, lto: 50, ivr: 50 },
+      { code: "VIE", name: "Vietnam",        pdi: 60, idv: 50, mas: 50, uai: 50, lto: 50, ivr: 50 },
+    ];
+
+
+    const DIM_KEYS = Object.keys(DIM_INFO);
+
+    // --- UI helpers ---------------------------------------------------------
+
+    function showSection(id) {
+      document.querySelectorAll("section").forEach((s) => {
+        s.classList.toggle("active", s.id === id);
+      });
+    }
+
+    function startQuestionnaire() {
+      renderQuestions();
+      showSection("questionnaireSection");
+    }
+
+    function restart() {
+      document.getElementById("questionnaireForm").innerHTML = "";
+      showSection("introSection");
+    }
+
+    // --- Render questionnaire ----------------------------------------------
+    function renderQuestions() {
+      const form = document.getElementById('questionnaireForm');
+      form.innerHTML = '';
+
+      // Headings copied from the VSM‑2013 questionnaire:contentReference[oaicite:3]{index=3}:contentReference[oaicite:4]{index=4}:contentReference[oaicite:5]{index=5}
+      const groupHeadings = {
+        'Ideal job importance': 'Please think of an ideal job, disregarding your present job, if you have one. In choosing an ideal job, how important would it be to you to ... (please circle one answer in each line across):',
+        'Private life importance': 'In your private life, how important is each of the following to you: (please circle one answer in each line across):',
+        'Agreement statements': 'To what extent do you agree or disagree with each of the following statements? (please circle one answer in each line across):'
+        // There is no specific heading for the “Personal life questions” group in the document
+      };
+
+      // Order in which to display groups
+      const groupOrder = [
+        'Ideal job importance',
+        'Private life importance',
+        'Personal life questions',
+        'Agreement statements'
+      ];
+
+      // Group questions by their group property
+      const groups = {};
+      for (const q of questions) {
+        if (!groups[q.group]) groups[q.group] = [];
+        groups[q.group].push(q);
+      }
+
+      const fragment = document.createDocumentFragment();
+
+      // Helper to generate scale captions based on the scale type
+      function scaleCaptionHTML(scale) {
+        switch (scale) {
+          case 'importance':
+            return '<span>1 = of utmost importance</span><span>5 = of very little or no importance</span>';
+          case 'frequency':
+            return '<span>1 = always</span><span>5 = never</span>';
+          case 'yes_no':
+            return '<span>1 = yes, always</span><span>5 = no, never</span>';
+          case 'health':
+            return '<span>1 = very good</span><span>5 = very poor</span>';
+          case 'pride':
+            return '<span>1 = very proud</span><span>5 = not proud at all</span>';
+          case 'fear':
+            return '<span>1 = never</span><span>5 = always</span>';
+          case 'agreement':
+          default:
+            return '<span>1 = strongly agree</span><span>5 = strongly disagree</span>';
+        }
+      }
+
+      for (const groupName of groupOrder) {
+        const qs = groups[groupName];
+        if (!qs || qs.length === 0) continue;
+
+        // Add heading if one exists for this group
+        const headingText = groupHeadings[groupName];
+        if (headingText) {
+          const headingEl = document.createElement('div');
+          headingEl.className = 'question-group-heading';
+          headingEl.textContent = headingText;
+          fragment.appendChild(headingEl);
+        }
+
+        // Add each question in the group
+        for (const q of qs) {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'question';
+
+          // Question text with numbering
+          const label = document.createElement('div');
+          label.className = 'question-label';
+          label.textContent = `${String(q.index).padStart(2, '0')}. ${q.text}`;
+          wrapper.appendChild(label);
+
+          // Radio buttons
+          const scaleRow = document.createElement('div');
+          scaleRow.className = 'scale-row';
+          for (let i = 1; i <= 5; i++) {
+            const optLabel = document.createElement('label');
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = `q${q.index}`;
+            input.id = q.index;
+            input.value = String(i);
+            optLabel.appendChild(input);
+            optLabel.appendChild(document.createTextNode(String(i)));
+            scaleRow.appendChild(optLabel);
+          }
+          wrapper.appendChild(scaleRow);
+
+          // Scale captions based on scale type
+          const captions = document.createElement('div');
+          captions.className = 'scale-captions';
+          captions.innerHTML = scaleCaptionHTML(q.scale);
+          wrapper.appendChild(captions);
+
+          fragment.appendChild(wrapper);
+        }
+      }
+
+      // Append note and submit button
+      const footer = document.createElement('div');
+      footer.className = 'questionnaire-footer';
+      const note = document.createElement('div');
+      note.textContent = 'Answer based on how you tend to behave or feel most of the time.';
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'btn';
+      btn.textContent = 'See your results';
+      btn.addEventListener('click', handleSubmit);
+      footer.appendChild(note);
+      footer.appendChild(btn);
+      fragment.appendChild(footer);
+
+      form.appendChild(fragment);
+    }
+
+
+
+    // --- Logic: scoring & comparisons ---------------------------------------
+    function handleSubmit() {
+      const m = {}; // m[1]..m[24]
+
+      // Collect answers; your debug tweak: fill missing with Q1
+      for (let i = 1; i <= 24; i++) {
+        const input = document.querySelector(`input[name="q${i}"]:checked`);
+        if (!input) {
+          //m[i] = m[1];
+          
+
+          alert("Please answer all questions before seeing your results.");
+
+          const target = document.querySelector(`.question input[name="q${i}"]`);
+          if (target) {
+            target.scrollIntoView({ behavior: "smooth", block: "center" });
+            target.focus({ preventScroll: true });
+          }
+
+          return;
+        } else {
+          m[i] = parseInt(input.value, 10);
+        }
+      }
+
+      // --- 1. RAW INDICES: VSM 2013 formulas (C(...) = 0) ---
+
+
+      const dimScores = { // !!!! Shifts are approximations
+        pdi: 35 * (m[7]  - m[2])  + 25 * (m[20] - m[23])+50,
+        idv: 35 * (m[4]  - m[1])  + 35 * (m[9]  - m[6])+50,
+        mas: 35 * (m[5]  - m[3])  + 35 * (m[8]  - m[10])+50,
+        uai: 40 * (m[18] - m[15]) + 25 * (m[21] - m[24])+50,
+        lto: 40 * (m[13] - m[14]) + 25 * (m[19] - m[22])+50,
+        ivr: 35 * (m[12] - m[11]) + 40 * (m[17] - m[16])+50
+      };
+
+      console.log("dimScores normalized, lowercase):", dimScores);
+
+      // --- 4. Build relationships vs USA ---
+
+      const relationships = {};
+      const tolerance = 18.0; // treat within X points as "equal"
+
+      DIM_KEYS.forEach((dim) => {
+        const you = dimScores[dim];
+        const us = USA_SCORES[dim];
+
+        if (you == null || us == null) {
+          relationships[dim] = "unknown"; // fallback, shouldn't really happen
+          return;
+        }
+
+        if (Math.abs(you - us) <= tolerance) {
+          relationships[dim] = "equal";
+        } else if (you > us) {
+          relationships[dim] = "greater";
+        } else {
+          relationships[dim] = "less";
+        }
+      });
+
+      console.log("Relationships vs USA:", relationships);
+
+      // --- 5. Use EXISTING country-matching + results rendering ---
+
+      const matchingCountries = findMatchingCountries(relationships, dimScores);
+
+      console.log("Matching countries:", matchingCountries);
+
+      // Old UI logic:
+      renderResults(dimScores, relationships, matchingCountries);
+      showSection("resultsSection");
+    }
+
+    function findMatchingCountriesOLD(relationships) {
+      const matches = [];
+
+      countryLoop: for (const c of COUNTRIES) {
+        for (const dim of DIM_KEYS) {
+          const relation = relationships[dim];
+          const us = USA_SCORES[dim];
+          const cv = c[dim];
+
+          if (cv == null || typeof cv !== "number") {
+            continue countryLoop; // require full data
+          }
+
+          if (relation === "greater" && !(cv > us)) {
+            continue countryLoop;
+          } else if (relation === "less" && !(cv < us)) {
+            continue countryLoop;
+          } else if (relation === "equal" && !(cv === us)) {
+            continue countryLoop;
+          }
+        }
+        matches.push(c);
+      }
+
+      return matches;
+    }
+
+    // dimScores: { pdi, idv, mas, uai, lto, ivr } in normalized space (your user scores)
+    function findMatchingCountries(relationships, dimScores) {
+      const scoredMatches = [];
+
+      countryLoop: for (const c of COUNTRIES) {
+        // 1) First apply the old direction-based rule vs USA
+        for (const dim of DIM_KEYS) {
+          const relation = relationships[dim];      // "greater" | "less" | "equal"
+          const us = USA_SCORES[dim];
+          const cv = c[dim];
+
+          if (cv == null || typeof cv !== "number") {
+            continue countryLoop; // require full data
+          }
+
+          if (relation === "greater" && !(cv > us)) {
+            continue countryLoop;
+          } else if (relation === "less" && !(cv < us)) {
+            continue countryLoop;
+          } else if (relation === "equal" && !(cv === us)) {
+            continue countryLoop;
+          }
+        }
+
+        // 2) If it passes the direction test, compute geometric mean distance
+        let product = 1;
+        let count = 0;
+        for (const dim of DIM_KEYS) {
+          const you = dimScores[dim];
+          const cv = c[dim];
+
+          if (typeof you !== "number" || typeof cv !== "number") {
+            continue countryLoop; // must have both values
+          }
+
+          const diff = Math.abs(you - cv);
+          // Add a tiny epsilon to avoid wiping out the product when diff = 0
+          product *= (diff + 1e-6);
+          count++;
+        }
+
+        if (count === 0) {
+          continue; // shouldn't happen, but guard anyway
+        }
+
+        const geoMean = Math.pow(product, 1 / count);
+
+        scoredMatches.push({ country: c, distance: geoMean });
+      }
+
+      // 3) Sort by geometric mean distance (closest first)
+      scoredMatches.sort((a, b) => a.distance - b.distance);
+
+      // 4) Return just the country objects in order
+      return scoredMatches.map((entry) => entry.country);
+    }
+
+
+    // Fallback: when no country matches on all 6 dimensions,
+    // pick the top N countries by number of matching directions.
+    function findClosestCountries(relationships, maxCount = 20) {
+      const scored = [];
+
+      countryLoop: for (const c of COUNTRIES) {
+        let matchCount = 0;
+
+        for (const dim of DIM_KEYS) {
+          const relUser = relationships[dim];
+          const us = USA_SCORES[dim];
+          const cv = c[dim];
+
+          if (cv == null || typeof cv !== "number") {
+            continue countryLoop; // require full data for all dims
+          }
+
+          const diffCountry = cv - us;
+          let relCountry;
+          if (diffCountry === 0) {
+            relCountry = "equal";
+          } else if (diffCountry > 0) {
+            relCountry = "greater";
+          } else {
+            relCountry = "less";
+          }
+
+          if (relCountry === relUser) {
+            matchCount++;
+          }
+        }
+
+        scored.push({ country: c, matchCount });
+      }
+
+      scored.sort((a, b) => b.matchCount - a.matchCount);
+      return scored.slice(0, maxCount).map((entry) => entry.country);
+    }
+
+
+    // --- Render results -----------------------------------------------------
+
+    function renderResults(dimScores, relationships, matchingCountries) {
+      // 1) Top message
+      const msgEl = document.getElementById("countriesMessage");
+      if (matchingCountries.length > 0) {
+        const names = matchingCountries.map((c) => c.name).join(", ");
+        msgEl.textContent = `You make America more like ${names}.`;
+      } else {
+        msgEl.textContent = "You make America more unique!";
+      }
+
+      // 2–3) Pattern summary + dimension table (dynamic baseline)
+      const patternSummaryEl = document.getElementById("patternSummary");
+      const tbody = document.querySelector("#dimTable tbody");
+      const listEl = document.getElementById("countriesList");
+      const baselineHeaderCell = document.querySelector("#dimTable thead th:nth-child(3)");
+
+      // Helper: find a country object by name
+      function getCountryByName(name) {
+        return COUNTRIES.find((c) => c.name === name) || null;
+      }
+
+      // Baseline state:
+      //   null          -> USA (default)
+      //   "SomeCountry" -> that country
+      let activeBaselineName = null;
+
+      function getBaselineScores() {
+        if (!activeBaselineName) {
+          // USA baseline
+          return { name: "United States", scores: USA_SCORES };
+        }
+        const country = getCountryByName(activeBaselineName);
+        if (!country) {
+          // Fallback to USA
+          return { name: "United States", scores: USA_SCORES };
+        }
+        return { name: country.name, scores: country };
+      }
+
+      function applyBaseline() {
+        const { name: baselineName, scores: baselineScores } = getBaselineScores();
+
+        // Update header label for baseline column
+        if (baselineHeaderCell) {
+          baselineHeaderCell.textContent = `${(getCountryByName(baselineName)?.abbr || (baselineName === "United States" ? "USA" : baselineName.slice(0,2).toUpperCase()))}`;
+
+        }
+
+        const parts = [];
+        tbody.innerHTML = "";
+
+        for (const dim of DIM_KEYS) {
+          const you = dimScores[dim];
+          const them = baselineScores[dim];
+
+          if (typeof you !== "number" || typeof them !== "number") continue;
+
+          const diff = you - them;
+          let rel;
+          if (Math.abs(diff) <= 1) {
+            rel = "equal";
+            parts.push(`${DIM_INFO[dim].code}: about the same as ${baselineName}`);
+          } else if (diff > 0) {
+            rel = "greater";
+            parts.push(`${DIM_INFO[dim].code}: higher than ${baselineName}`);
+          } else if (diff < 0){
+            rel = "less";
+            parts.push(`${DIM_INFO[dim].code}: lower than ${baselineName}`);
+          } else {
+            rel = "unknown";
+            parts.push(`${DIM_INFO[dim].code}: incomparable to ${baselineName}`);
+          }
+
+          const tr = document.createElement("tr");
+
+          const tdDim = document.createElement("td");
+          tdDim.innerHTML = `<div class="dim-key">${DIM_INFO[dim].code}</div>
+                             <div class="dim-name">${DIM_INFO[dim].name}</div>`;
+
+          const tdYou = document.createElement("td");
+          tdYou.textContent = Math.round(you);
+
+          const tdBaseline = document.createElement("td");
+          tdBaseline.textContent = Math.round(them);
+
+          const tdDir = document.createElement("td");
+          const tag = document.createElement("span");
+          tag.className = "tag";
+          if (rel === "greater") {
+            tag.classList.add("tag-up");
+            tag.textContent = `You > ${baselineName}`;
+          } else if (rel === "less") {
+            tag.classList.add("tag-down");
+            tag.textContent = `You < ${baselineName}`;
+          } else if (rel === "equal"){
+            tag.classList.add("tag-equal");
+            tag.textContent = `≈ ${baselineName}`;
+          } else {
+            tag.classList.add("tag-down");
+            tag.textContent = `incomparable`;
+          }
+          tdDir.appendChild(tag);
+
+          tr.appendChild(tdDim);
+          tr.appendChild(tdYou);
+          tr.appendChild(tdBaseline);
+          tr.appendChild(tdDir);
+
+          tbody.appendChild(tr);
+        }
+        patternSummaryEl.textContent = parts.join(" · ");
+      }
+
+      // 4) Country Chips
+      listEl.innerHTML = "";
+
+      let sideCountries;
+      let uniqueMode = false;
+
+      if (matchingCountries.length > 0) {
+        sideCountries = matchingCountries;
+      } else {
+        uniqueMode = true;
+        sideCountries = findClosestCountries(relationships, 20);
+      }
+
+      if (!sideCountries || sideCountries.length === 0) {
+        const span = document.createElement("span");
+        span.style.color = "#9ca3af";
+        span.style.fontSize = "0.82rem";
+        span.textContent =
+          "No country in this dataset could be compared on all six dimensions.";
+        listEl.appendChild(span);
+      } else {
+        if (uniqueMode) {
+          const note = document.createElement("div");
+          note.style.color = "#9ca3af";
+          note.style.fontSize = "0.82rem";
+          note.style.marginBottom = "0.35rem";
+          note.textContent =
+            "No country differs from the US in the same direction as you in all 6 dimensions. These are the 20 that come closest.";
+          listEl.appendChild(note);
+
+          document.getElementById("chip-criteria").textContent = "A country appears here if, for several dimensions, it differs from U.S.A. in the same direction as you (higher, lower, or roughly equal).";
+        }
+
+        sideCountries.forEach((c) => {
+          const chip = document.createElement("div");
+          chip.className = "chip";
+          chip.textContent = c.name;
+
+          chip.addEventListener("click", () => {
+            // Toggle selection: deselect -> revert to USA
+            if (activeBaselineName === c.name) {
+              activeBaselineName = null;
+              document
+                .querySelectorAll("#countriesList .chip")
+                .forEach((ch) => ch.classList.remove("chip-active"));
+            } else {
+              activeBaselineName = c.name;
+              document
+                .querySelectorAll("#countriesList .chip")
+                .forEach((ch) => ch.classList.remove("chip-active"));
+              chip.classList.add("chip-active");
+            }
+
+            applyBaseline();
+          });
+
+          listEl.appendChild(chip);
+        });
+      }
+
+      // Initial render: baseline = USA (no chip active)
+      applyBaseline();
+
+
+    }
+  </script>
+</body>
+</html>
