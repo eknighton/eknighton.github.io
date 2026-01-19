@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pattern Pattern</title>
+  <style>
+    :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+    body { margin: 0; padding: 24px; background: #0b0f17; color: #e9eefc; }
+    .wrap { max-width: 900px; margin: 0 auto; }
+    h1 { font-size: 20px; margin: 0 0 10px; }
+    .sub { opacity: 0.85; margin: 0 0 18px; line-height: 1.4; }
+    .card {
+      background: #11192b;
+      border: 1px solid #223252;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      will-change: transform;
+    }
+    .row { display:flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .pill { padding: 6px 10px; border-radius: 999px; background: #0f254a; border: 1px solid #243d68; font-size: 12px; opacity: 0.95; }
+    .grid { display: flex; gap: 10px; flex-wrap: wrap; padding: 14px 0 6px; align-items: center; }
+    .cell {
+      width: 54px; height: 58px;
+      border-radius: 12px;
+      background: #0c1322;
+      border: 1px solid #2a3f66;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .cell.revealed { background: #0c1a2f; border-color: #3a67b1; }
+    .cell input {
+      width: 100%; height: 100%;
+      border: 0; outline: 0;
+      background: transparent;
+      color: #e9eefc;
+      font-size: 26px;
+      text-align: center;
+      caret-color: #e9eefc;
+    }
+    .cell .fixed { font-size: 26px; font-weight: 700; opacity: 0.95; }
+    .cell .idx { position: absolute; bottom: 4px; right: 6px; font-size: 10px; opacity: 0.45; }
+
+    .actions { display:flex; gap: 10px; align-items: center; margin-top: 12px; flex-wrap: wrap; }
+    button {
+      border: 1px solid #2a3f66;
+      background: #0c1322;
+      color: #e9eefc;
+      padding: 10px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    button:hover { filter: brightness(1.1); }
+    button.primary { background: #17325d; border-color: #3a67b1; }
+    button.danger  { background: #3a1a1a; border-color: #8a3a3a; }
+
+    /* Inline clear button at end of sequence */
+    .clearSlot {
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .clearSlot button {
+      height: 58px;
+      padding: 0 14px;
+      border-radius: 12px;
+    }
+
+    /* Screen shake */
+    @keyframes shake {
+      0%   { transform: translate(0, 0); }
+      10%  { transform: translate(-6px, 2px); }
+      20%  { transform: translate(6px, -2px); }
+      30%  { transform: translate(-8px, -2px); }
+      40%  { transform: translate(8px, 2px); }
+      50%  { transform: translate(-6px, 2px); }
+      60%  { transform: translate(6px, -2px); }
+      70%  { transform: translate(-4px, -1px); }
+      80%  { transform: translate(4px, 1px); }
+      90%  { transform: translate(-2px, 0px); }
+      100% { transform: translate(0, 0); }
+    }
+    .shake {
+      animation: shake 160ms ease-in-out;
+    }
+
+    .msg { margin-top: 10px; min-height: 24px; }
+    .msg.good { color: #9ff2b4; }
+    .msg.bad  { color: #ffb3b3; }
+    .small { font-size: 12px; opacity: 0.8; }
+    .footer { margin-top: 14px; display:flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <h1>Guess the sequence</h1>
+    <p class="sub">
+      Each round you’re guessing a sequence of single-digit numbers.
+      You’ll only be told if your guess is <b>right</b> or <b>wrong</b>. When you get it right, a new round begins.
+    </p>
+
+    <div class="card" id="card">
+      <div class="row">
+        <span class="pill">Round: <span id="roundNo">1</span></span>
+        <span class="pill">Total unique tries: <span id="tThis">0</span></span>
+      </div>
+
+      <div id="grid" class="grid" aria-label="Sequence inputs"></div>
+
+      <div class="actions">
+        <button class="primary" id="submitBtn">Submit guess</button>
+        <button id="skipBtn">Skip</button>
+        <button id="downloadBtn">Download log (.xls)</button>
+        <button class="danger" id="resetBtn">Reset session</button>
+      </div>
+
+      <div id="msg" class="msg"></div>
+
+      <div class="footer">
+        <div class="small">Tip: Press <span class="mono">Enter</span> to submit.</div>
+        <div class="small mono"></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* =========================================================
+   DIALS (length + experience shaping)
+   - "avgGuesses" starts at half of baseMax (from prompt type),
+     reduced by experience, with "higher base -> easier reduction"
+   - avgGuesses can be fractional
+   - acceptance threshold sampled from Normal(mean=avg, sd=0.5*avg),
+     clamped to [0, 3*avg], then converted to acceptAtUniqueIndex (>=1)
+   ========================================================= */
+const DIALS = {
+  MIN_LEN: 2,
+  MAX_LEN: 8,
+  HISTORY_SCALE: 10,
+  EXP_REDUCE_RATE: 1.0,
+  EXP_EASE_BASE: 10,
+  MIN_AVG_GUESSES: 0,
+  MAX_AVG_GUESSES: 20,
+};
+
+/* =========================================================
+   PROMPT TYPES (mask -> base max fails)
+   ========================================================= */
+const PROMPT_TYPES = {
+  // Length 2
+  "#-": 5,
+
+  // Length 3
+  "#--": 10,
+  "-#-": 5,
+
+  // Length 4
+  "-#--": 8,
+  "##--": 4,
+  "#-#-": 3,
+
+  // Length 5
+  "##---": 5,
+  "#-#--": 3,
+  "###--": 2,
+
+  // Length 6
+  "##----": 2,
+  "#-#---": 4,
+  "###---": 1,
+  "##-#--": 1,
+
+  // Length 7
+  "##-----": 3,
+  "###----": 2,
+  "#-#-#--": 3,
+
+  // Length 8
+  "####----": 2,
+  "##-##---": 1
+};
+
+/* --------------------------
+   State
+-------------------------- */
+const state = {
+  round: 1,
+  totalUniqueGuesses: 0,
+  logs: [],
+
+  len: 0,
+  revealed: [],
+  clueDigits: [],
+  uniqueThisRound: new Set(),
+  uniqueIndexThisRound: 0,
+
+  promptMask: "",
+  promptMaskBaseMaxFails: 0,
+
+  baseMaxFails: 0,
+  maxFails: 0,           // avgGuesses (float)
+  failsThisRound: 0,     // acceptAtUniqueIndex-1
+  acceptAtUniqueIndex: 1,
+  longestRun: 0,
+  revealedCount: 0,
+  historyUnits: 0
+};
+
+/* --------------------------
+   Utilities
+-------------------------- */
+function clamp(x, a, b) { return Math.max(a, Math.min(b, x)); }
+function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+function nowIso() { return new Date().toISOString(); }
+
+function choiceWeighted(items) {
+  const total = items.reduce((s, it) => s + it.weight, 0);
+  let r = Math.random() * total;
+  for (const it of items) { r -= it.weight; if (r <= 0) return it.value; }
+  return items[items.length - 1].value;
+}
+
+function longestRevealedRun(revealedArr) {
+  let best = 0, cur = 0;
+  for (const r of revealedArr) {
+    if (r) { cur += 1; best = Math.max(best, cur); }
+    else { cur = 0; }
+  }
+  return best;
+}
+
+function progressScalar() {
+  return 1 - Math.exp(-state.totalUniqueGuesses / 90);
+}
+
+// Standard normal sampler (Box–Muller)
+function randNormal(mean, stdDev) {
+  if (!(stdDev > 0)) return mean;
+  let u = 0, v = 0;
+  while (u === 0) u = Math.random();
+  while (v === 0) v = Math.random();
+  const z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+  return mean + z * stdDev;
+}
+
+/* --------------------------
+   Effects
+-------------------------- */
+function shakeCard() {
+  const card = document.getElementById("card");
+  card.classList.remove("shake");
+  void card.offsetWidth;
+  card.classList.add("shake");
+}
+
+/* --------------------------
+   Prompt type selection
+-------------------------- */
+function flipMask(mask) {
+  return (Math.random() < 0.5) ? mask.split("").reverse().join("") : mask;
+}
+
+function fillMaskDigits(mask) {
+  const revealed = [];
+  const clueDigits = [];
+  for (let i = 0; i < mask.length; i++) {
+    if (mask[i] === "#") {
+      revealed[i] = true;
+      clueDigits[i] = randInt(0, 9);
+    } else {
+      revealed[i] = false;
+      clueDigits[i] = null;
+    }
+  }
+  return { revealed, clueDigits };
+}
+
+function pickPromptTypeByLen(L) {
+  const entries = Object.entries(PROMPT_TYPES).filter(([mask]) => mask.length === L);
+  if (entries.length === 0) {
+    const mask = "-".repeat(L);
+    return { mask, baseMaxFails: Math.max(1, Math.round(L / 2)) };
+  }
+  const [mask, baseMaxFails] = entries[randInt(0, entries.length - 1)];
+  return { mask: flipMask(mask), baseMaxFails };
+}
+
+/* --------------------------
+   Round config (length biased by progress)
+-------------------------- */
+function pickRoundLength() {
+  const p = progressScalar();
+  const expectedLen = clamp(3.2 + 4.5 * p, DIALS.MIN_LEN, DIALS.MAX_LEN);
+  const candidates = [];
+  for (let L = DIALS.MIN_LEN; L <= DIALS.MAX_LEN; L++) {
+    const dist = Math.abs(L - expectedLen);
+    candidates.push({ value: L, weight: Math.exp(-0.55 * dist) });
+  }
+  return choiceWeighted(candidates);
+}
+
+/* --------------------------
+   Planner
+-------------------------- */
+function computeHistoryUnits(totalUniqueGuesses) {
+  return Math.log(1 + (totalUniqueGuesses / DIALS.HISTORY_SCALE));
+}
+
+function planRound() {
+  state.revealedCount = state.revealed.filter(Boolean).length;
+  state.longestRun = longestRevealedRun(state.revealed);
+
+  state.baseMaxFails = state.promptMaskBaseMaxFails;
+  const baseAvg = state.baseMaxFails / 2;
+
+  state.historyUnits = computeHistoryUnits(state.totalUniqueGuesses);
+
+  const easeFactor = state.baseMaxFails / (state.baseMaxFails + DIALS.EXP_EASE_BASE);
+  const expEffect = 1 - Math.exp(-DIALS.EXP_REDUCE_RATE * state.historyUnits);
+  const reduceBy = baseAvg * easeFactor * expEffect;
+
+  const avgGuesses = clamp(
+    baseAvg - reduceBy,
+    DIALS.MIN_AVG_GUESSES,
+    DIALS.MAX_AVG_GUESSES
+  );
+
+  state.maxFails = avgGuesses;
+
+  const stdDev = 0.5 * avgGuesses;
+  const sampled = randNormal(avgGuesses, stdDev);
+  const guessesNeeded = clamp(sampled, 0, avgGuesses * 3);
+
+  state.acceptAtUniqueIndex = Math.max(1, Math.ceil(guessesNeeded));
+  state.failsThisRound = Math.max(0, state.acceptAtUniqueIndex - 1);
+
+  console.log(
+    `[Round ${state.round}] mask=${state.promptMask} len=${state.len} revealed=${state.revealedCount}/${state.len} run=${state.longestRun} ` +
+    `base=${state.baseMaxFails} avgGuesses=${state.maxFails.toFixed(2)} acceptAt=${state.acceptAtUniqueIndex} ` +
+    `totalUnique=${state.totalUniqueGuesses} histUnits=${state.historyUnits.toFixed(2)}`
+  );
+}
+
+/* --------------------------
+   UI
+-------------------------- */
+const els = {
+  grid: document.getElementById("grid"),
+  roundNo: document.getElementById("roundNo"),
+  tThis: document.getElementById("tThis"),
+  msg: document.getElementById("msg"),
+  submitBtn: document.getElementById("submitBtn"),
+  skipBtn: document.getElementById("skipBtn"),
+  downloadBtn: document.getElementById("downloadBtn"),
+  resetBtn: document.getElementById("resetBtn"),
+};
+
+function clearMsg() { els.msg.textContent = ""; els.msg.className = "msg"; }
+function setMsg(text, kind) { els.msg.textContent = text; els.msg.className = "msg " + (kind || ""); }
+
+/* Clear current inputs (non-revealed) */
+function clearCurrentGuess() {
+  const inputs = els.grid.querySelectorAll("input");
+  inputs.forEach(inp => inp.value = "");
+  const first = els.grid.querySelector("input");
+  if (first) first.focus();
+}
+
+function renderRound() {
+  els.grid.innerHTML = "";
+
+  els.roundNo.textContent = state.round;
+  els.tThis.textContent = state.totalUniqueGuesses;
+
+  for (let i = 0; i < state.len; i++) {
+    const cell = document.createElement("div");
+    cell.className = "cell" + (state.revealed[i] ? " revealed" : "");
+    const idx = document.createElement("div");
+    idx.className = "idx";
+    idx.textContent = i + 1;
+
+    if (state.revealed[i]) {
+      const fixed = document.createElement("div");
+      fixed.className = "fixed";
+      fixed.textContent = state.clueDigits[i];
+      cell.appendChild(fixed);
+    } else {
+      const input = document.createElement("input");
+      input.inputMode = "numeric";
+      input.autocomplete = "off";
+      input.maxLength = 1;
+      input.placeholder = "·";
+      input.setAttribute("aria-label", `Digit ${i+1}`);
+
+      input.addEventListener("input", () => {
+        input.value = input.value.replace(/[^0-9]/g, "").slice(0, 1);
+        if (input.value.length === 1) {
+          const next = findNextInput(i);
+          if (next) next.focus();
+          else {
+            // If this was the last input in the row, move focus to the clear button (nice keyboard flow)
+            const clearBtn = document.getElementById("clearGuessBtn");
+            if (clearBtn) clearBtn.focus();
+          }
+        }
+      });
+
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Backspace" && input.value === "") {
+          const prev = findPrevInput(i);
+          if (prev) prev.focus();
+        }
+        // Optional: Escape clears guess
+        if (e.key === "Escape") {
+          e.preventDefault();
+          clearCurrentGuess();
+        }
+      });
+
+      cell.appendChild(input);
+    }
+
+    cell.appendChild(idx);
+    els.grid.appendChild(cell);
+  }
+
+  // Add inline "Clear" button at the end of the sequence (same line as grid)
+  const clearSlot = document.createElement("div");
+  clearSlot.className = "clearSlot";
+  const clearBtn = document.createElement("button");
+  clearBtn.id = "clearGuessBtn";
+  clearBtn.type = "button";
+  clearBtn.textContent = "Clear";
+  clearBtn.title = "Clear current guess (Esc)";
+  clearBtn.addEventListener("click", () => {
+    clearCurrentGuess();
+    console.log(`[Round ${state.round}] cleared current guess`);
+  });
+  clearSlot.appendChild(clearBtn);
+  els.grid.appendChild(clearSlot);
+
+  const first = els.grid.querySelector("input");
+  if (first) first.focus();
+}
+
+function findNextInput(fromIndex) {
+  const cells = Array.from(els.grid.children);
+  for (let i = fromIndex + 1; i < cells.length; i++) {
+    const inp = cells[i].querySelector("input");
+    if (inp) return inp;
+  }
+  return null;
+}
+function findPrevInput(fromIndex) {
+  const cells = Array.from(els.grid.children);
+  for (let i = fromIndex - 1; i >= 0; i--) {
+    const inp = cells[i].querySelector("input");
+    if (inp) return inp;
+  }
+  return null;
+}
+
+/* --------------------------
+   Guess handling
+-------------------------- */
+function getCurrentGuessString() {
+  const cells = Array.from(els.grid.children);
+  const digits = [];
+  for (let i = 0; i < state.len; i++) {
+    if (state.revealed[i]) digits.push(String(state.clueDigits[i]));
+    else {
+      const inp = cells[i].querySelector("input");
+      const v = inp?.value ?? "";
+      digits.push(v === "" ? "_" : v);
+    }
+  }
+  return digits.join("");
+}
+function isGuessComplete(guessStr) { return !guessStr.includes("_"); }
+
+function submitGuess() {
+  clearMsg();
+
+  const guess = getCurrentGuessString();
+  if (!isGuessComplete(guess)) {
+    setMsg("Fill all blank digits before submitting.", "bad");
+    return;
+  }
+
+  if (state.uniqueThisRound.has(guess)) {
+    setMsg("Already tried that exact guess. Try something new.", "bad");
+    logGuess({ guess, accepted: 0, duplicate: 1, skipped: 0 });
+    shakeCard();
+    console.log(`[Round ${state.round}] duplicate guess: ${guess}`);
+    return;
+  }
+
+  state.uniqueThisRound.add(guess);
+  state.uniqueIndexThisRound += 1;
+  state.totalUniqueGuesses += 1;
+
+  const accepted = (state.uniqueIndexThisRound >= state.acceptAtUniqueIndex);
+
+  logGuess({ guess, accepted: accepted ? 1 : 0, duplicate: 0, skipped: 0 });
+  els.tThis.textContent = state.totalUniqueGuesses;
+
+  if (accepted) {
+    setMsg("Correct! New round…", "good");
+    console.log(`[Round ${state.round}] accepted on unique #${state.uniqueIndexThisRound}: ${guess}`);
+    state.round += 1;
+    setTimeout(() => startNewRound(), 350);
+  } else {
+    setMsg("Wrong. Try again.", "bad");
+    shakeCard();
+    console.log(`[Round ${state.round}] wrong (unique #${state.uniqueIndexThisRound}/${state.acceptAtUniqueIndex}) guess=${guess}`);
+  }
+}
+
+function skipRound() {
+  clearMsg();
+  setMsg("Skipped. New round…", "bad");
+
+  console.log(`[Round ${state.round}] skipped by user (uniqueThisRound=${state.uniqueThisRound.size})`);
+  logGuess({ guess: "(SKIP)", accepted: 0, duplicate: 0, skipped: 1 });
+
+  state.round += 1;
+  setTimeout(() => startNewRound(), 250);
+}
+
+function logGuess({ guess, accepted, duplicate, skipped }) {
+  const unknown = state.len - state.revealedCount;
+  state.logs.push({
+    ts: nowIso(),
+    round: state.round,
+    length: state.len,
+    promptMask: state.promptMask,
+    revealedCount: state.revealedCount,
+    unknown,
+    longestRun: state.longestRun,
+    baseMaxFails: state.baseMaxFails,
+    avgGuesses: state.maxFails,
+    acceptAtUniqueIndex: state.acceptAtUniqueIndex,
+    uniqueIndexThisRound: state.uniqueIndexThisRound,
+    guess,
+    totalUniqueGuesses: state.totalUniqueGuesses,
+    accepted,
+    duplicate,
+    skipped: skipped ? 1 : 0
+  });
+}
+
+/* --------------------------
+   Round start
+-------------------------- */
+function startNewRound() {
+  state.len = pickRoundLength();
+
+  const picked = pickPromptTypeByLen(state.len);
+  state.promptMask = picked.mask;
+  state.promptMaskBaseMaxFails = picked.baseMaxFails;
+
+  const filled = fillMaskDigits(state.promptMask);
+  state.revealed = filled.revealed;
+  state.clueDigits = filled.clueDigits;
+
+  state.uniqueThisRound = new Set();
+  state.uniqueIndexThisRound = 0;
+
+  planRound();
+  clearMsg();
+  renderRound();
+}
+
+/* --------------------------
+   Excel download (.xls via SpreadsheetML XML)
+-------------------------- */
+function xmlEscape(s) {
+  return String(s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+}
+
+function buildSpreadsheetML(rows) {
+  const headers = [
+    "ts","round","length","promptMask","revealedCount","unknown","longestRun",
+    "baseMaxFails","avgGuesses","acceptAtUniqueIndex","uniqueIndexThisRound",
+    "guess","totalUniqueGuesses","accepted","duplicate","skipped"
+  ];
+
+  const xmlRows = [];
+  xmlRows.push("<Row>" + headers.map(h => `<Cell><Data ss:Type="String">${xmlEscape(h)}</Data></Cell>`).join("") + "</Row>");
+
+  for (const r of rows) {
+    xmlRows.push("<Row>" + headers.map(h => {
+      const v = r[h];
+      const isNum =
+        (typeof v === "number") ||
+        (typeof v === "string" && v !== "" && !isNaN(Number(v)) && h !== "ts" && h !== "guess" && h !== "promptMask");
+      const type = isNum ? "Number" : "String";
+      return `<Cell><Data ss:Type="${type}">${xmlEscape(v ?? "")}</Data></Cell>`;
+    }).join("") + "</Row>");
+  }
+
+  return `<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Guesses">
+    <Table>
+      ${xmlRows.join("\n")}
+    </Table>
+  </Worksheet>
+</Workbook>`;
+}
+
+function downloadLogXls() {
+  if (state.logs.length === 0) { alert("No guesses logged yet."); return; }
+  const xml = buildSpreadsheetML(state.logs);
+  const blob = new Blob([xml], { type: "application/vnd.ms-excel" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+  a.href = url;
+  a.download = `sequence-guess-log-${stamp}.xls`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+/* --------------------------
+   Reset / wiring
+-------------------------- */
+function resetSession(confirmFirst = true) {
+  if (confirmFirst && !confirm("Reset the session? This clears the current log in memory.")) return;
+
+  state.round = 1;
+  state.totalUniqueGuesses = 0;
+  state.logs = [];
+
+  startNewRound();
+}
+
+document.getElementById("submitBtn").addEventListener("click", submitGuess);
+document.getElementById("skipBtn").addEventListener("click", skipRound);
+document.getElementById("downloadBtn").addEventListener("click", downloadLogXls);
+document.getElementById("resetBtn").addEventListener("click", () => resetSession(true));
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") submitGuess();
+  if (e.key === "s" || e.key === "S") skipRound();
+  // Esc clears guess globally (useful if focus is on button)
+  if (e.key === "Escape") clearCurrentGuess();
+});
+
+// init
+resetSession(false);
+</script>
+</body>
+</html>
