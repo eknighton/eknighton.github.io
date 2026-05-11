@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hidden Blocks Poetry Game</title>
+  <style>
+    :root {
+      --bg: #11100e;
+      --panel: #1b1916;
+      --panel-soft: #24211d;
+      --text: #eee6d8;
+      --muted: #a99f8e;
+      --accent: #e3b76a;
+      --accent-soft: rgba(227, 183, 106, 0.18);
+      --success: #b9d98a;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(227, 183, 106, 0.11), transparent 32rem),
+        radial-gradient(circle at bottom right, rgba(185, 217, 138, 0.08), transparent 32rem),
+        var(--bg);
+      color: var(--text);
+      font-family: Georgia, "Times New Roman", serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .game {
+      width: min(860px, 100%);
+      min-height: min(760px, calc(100vh - 48px));
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)), var(--panel);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 28px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.42);
+      padding: clamp(22px, 4vw, 42px);
+      display: flex;
+      flex-direction: column;
+      gap: 26px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: flex-start;
+    }
+
+    .level-label {
+      color: var(--muted);
+      font-size: 0.9rem;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.8rem, 5vw, 3.2rem);
+      font-weight: 500;
+      line-height: 1;
+    }
+
+    .prompt {
+      max-width: 310px;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.45;
+      text-align: right;
+      margin-top: 4px;
+    }
+
+    .poem-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(12px, 4vw, 36px) 0;
+    }
+
+    .poem-wrap.select-mode {
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+
+    .poem {
+      width: 100%;
+      white-space: pre-wrap;
+      font-size: clamp(1.8rem, 7vw, 4rem);
+      line-height: 1.28;
+      text-align: center;
+      text-wrap: balance;
+      user-select: none;
+    }
+
+    .choice {
+      border-radius: 0.18em;
+      cursor: default;
+      transition: color 140ms ease, text-shadow 140ms ease;
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+    }
+
+    .choice.changed {
+      color: var(--accent);
+      text-shadow: 0 0 18px rgba(227, 183, 106, 0.28);
+    }
+
+    .status-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 20px;
+    }
+
+    .status {
+      color: var(--muted);
+      font-size: 1rem;
+      min-height: 1.4em;
+      width: min(360px, 100%);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    button {
+      appearance: none;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.13);
+      background: var(--panel-soft);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 15px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 0.95rem;
+      transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      border-color: rgba(227, 183, 106, 0.45);
+    }
+
+    button.primary {
+      background: var(--accent);
+      color: #21180a;
+      border-color: transparent;
+      font-weight: 700;
+    }
+
+    button.danger {
+      border-color: rgba(217, 138, 107, 0.35);
+      color: #f0b39d;
+    }
+
+    .footer-note {
+      color: rgba(238,230,216,0.46);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 0.78rem;
+      line-height: 1.4;
+      text-align: center;
+      position: relative;
+      min-height: 2.2em;
+    }
+
+    .settings-link {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      padding: 5px 9px;
+      font-size: 0.76rem;
+      opacity: 0.55;
+      background: transparent;
+      border-color: rgba(255,255,255,0.08);
+    }
+
+    .settings-link:hover {
+      opacity: 1;
+      transform: none;
+    }
+
+    .settings-panel {
+      width: min(520px, 100%);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .setting-card {
+      background: var(--panel-soft);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .setting-card h2 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 650;
+      color: var(--text);
+    }
+
+    .setting-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 0.92rem;
+    }
+
+    .setting-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    input[type="range"] {
+      flex: 1;
+      min-width: 170px;
+      accent-color: var(--accent);
+    }
+
+    .volume-readout {
+      color: var(--accent);
+      min-width: 3.5em;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .chapter-list {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .chapter-section {
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+    }
+
+    .chapter-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 14px;
+      border: 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding: 0 0 10px 0;
+      border-radius: 0;
+      background: transparent;
+      text-align: left;
+      width: 100%;
+    }
+
+    .chapter-header:hover {
+      transform: none;
+      border-color: rgba(255,255,255,0.08);
+    }
+
+    .chapter-title-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .chapter-title {
+      margin: 0;
+      font-size: clamp(1.25rem, 3vw, 1.85rem);
+      font-weight: 500;
+    }
+
+    .chapter-subtitle {
+      color: var(--muted);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 0.9rem;
+      line-height: 1.35;
+      margin-top: 4px;
+    }
+
+    .author-badge {
+      --author-hue: 42;
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      color: hsl(var(--author-hue), 78%, 78%);
+      border: 1px solid hsla(var(--author-hue), 72%, 62%, 0.42);
+      background: linear-gradient(180deg, hsla(var(--author-hue), 72%, 52%, 0.18), hsla(var(--author-hue), 72%, 42%, 0.08));
+      border-radius: 999px;
+      padding: 4px 9px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 0.74rem;
+      font-weight: 650;
+      letter-spacing: 0.035em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .chapter-mark {
+      font-size: 0.75rem;
+    }
+
+    .chapter-progress {
+      color: var(--muted);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 0.82rem;
+      white-space: nowrap;
+    }
+
+    .collapse-indicator {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-right: 2px;
+    }
+
+    .level-select {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 14px;
+      width: 100%;
+    }
+
+    .level-card {
+      min-height: 170px;
+      background: var(--panel-soft);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text);
+      border-radius: 20px;
+      padding: 16px;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      justify-content: space-between;
+    }
+
+    .level-card:hover {
+      transform: translateY(-1px);
+      border-color: rgba(227, 183, 106, 0.45);
+    }
+
+    .card-title {
+      color: var(--accent);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .card-poem {
+      white-space: pre-wrap;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.05rem;
+      line-height: 1.25;
+      color: var(--text);
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 5;
+      -webkit-box-orient: vertical;
+    }
+
+    .card-note {
+      color: var(--muted);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 0.78rem;
+      min-height: 1.6rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .saved-pulse { animation: savedPulse 700ms ease; }
+    .miss-shake { animation: missShake 240ms ease; }
+
+    @keyframes savedPulse {
+      0% { transform: scale(1); }
+      35% { transform: scale(1.012); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes missShake {
+      0% { transform: translateX(0); }
+      22% { transform: translateX(-7px); }
+      44% { transform: translateX(6px); }
+      66% { transform: translateX(-4px); }
+      88% { transform: translateX(2px); }
+      100% { transform: translateX(0); }
+    }
+
+    @media (max-width: 620px) {
+      body { padding: 12px; }
+      .game {
+        min-height: calc(100vh - 24px);
+        border-radius: 22px;
+      }
+      header, .chapter-header { flex-direction: column; }
+      .prompt {
+        text-align: left;
+        max-width: none;
+      }
+      .status-row { align-items: stretch; }
+      .buttons, .buttons button { width: 100%; }
+      .settings-link {
+        position: static;
+        margin-top: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="game" id="game">
+    <header>
+      <div>
+        <div class="level-label" id="levelLabel"></div>
+        <h1 id="title"></h1>
+      </div>
+      <div class="prompt" id="prompt"></div>
+    </header>
+
+    <section class="poem-wrap" id="mainArea">
+      <div class="poem" id="poem" aria-live="polite"></div>
+    </section>
+
+    <section class="status-row" id="controls">
+      <div class="status" id="status" aria-live="polite">Click the poem to find what can change.</div>
+      <div class="buttons" id="buttons">
+        <button id="revertButton">Revert</button>
+        <button class="primary" id="nextButton">Next</button>
+        <button id="exitButton">Exit</button>
+      </div>
+    </section>
+
+    <div class="footer-note" id="footerNote">
+      Click or tap suspicious words. Next or Exit saves your current version.
+    </div>
+  </main>
+
+  <script>
+
+    const chapters = [
+      {
+
+        title: "Erik",
+        subtitle: "",
+        levels: [
+          {
+            title: "Relativity",
+            prompt: "",
+            blocks: [
+              "I want ",
+              { options: ["to feel ", "you ", "more "], initial: 1, answer: 0 },
+              { options: ["small", "now", "whole"], initial: 1, answer: 0 },
+              "\nso the ",
+              { options: ["world", "pain", "silence"], initial: 1, answer: 0 },
+              " will ",
+              { options: ["seem ", "be ", "feel "], initial: 1, answer: 0 },
+              { options: ["loud", "empty", "small", "big"], initial: 1, answer: 3 }
+            ],
+            solutions: {
+              "Erik Knighton": [0, 0, 0, 0, 3],
+              "Vinny": [1, 1, 1],
+              "Ben Most": [2, 2, 2]
+            }
+          },
+          {
+            title: "Slow",
+            prompt: "",
+            blocks: [
+              "By the time I ",
+              { options: ["knew", "felt", "saw"], initial: 1, answer: 0 },
+              "\nwhat I ", 
+              { options: ["ought to", "had to", "wanted to"], initial: 1, answer: 0 },
+              " feel,",
+              "\nthe moment had passed."
+            ],
+            solutions: {
+              "Erik Knighton": [0, 0, 0],
+              "Vinny": [1, 1, 1],
+              "Ben Most": [2, 2, 2]
+            }
+          },
+          {
+            title: "Fairness",
+            prompt: "",
+            blocks: [
+              "I notice that ",
+               { options: ["the ground itself", "reason", "love"], initial: 1, answer: 0 },
+              "\n",
+              { options: ["supports", "condemns", "sees"], initial: 1, answer: 0 },
+              " both sides"
+            ],
+            solutions: {
+              "Erik Knighton": [0, 0, 0],
+              "Vinny": [1, 1, 1],
+              "Ben Most": [2, 2, 2]
+            }
+          },
+          {
+            title: "Exodus",
+            prompt: "",
+            blocks: [
+              "I ",
+              { options: ["go", "emerge", "escape"], initial: 1, answer: 2 },
+              " into\n",
+              { options: ["a smaller place", "myself", "eternity"], initial: 1, answer: 0 },
+            ],
+            solutions: {
+              "Erik Knighton": [0, 0, 0],
+              "Vinny": [1, 1, 1],
+              "Ben Most": [2, 2, 2]
+            }
+          },
+          {
+            title: "Hope",
+            prompt: "",
+            blocks: [
+              { options: ["He ", "I ", "You "], initial: 1, answer: 0 },
+              { options: ["couldn't", "didn't", "need not"], initial: 1, answer: 0 },
+              " come up with\n",
+              { options: ["anything ", "something ", "someone "], initial: 1, answer: 0 },
+              " to hope for."
+            ],
+            solutions: {
+              "Erik Knighton": [0, 0, 0],
+              "Vinny": [1, 1, 1],
+              "Ben Most": [2, 2, 2]
+            }
+          }
+        ]
+      },
+      {
+        title: "Ju",
+        subtitle: "",
+        levels: [
+           {
+            title: "",
+            prompt: "",
+            blocks: [
+              "Die ",
+              { options: ["again", "quick", "hard"], initial: 0, answer: 2 },
+            ]
+          },
+          {
+            title: "",
+            prompt: "",
+            blocks: [
+              "Die ",
+              { options: ["again", "quick", "hard"], initial: 0, answer: 2 },
+            ]
+          }
+        ]
+      }
+    ];
+   
+    const STORAGE_KEY = "hidden-block-poetry-chapter-saves-v1";
+    const UI_STATE_KEY = "hidden-block-poetry-ui-state-v1";
+    const SETTINGS_KEY = "hidden-block-poetry-settings-v1";
+
+    let screen = "select";
+    let chapterIndex = 0;
+    let levelIndex = 0;
+    let choices = [];
+    let changedChoiceIndex = null;
+    let audioContext = null;
+
+    const gameEl = document.getElementById("game");
+    const levelLabelEl = document.getElementById("levelLabel");
+    const titleEl = document.getElementById("title");
+    const promptEl = document.getElementById("prompt");
+    const mainAreaEl = document.getElementById("mainArea");
+    const poemEl = document.getElementById("poem");
+    const controlsEl = document.getElementById("controls");
+    const statusEl = document.getElementById("status");
+    const footerNoteEl = document.getElementById("footerNote");
+    const revertButton = document.getElementById("revertButton");
+    const exitButton = document.getElementById("exitButton");
+    const nextButton = document.getElementById("nextButton");
+
+    function loadJson(key, fallback) {
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return fallback;
+        return { ...fallback, ...JSON.parse(raw) };
+      } catch {
+        return fallback;
+      }
+    }
+
+    function writeJson(key, value) {
+      try {
+        localStorage.setItem(key, JSON.stringify(value));
+      } catch {
+        statusEl.textContent = "Could not save in this browser.";
+      }
+    }
+
+    function loadSaves() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) || {} : {};
+      } catch {
+        return {};
+      }
+    }
+
+    function writeSaves(saves) {
+      writeJson(STORAGE_KEY, saves);
+    }
+
+    function loadUiState() {
+      return loadJson(UI_STATE_KEY, { collapsedChapters: {}, menuScrollY: 0 });
+    }
+
+    function writeUiState(uiState) {
+      writeJson(UI_STATE_KEY, uiState);
+    }
+
+    function loadSettings() {
+      return loadJson(SETTINGS_KEY, { volume: 0.75 });
+    }
+
+    function writeSettings(settings) {
+      writeJson(SETTINGS_KEY, settings);
+    }
+
+    function getVolume() {
+      const volume = Number(loadSettings().volume);
+      return Number.isFinite(volume) ? Math.max(0, Math.min(1, volume)) : 0.75;
+    }
+
+    function setVolume(volume) {
+      const settings = loadSettings();
+      settings.volume = Math.max(0, Math.min(1, Number(volume)));
+      writeSettings(settings);
+    }
+
+    function saveLevelSelectScroll() {
+      if (screen !== "select") return;
+      const uiState = loadUiState();
+      uiState.menuScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      writeUiState(uiState);
+    }
+
+    function setChapterCollapsed(cIndex, collapsed) {
+      const uiState = loadUiState();
+      uiState.collapsedChapters[String(cIndex)] = collapsed;
+      writeUiState(uiState);
+    }
+
+    function isChapterCollapsed(cIndex) {
+      return loadUiState().collapsedChapters[String(cIndex)] === true;
+    }
+
+    function saveKey(cIndex, lIndex) {
+      return `${cIndex}:${lIndex}`;
+    }
+
+    function getCurrentLevel() {
+      return chapters[chapterIndex].levels[levelIndex];
+    }
+
+    function isChoiceBlock(block) {
+      return typeof block === "object" && block !== null && Array.isArray(block.options);
+    }
+
+    function getChoiceBlocks(level) {
+      return level.blocks.filter(isChoiceBlock);
+    }
+
+    function initialChoices(level) {
+      return getChoiceBlocks(level).map(block => typeof block.initial === "number" ? block.initial : 0);
+    }
+
+    function choicesForLevel(cIndex, lIndex) {
+      const level = chapters[cIndex].levels[lIndex];
+      const saves = loadSaves();
+      const saved = saves[saveKey(cIndex, lIndex)];
+      const expectedLength = getChoiceBlocks(level).length;
+      return Array.isArray(saved) && saved.length === expectedLength ? saved.slice() : initialChoices(level);
+    }
+
+    function hasSavedLevel(cIndex, lIndex) {
+      return Array.isArray(loadSaves()[saveKey(cIndex, lIndex)]);
+    }
+
+    function poemTextFromChoices(level, levelChoices) {
+      let text = "";
+      let currentChoiceIndex = 0;
+
+      for (const block of level.blocks) {
+        if (typeof block === "string") {
+          text += block;
+        } else if (isChoiceBlock(block)) {
+          const optionIndex = levelChoices[currentChoiceIndex] ?? 0;
+          text += block.options[optionIndex] ?? block.options[0] ?? "";
+          currentChoiceIndex++;
+        }
+      }
+
+      return text;
+    }
+
+    function arraysMatch(a, b) {
+      if (!Array.isArray(a) || !Array.isArray(b)) return false;
+      if (a.length !== b.length) return false;
+      return a.every((value, i) => value === b[i]);
+    }
+
+    function matchedAuthorForLevel(level, levelChoices) {
+      if (!level.solutions || !Array.isArray(levelChoices)) return null;
+
+      for (const [author, solutionChoices] of Object.entries(level.solutions)) {
+        if (arraysMatch(levelChoices, solutionChoices)) return author;
+      }
+
+      return null;
+    }
+
+    function authorHue(author) {
+      let hash = 0;
+      for (let i = 0; i < author.length; i++) {
+        hash = (hash * 31 + author.charCodeAt(i)) % 360;
+      }
+      return hash;
+    }
+
+    function makeAuthorBadge(author, suffix = "") {
+      const badge = document.createElement("span");
+      badge.className = "author-badge";
+      badge.style.setProperty("--author-hue", String(authorHue(author)));
+      badge.textContent = `${author}${suffix}`;
+      return badge;
+    }
+
+    function chapterAuthorSummary(cIndex) {
+      const chapter = chapters[cIndex];
+      const saves = loadSaves();
+      const counts = {};
+      let matchedCount = 0;
+
+      chapter.levels.forEach((level, lIndex) => {
+        const saved = saves[saveKey(cIndex, lIndex)];
+        const author = matchedAuthorForLevel(level, saved);
+        if (!author) return;
+        counts[author] = (counts[author] || 0) + 1;
+        matchedCount++;
+      });
+
+      const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+      const plurality = entries.length ? entries[0][0] : null;
+      const pluralityCount = entries.length ? entries[0][1] : 0;
+      const tied = entries.length > 1 && entries[0][1] === entries[1][1];
+      const unanimous = plurality && pluralityCount === chapter.levels.length;
+
+      return {
+        counts,
+        matchedCount,
+        plurality: tied ? null : plurality,
+        pluralityCount,
+        tied,
+        unanimous
+      };
+    }
+
+    function chapterSavedCount(cIndex) {
+      return chapters[cIndex].levels.filter((_, lIndex) => hasSavedLevel(cIndex, lIndex)).length;
+    }
+
+    function playTone(type) {
+      try {
+        audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
+        const now = audioContext.currentTime;
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        const volume = getVolume();
+        const changeVolume = 0.045 * volume;
+        const saveVolume = 0.05 * volume;
+        const missVolume = 0.06 * volume;
+
+        oscillator.type = type === "change" || type === "save" ? "sine" : "triangle";
+        oscillator.frequency.setValueAtTime(type === "miss" ? 120 : 440, now);
+
+        if (type === "change") {
+          oscillator.frequency.exponentialRampToValueAtTime(660, now + 0.09);
+          gain.gain.setValueAtTime(0.0001, now);
+          gain.gain.exponentialRampToValueAtTime(Math.max(0.0001, changeVolume), now + 0.012);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.13);
+        } else if (type === "save") {
+          oscillator.frequency.exponentialRampToValueAtTime(880, now + 0.12);
+          gain.gain.setValueAtTime(0.0001, now);
+          gain.gain.exponentialRampToValueAtTime(Math.max(0.0001, saveVolume), now + 0.012);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.2);
+        } else {
+          oscillator.frequency.exponentialRampToValueAtTime(85, now + 0.11);
+          gain.gain.setValueAtTime(0.0001, now);
+          gain.gain.exponentialRampToValueAtTime(Math.max(0.0001, missVolume), now + 0.01);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
+        }
+
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+        oscillator.start(now);
+        oscillator.stop(now + 0.22);
+      } catch {
+        // Sound is optional.
+      }
+    }
+
+    function miss() {
+      playTone("miss");
+      poemEl.classList.remove("miss-shake");
+      void poemEl.offsetWidth;
+      poemEl.classList.add("miss-shake");
+      statusEl.textContent = "That part of the poem would not move.";
+
+      window.clearTimeout(miss.messageTimer);
+      miss.messageTimer = window.setTimeout(() => {
+        if (screen === "level") statusEl.textContent = "Click the poem to find what can change.";
+      }, 900);
+    }
+
+    function setFooterWithSettings(text) {
+      footerNoteEl.innerHTML = "";
+      const footerText = document.createElement("span");
+      footerText.textContent = text;
+      const settingsButton = document.createElement("button");
+      settingsButton.className = "settings-link";
+      settingsButton.textContent = "Settings";
+      settingsButton.addEventListener("click", showSettings);
+      footerNoteEl.append(footerText, settingsButton);
+    }
+
+    function showLevelSelect() {
+      screen = "select";
+      const saves = loadSaves();
+      const uiState = loadUiState();
+
+      levelLabelEl.textContent = "Level select";
+      titleEl.textContent = "Saved Poems";
+      promptEl.textContent = "Open any poem. Your saved version becomes its icon.";
+      controlsEl.style.display = "none";
+      setFooterWithSettings("Saved poems can match different hidden authors; chapters show the leading author.");
+      mainAreaEl.innerHTML = "";
+      mainAreaEl.classList.add("select-mode");
+
+      const chapterList = document.createElement("div");
+      chapterList.className = "chapter-list";
+
+      chapters.forEach((chapter, cIndex) => {
+        const section = document.createElement("section");
+        section.className = "chapter-section";
+
+        const header = document.createElement("button");
+        header.className = "chapter-header";
+        header.type = "button";
+
+        const titleBlock = document.createElement("div");
+        const titleRow = document.createElement("div");
+        titleRow.className = "chapter-title-row";
+
+        const collapsed = isChapterCollapsed(cIndex);
+        const collapseIndicator = document.createElement("span");
+        collapseIndicator.className = "collapse-indicator";
+        collapseIndicator.textContent = collapsed ? "▸" : "▾";
+
+        const heading = document.createElement("h2");
+        heading.className = "chapter-title";
+        heading.textContent = chapter.title;
+        titleRow.append(collapseIndicator, heading);
+
+        const authorSummary = chapterAuthorSummary(cIndex);
+        if (authorSummary.unanimous) {
+          const mark = makeAuthorBadge(authorSummary.plurality, " ✦");
+          mark.classList.add("chapter-mark");
+          titleRow.append(mark);
+        } else if (authorSummary.plurality) {
+          const mark = makeAuthorBadge(authorSummary.plurality, " leads");
+          mark.classList.add("chapter-mark");
+          titleRow.append(mark);
+        } else if (authorSummary.tied) {
+          const mark = document.createElement("span");
+          mark.className = "author-badge chapter-mark";
+          mark.style.setProperty("--author-hue", "42");
+          mark.textContent = "Mixed";
+          titleRow.append(mark);
+        }
+
+        const subtitle = document.createElement("div");
+        subtitle.className = "chapter-subtitle";
+        subtitle.textContent = chapter.subtitle;
+        titleBlock.append(titleRow, subtitle);
+
+        const progress = document.createElement("div");
+        progress.className = "chapter-progress";
+        progress.textContent = `${chapterSavedCount(cIndex)} / ${chapter.levels.length} saved`;
+        header.append(titleBlock, progress);
+
+        const grid = document.createElement("div");
+        grid.className = "level-select";
+        grid.style.display = collapsed ? "none" : "grid";
+
+        header.addEventListener("click", () => {
+          saveLevelSelectScroll();
+          const nowCollapsed = grid.style.display !== "none";
+          grid.style.display = nowCollapsed ? "none" : "grid";
+          collapseIndicator.textContent = nowCollapsed ? "▸" : "▾";
+          setChapterCollapsed(cIndex, nowCollapsed);
+        });
+
+        chapter.levels.forEach((level, lIndex) => {
+          const card = document.createElement("button");
+          card.className = "level-card";
+
+          const savedChoices = saves[saveKey(cIndex, lIndex)];
+          const saved = Array.isArray(savedChoices);
+          const levelChoices = saved ? savedChoices : initialChoices(level);
+          const matchedAuthor = saved ? matchedAuthorForLevel(level, savedChoices) : null;
+
+          const cardTitle = document.createElement("div");
+          cardTitle.className = "card-title";
+          cardTitle.textContent = `${lIndex + 1}. ${level.title}`;
+
+          const poem = document.createElement("div");
+          poem.className = "card-poem";
+          poem.textContent = poemTextFromChoices(level, levelChoices);
+
+          const note = document.createElement("div");
+          note.className = "card-note";
+
+          if (saved && matchedAuthor) {
+            note.append(makeAuthorBadge(matchedAuthor));
+          } else {
+            note.textContent = saved ? "Saved version · no author match" : "Starting version";
+          }
+
+          card.append(cardTitle, poem, note);
+          card.addEventListener("click", () => {
+            saveLevelSelectScroll();
+            loadLevel(cIndex, lIndex);
+          });
+          grid.append(card);
+        });
+
+        section.append(header, grid);
+        chapterList.append(section);
+      });
+
+      mainAreaEl.append(chapterList);
+      requestAnimationFrame(() => {
+        window.scrollTo(0, uiState.menuScrollY || 0);
+      });
+    }
+
+    function showSettings() {
+      screen = "settings";
+      saveLevelSelectScroll();
+
+      levelLabelEl.textContent = "Settings";
+      titleEl.textContent = "Settings";
+      promptEl.textContent = "Keep this quiet and simple.";
+      controlsEl.style.display = "none";
+      footerNoteEl.textContent = "Settings are saved on this browser.";
+      mainAreaEl.innerHTML = "";
+      mainAreaEl.classList.add("select-mode");
+
+      const settings = loadSettings();
+      const panel = document.createElement("div");
+      panel.className = "settings-panel";
+
+      const audioCard = document.createElement("section");
+      audioCard.className = "setting-card";
+      const audioTitle = document.createElement("h2");
+      audioTitle.textContent = "Sound";
+      const audioDescription = document.createElement("p");
+      audioDescription.textContent = "Adjust the small interaction sounds.";
+      const volumeRow = document.createElement("div");
+      volumeRow.className = "setting-row";
+      const volumeSlider = document.createElement("input");
+      volumeSlider.type = "range";
+      volumeSlider.min = "0";
+      volumeSlider.max = "100";
+      volumeSlider.value = String(Math.round(getVolume() * 100));
+      const volumeReadout = document.createElement("div");
+      volumeReadout.className = "volume-readout";
+      volumeReadout.textContent = `${volumeSlider.value}%`;
+      volumeSlider.addEventListener("input", () => {
+        setVolume(Number(volumeSlider.value) / 100);
+        volumeReadout.textContent = `${volumeSlider.value}%`;
+      });
+      volumeSlider.addEventListener("change", () => playTone("change"));
+      volumeRow.append(volumeSlider, volumeReadout);
+      audioCard.append(audioTitle, audioDescription, volumeRow);
+
+      const dataCard = document.createElement("section");
+      dataCard.className = "setting-card";
+      const dataTitle = document.createElement("h2");
+      dataTitle.textContent = "Data";
+      const dataDescription = document.createElement("p");
+      dataDescription.textContent = "Reset saved poems or reset only chapter collapse and scroll state.";
+      const dataButtons = document.createElement("div");
+      dataButtons.className = "setting-row";
+
+      const resetSavesButton = document.createElement("button");
+      resetSavesButton.className = "danger";
+      resetSavesButton.textContent = "Reset poems";
+      resetSavesButton.addEventListener("click", () => {
+        if (!window.confirm("Reset all saved poem versions?")) return;
+        localStorage.removeItem(STORAGE_KEY);
+        statusEl.textContent = "Saved poems reset.";
+        playTone("miss");
+      });
+
+      const resetUiButton = document.createElement("button");
+      resetUiButton.textContent = "Reset menu state";
+      resetUiButton.addEventListener("click", () => {
+        localStorage.removeItem(UI_STATE_KEY);
+        statusEl.textContent = "Menu state reset.";
+        playTone("miss");
+      });
+
+      const resetAllButton = document.createElement("button");
+      resetAllButton.className = "danger";
+      resetAllButton.textContent = "Reset all";
+      resetAllButton.addEventListener("click", () => {
+        if (!window.confirm("Reset poems, settings, and menu state?")) return;
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(UI_STATE_KEY);
+        localStorage.removeItem(SETTINGS_KEY);
+        statusEl.textContent = "All local data reset.";
+        playTone("miss");
+        showSettings();
+      });
+
+      dataButtons.append(resetSavesButton, resetUiButton, resetAllButton);
+      dataCard.append(dataTitle, dataDescription, dataButtons);
+
+      const navCard = document.createElement("section");
+      navCard.className = "setting-card";
+      const backButton = document.createElement("button");
+      backButton.className = "primary";
+      backButton.textContent = "Back to levels";
+      backButton.addEventListener("click", showLevelSelect);
+      navCard.append(backButton);
+
+      panel.append(audioCard, dataCard, navCard);
+      mainAreaEl.append(panel);
+    }
+
+    function loadLevel(cIndex, lIndex) {
+      screen = "level";
+      chapterIndex = cIndex;
+      levelIndex = lIndex;
+      choices = choicesForLevel(cIndex, lIndex);
+      changedChoiceIndex = null;
+      controlsEl.style.display = "flex";
+      footerNoteEl.textContent = "Click or tap suspicious words. Next or Exit saves your current version.";
+      mainAreaEl.classList.remove("select-mode");
+      renderLevel();
+    }
+
+    function renderLevel() {
+      const chapter = chapters[chapterIndex];
+      const level = getCurrentLevel();
+      let currentChoiceIndex = 0;
+
+      levelLabelEl.textContent = `${chapter.title} · Poem ${levelIndex + 1} of ${chapter.levels.length}`;
+      titleEl.textContent = level.title;
+      promptEl.textContent = level.prompt;
+      mainAreaEl.innerHTML = "";
+      poemEl.innerHTML = "";
+      poemEl.className = "poem";
+
+      for (const block of level.blocks) {
+        if (typeof block === "string") {
+          const span = document.createElement("span");
+          span.textContent = block;
+          span.className = "fixed";
+          span.addEventListener("click", miss);
+          poemEl.append(span);
+        } else if (isChoiceBlock(block)) {
+          const span = document.createElement("span");
+          const optionIndex = choices[currentChoiceIndex];
+          span.textContent = block.options[optionIndex];
+          span.className = "choice";
+          span.dataset.choiceIndex = String(currentChoiceIndex);
+
+          if (currentChoiceIndex === changedChoiceIndex) {
+            span.classList.add("changed");
+          }
+
+          span.addEventListener("click", () => cycleChoice(Number(span.dataset.choiceIndex)));
+          poemEl.append(span);
+          currentChoiceIndex++;
+        }
+      }
+
+      mainAreaEl.append(poemEl);
+      statusEl.textContent = "Click the poem to find what can change.";
+    }
+
+    function cycleChoice(choiceIndex) {
+      const block = getChoiceBlocks(getCurrentLevel())[choiceIndex];
+      choices[choiceIndex] = (choices[choiceIndex] + 1) % block.options.length;
+      changedChoiceIndex = choiceIndex;
+      playTone("change");
+      renderLevel();
+    }
+
+    function saveCurrentLevel(showFeedback = false) {
+      const saves = loadSaves();
+      saves[saveKey(chapterIndex, levelIndex)] = choices.slice();
+      writeSaves(saves);
+
+      if (showFeedback) {
+        playTone("save");
+        statusEl.textContent = "Saved.";
+        gameEl.classList.remove("saved-pulse");
+        void gameEl.offsetWidth;
+        gameEl.classList.add("saved-pulse");
+      }
+    }
+
+    function revertCurrentLevel() {
+      choices = choicesForLevel(chapterIndex, levelIndex);
+      changedChoiceIndex = null;
+      playTone("miss");
+      renderLevel();
+      statusEl.textContent = "Reverted to the last saved version.";
+    }
+
+    function nextLevelPosition() {
+      const currentChapter = chapters[chapterIndex];
+      if (levelIndex < currentChapter.levels.length - 1) {
+        return { cIndex: chapterIndex, lIndex: levelIndex + 1 };
+      }
+      if (chapterIndex < chapters.length - 1) {
+        return { cIndex: chapterIndex + 1, lIndex: 0 };
+      }
+      return { cIndex: 0, lIndex: 0 };
+    }
+
+    function scheduleLevelSelectScrollSave() {
+      if (screen !== "select") return;
+      window.clearTimeout(window.levelSelectScrollSaveTimer);
+      window.levelSelectScrollSaveTimer = window.setTimeout(saveLevelSelectScroll, 120);
+    }
+
+    window.addEventListener("scroll", scheduleLevelSelectScrollSave, { passive: true });
+
+    revertButton.addEventListener("click", revertCurrentLevel);
+
+    exitButton.addEventListener("click", () => {
+      saveCurrentLevel(false);
+      showLevelSelect();
+    });
+
+    nextButton.addEventListener("click", () => {
+      saveCurrentLevel(false);
+      const next = nextLevelPosition();
+      loadLevel(next.cIndex, next.lIndex);
+    });
+
+    showLevelSelect();
+  </script>
+</body>
+</html>
