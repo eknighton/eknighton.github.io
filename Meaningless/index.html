@@ -485,8 +485,8 @@
             ],
             solutions: {
               "Erik Knighton": [0, 0, 0, 0, 3],
-              "Vinny": [1, 1, 1],
-              "Ben Most": [2, 2, 2]
+              "Vinny": [1, 0, 2, 1, 0],
+              "Ben Most": [2, 2, 2, 2, 2]
             }
           },
           {
@@ -501,9 +501,9 @@
               "\nthe moment had passed."
             ],
             solutions: {
-              "Erik Knighton": [0, 0, 0],
-              "Vinny": [1, 1, 1],
-              "Ben Most": [2, 2, 2]
+              "Erik Knighton": [0, 0],
+              "Vinny": [0, 2],
+              "Ben Most": [2, 2]
             }
           },
           {
@@ -517,9 +517,9 @@
               " both sides"
             ],
             solutions: {
-              "Erik Knighton": [0, 0, 0],
-              "Vinny": [1, 1, 1],
-              "Ben Most": [2, 2, 2]
+              "Erik Knighton": [0, 0],
+              "Vinny": [1, 2],
+              "Ben Most": [2, 2]
             }
           },
           {
@@ -532,9 +532,9 @@
               { options: ["a smaller place", "myself", "eternity"], initial: 1, answer: 0 },
             ],
             solutions: {
-              "Erik Knighton": [0, 0, 0],
-              "Vinny": [1, 1, 1],
-              "Ben Most": [2, 2, 2]
+              "Erik Knighton": [2, 0],
+              "Vinny": [0, 2],
+              "Ben Most": [2, 2]
             }
           },
           {
@@ -901,7 +901,7 @@
           mark.classList.add("chapter-mark");
           titleRow.append(mark);
         } else if (authorSummary.plurality) {
-          const mark = makeAuthorBadge(authorSummary.plurality, " leads");
+          const mark = makeAuthorBadge(authorSummary.plurality, " style");
           mark.classList.add("chapter-mark");
           titleRow.append(mark);
         } else if (authorSummary.tied) {
@@ -957,7 +957,7 @@
           if (saved && matchedAuthor) {
             note.append(makeAuthorBadge(matchedAuthor));
           } else {
-            note.textContent = saved ? "Saved version · no author match" : "Starting version";
+            note.textContent = saved ? "Your Unique Version!" : "Meaningless Version";
           }
 
           card.append(cardTitle, poem, note);
