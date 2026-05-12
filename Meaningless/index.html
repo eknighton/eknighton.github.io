@@ -471,25 +471,6 @@
         subtitle: "",
         levels: [
           {
-            title: "Relativity",
-            prompt: "",
-            blocks: [
-              "I want ",
-              { options: ["to feel ", "you ", "more "], initial: 1, answer: 0 },
-              { options: ["small", "now", "whole"], initial: 1, answer: 0 },
-              "\nso the ",
-              { options: ["world", "pain", "silence"], initial: 1, answer: 0 },
-              " will ",
-              { options: ["seem ", "be ", "feel "], initial: 1, answer: 0 },
-              { options: ["loud", "empty", "small", "big"], initial: 1, answer: 3 }
-            ],
-            solutions: {
-              "Erik Knighton": [0, 0, 0, 0, 3],
-              "McKinny": [1, 2, 0, 2, 3],
-              "Ben Most": [2, 1, 1, 1, 0]
-            }
-          },
-          {
             title: "Slow",
             prompt: "",
             blocks: [
@@ -502,8 +483,9 @@
             ],
             solutions: {
               "Erik Knighton": [0, 0],
-              "Ted McKinny": [1, 2],
-              "Ben Most": [2, 1]
+              "McKinny": [1, 2],
+              "Ben Most": [2, 1],
+              "Josh": [2, 1]
             }
           },
           {
@@ -519,7 +501,8 @@
             solutions: {
               "Erik Knighton": [0, 0],
               "McKinny": [2, 2],
-              "Ben Most": [1, 1]
+              "Ben Most": [1, 1],
+              "Josh": [1, 2]
             }
           },
           {
@@ -534,23 +517,8 @@
             solutions: {
               "Erik Knighton": [2, 0],
               "McKinny": [1, 2],
-              "Ben Most": [1, 1]
-            }
-          },
-          {
-            title: "Hope",
-            prompt: "",
-            blocks: [
-              { options: ["He ", "I ", "You "], initial: 1, answer: 0 },
-              { options: ["couldn't", "didn't", "need not"], initial: 1, answer: 0 },
-              " come up with\n",
-              { options: ["anything ", "something ", "someone "], initial: 1, answer: 0 },
-              " to hope for."
-            ],
-            solutions: {
-              "Erik Knighton": [0, 0, 0],
-              "McKinny": [1, 2, 2],
-              "Ben Most": [1, 1, 1]
+              "Ben Most": [1, 1],
+              "Josh": [0, 0]
             }
           }
         ]
@@ -559,7 +527,48 @@
         title: "Chapter II",
         subtitle: "",
         levels: [
-           {
+          {
+            title: "Hope",
+            prompt: "",
+            blocks: [
+              { options: ["He ", "I ", "You "], initial: 1, answer: 0 },
+              { options: ["couldn't", "didn't", "need not"], initial: 1, answer: 0 },
+              " come up with\n",
+              { options: ["anything ", "something ", "someone "], initial: 1, answer: 0 },
+              "to hope for."
+            ],
+            solutions: {
+              "Erik Knighton": [0, 0, 0],
+              "McKinny": [1, 2, 2],
+              "Ben Most": [1, 1, 1],
+              "Josh": [1, 0, 0]
+            }
+          },
+          {
+            title: "Relativity",
+            prompt: "",
+            blocks: [
+              "I want ",
+              { options: ["to feel ", "you ", "more "], initial: 1, answer: 0 },
+              { options: ["small", "now", "whole"], initial: 1, answer: 0 },
+              "\nso the ",
+              { options: ["world", "pain", "silence"], initial: 1, answer: 0 },
+              " will ",
+              { options: ["seem ", "be ", "feel "], initial: 1, answer: 0 },
+              { options: ["loud", "empty", "small", "big"], initial: 1, answer: 3 }
+            ],
+            solutions: {
+              "Erik Knighton": [0, 0, 0, 0, 3],
+              "McKinny": [1, 2, 0, 2, 3],
+              "Ben Most": [2, 1, 1, 1, 0],
+              "Josh": [2, 1, 1, 1, 0]
+            }
+          }
+        ]
+      }
+    ];
+
+    /* {
             title: "Nothing",
             prompt: "",
             blocks: [
@@ -567,9 +576,7 @@
               { options: ["yet", "right now", "currently"], initial: 0},
             ]
           }
-        ]
-      }
-    ];
+          */
    
     const STORAGE_KEY = "hidden-block-poetry-chapter-saves-v1";
     const UI_STATE_KEY = "hidden-block-poetry-ui-state-v1";
