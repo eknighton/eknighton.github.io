@@ -466,8 +466,41 @@
 
     const chapters = [
       {
-
         title: "Chapter I",
+        subtitle: "",
+        levels: [
+          {
+            title: "I am",
+            prompt: "",
+            blocks: [
+              "I am ",
+              { options: ["incomplete.", "terrified.", "silly.", "young."], initial: 1, answer: 0 }
+            ],
+            solutions: {
+              "Erik Knighton": [1],
+              "McKinny": [2],
+              "Ben Most": [0],
+              "Jay": [3]
+            }
+          },
+          {
+            title: "I will ",
+            prompt: "",
+            blocks: [
+              "I will ",
+              { options: ["rest.", "see it.", "lose you.", "end you.", "need more."], initial: 1, answer: 0 }
+            ],
+            solutions: {
+              "Erik Knighton": [1],
+              "McKinny": [2],
+              "Ben Most": [3],
+              "Jay": [0]
+            }
+          }
+        ]
+      },
+      {
+        title: "Chapter II",
         subtitle: "",
         levels: [
           {
@@ -485,7 +518,7 @@
               "Erik Knighton": [0, 0],
               "McKinny": [1, 2],
               "Ben Most": [2, 1],
-              "Josh": [2, 1]
+              "Jay": [2, 1]
             }
           },
           {
@@ -502,7 +535,7 @@
               "Erik Knighton": [0, 0],
               "McKinny": [2, 2],
               "Ben Most": [1, 1],
-              "Josh": [1, 2]
+              "Jay": [1, 2]
             }
           },
           {
@@ -518,13 +551,13 @@
               "Erik Knighton": [2, 0],
               "McKinny": [1, 2],
               "Ben Most": [1, 1],
-              "Josh": [0, 0]
+              "Jay": [0, 0]
             }
           }
         ]
       },
       {
-        title: "Chapter II",
+        title: "Chapter III",
         subtitle: "",
         levels: [
           {
@@ -541,7 +574,7 @@
               "Erik Knighton": [0, 0, 0],
               "McKinny": [1, 2, 2],
               "Ben Most": [1, 1, 1],
-              "Josh": [1, 0, 0]
+              "Jay": [1, 0, 0]
             }
           },
           {
@@ -561,7 +594,7 @@
               "Erik Knighton": [0, 0, 0, 0, 3],
               "McKinny": [1, 2, 0, 2, 3],
               "Ben Most": [2, 1, 1, 1, 0],
-              "Josh": [2, 1, 1, 1, 0]
+              "Jay": [2, 1, 1, 1, 0]
             }
           }
         ]
