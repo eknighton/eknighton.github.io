@@ -466,15 +466,15 @@
 
     const chapters = [
       {
-        title: "Chapter I",
-        subtitle: "",
+        title: "Preface I",
+        subtitle: "Myself",
         levels: [
           {
             title: "I am",
             prompt: "",
             blocks: [
-              "I am ",
-              { options: ["a work in progress.", "terrified.", "silly.", "young.", "honest.", "in love.", "a parasite."], initial: 2, answer: 0 }
+              "I am",
+               { options: [" too.", " stardust.", " old.", " fertile.", " a work in progress.", " a parasite."], initial: 2, answer: 0 } //rising
             ],
             solutions: {
               "Erik Knighton": [1],
@@ -487,8 +487,72 @@
             title: "I will ",
             prompt: "",
             blocks: [
-              "I will ",
-              { options: ["rest.", "see it.", "lose you.", "end you.", "die."], initial: 4, answer: 0 }
+              "I will",
+              { options: [" do it alone.", " be ok.", " understand.", " die.", " shit.", " get caught."], initial: 4, answer: 0 }//{ options: ["step away.", "see it.", "understand", "lose you.", "end you.", "quit."], initial: 4, answer: 0 }
+            ],
+            solutions: {
+              "Erik Knighton": [1],
+              "McKinny": [2],
+              "Ben Most": [4],
+              "Jay": [0]
+            }
+          },
+          {
+            title: "I was ",
+            prompt: "",
+            blocks: [
+              "I was",
+              { options: [" angry.", " not thinking.", " naive.", " beautiful.", " caught."], initial: 3, answer: 0 }
+            ],
+            solutions: {
+              "Erik Knighton": [0],
+              "McKinny": [2],
+              "Ben Most": [1],
+              "Jay": [4]
+            }
+          }
+        ]
+      },
+      {
+        title: "Preface II",
+        subtitle: "Maybes",
+        levels: [
+          {
+            title: "If",
+            prompt: "",
+            blocks: [
+              "If",
+              { options: [" there are others", " there's a way to fight", " music", " I told you", " there are heroes"], initial: 2, answer: 0 }
+
+             //" in pain.",
+            ],
+            solutions: {
+              "Erik Knighton": [1],
+              "McKinny": [2],
+              "Ben Most": [0],
+              "Jay": [3]
+            }
+          },
+          {
+            title: "Unless",
+            prompt: "",
+            blocks: [
+              "Unless",
+              { options: [" they know.", " you love me.", " we stop.", " she dies.", " I trip."], initial: 3, answer: 0 }
+            ],
+            solutions: {
+              "Erik Knighton": [1],
+              "McKinny": [2],
+              "Ben Most": [4],
+              "Jay": [0]
+            },
+          },
+          {
+            title: "When ",
+            prompt: "",
+            blocks: [
+              "When ",
+              { options: [" I'm dead.", "see it.", "lose you.", "end you.", "die."], initial: 4, answer: 0 }
             ],
             solutions: {
               "Erik Knighton": [1],
@@ -499,8 +563,9 @@
           }
         ]
       },
+      
       {
-        title: "Chapter II",
+        title: "Chapter I",
         subtitle: "",
         levels: [
           {
@@ -557,7 +622,7 @@
         ]
       },
       {
-        title: "Chapter III",
+        title: "Chapter II",
         subtitle: "",
         levels: [
           {
