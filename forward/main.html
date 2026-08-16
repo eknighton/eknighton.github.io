@@ -1,362 +1,97 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Curated Web Directory</title>
-<style>
-:root{--bg:#f6f7f9;--panel:#fff;--text:#181a1d;--muted:#68717a;--line:#dfe3e7;--accent:#4d50e6;--soft:#eff0ff;--danger:#b3261e}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-main{width:min(1120px,calc(100% - 32px));margin:34px auto 70px}h1{font-size:clamp(30px,4vw,43px);margin:0 0 8px}
-.lead,.note,.status{color:var(--muted);line-height:1.5}.lead{margin:0 0 22px;max-width:850px}.note,.status{font-size:13px}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:18px;box-shadow:0 7px 25px rgba(0,0,0,.055)}
-.heading-row,.facet-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.heading-row{margin:22px 0 9px}
-.heading{font-size:12px;text-transform:uppercase;letter-spacing:.075em;font-weight:850;color:var(--muted)}.facet-title{font-weight:780}
-.actions{display:flex;gap:6px;flex-wrap:wrap}button{border:0;border-radius:12px;background:var(--accent);color:#fff;font:inherit;font-weight:750;padding:11px 18px;cursor:pointer}
-button.secondary{background:#eef0f3;color:#2f3439;border:1px solid var(--line)}button.small{padding:7px 10px;border-radius:9px;font-size:12px}
-.check-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}.check{display:flex;align-items:flex-start;gap:8px;border:1px solid var(--line);border-radius:11px;padding:10px 11px;background:#fff;cursor:pointer}
-.check:has(input:checked),.tag-control:has(input:checked){border-color:var(--accent);background:var(--soft)}.check strong{font-size:14px}.meta{display:block;color:var(--muted);font-size:11px;margin-top:3px}
-.facet{border-top:1px solid var(--line);padding-top:14px;margin-top:14px}.facet:first-child{border-top:0;padding-top:0;margin-top:0}.facet-head{margin-bottom:8px}.tag-values{display:flex;gap:8px;flex-wrap:wrap}
-.tag-control{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:999px;padding:8px 11px;background:#fff;cursor:pointer}.tag-name{font-size:13px}.tag-count{color:var(--muted);font-size:11px}
-.summary{margin-top:15px;padding:10px 12px;background:#f7f8fa;border-radius:10px;color:#4c535a;font-size:13px}.mode-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
-.error{color:var(--danger);white-space:pre-wrap}.results{display:none}.results.open{display:block}.toolbar{display:grid;grid-template-columns:1fr auto;gap:10px;margin-bottom:14px}
-input[type=search]{width:100%;border:1px solid var(--line);border-radius:12px;padding:13px 15px;font:inherit;font-size:16px;outline:none;background:#fff}
-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(77,80,230,.1)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:12px}
-.card{display:flex;flex-direction:column;text-decoration:none;color:inherit;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;min-height:270px;transition:.12s}
-.card:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(0,0,0,.09);border-color:#c9cdd5}
-.preview-media{height:145px;background:linear-gradient(135deg,#eef0f3,#f9fafb);position:relative;overflow:hidden}
-.preview-media .shot{width:100%;height:100%;object-fit:cover;display:block}
-.favicon{position:absolute;left:12px;bottom:10px;width:38px;height:38px;border-radius:9px;background:#fff;border:1px solid rgba(0,0,0,.09);padding:5px;box-shadow:0 3px 10px rgba(0,0,0,.12)}
-.card-body{display:flex;flex-direction:column;gap:8px;padding:13px 15px 15px;flex:1}
-.domain{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
-.card-title{font-size:17px;font-weight:800;line-height:1.25}
-.url{font-size:12px;color:#272caa;overflow-wrap:anywhere;line-height:1.35}
-.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:auto}.chip{font-size:10px;background:#eef0f3;border-radius:999px;padding:4px 7px;color:#555d65}
-.context-chip{background:#f7f7f9;color:#676e76}
-.empty{border:1px dashed var(--line);border-radius:14px;padding:22px;color:var(--muted);background:#fff}
-.goggle-panel{display:none;margin-top:16px;padding:16px;border:1px solid var(--line);border-radius:14px;background:#fafbfc}
-.goggle-panel.open{display:block}.goggle-actions{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
-.goggle-text{width:100%;min-height:220px;border:1px solid var(--line);border-radius:10px;padding:12px;background:#fff;font:12px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;resize:vertical}
-details{border-top:1px solid var(--line);margin-top:18px;padding-top:13px}summary{cursor:pointer;color:var(--muted)}
-@media(max-width:620px){main{margin-top:22px}.toolbar,.check-grid,.grid{grid-template-columns:1fr}.mode-actions button{width:100%}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Search the Movement</title>
+  <meta name="description" content="Find webpages from around the movement.">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<main>
-<h1>Curated Web Directory</h1>
-<p class="lead">Browse a curated collection of organizations and useful webpages. Choose the regions, issues, organization types, and page lists you want to include.</p>
-<section class="panel">
-<div id="loading" class="status">Loading public spreadsheet…</div><div id="error" class="error"></div>
-<div id="controls" style="display:none">
-<div id="facets"></div>
-<div class="heading-row"><div class="heading">Specific Page Lists</div><div class="actions"><button class="secondary small" data-page="exact-all">All</button><button class="secondary small" data-page="exact-none">None</button></div></div>
-<div id="exactLists" class="check-grid"></div>
-<div class="heading-row"><div class="heading">Site Sections</div><div class="actions"><button class="secondary small" data-page="scope-all">All</button><button class="secondary small" data-page="scope-none">None</button></div></div>
-<div id="scopeLists" class="check-grid"></div>
-<p class="note" style="margin-top:8px">This static version shows the stored site/section link; it does not search descendant pages.</p>
-<div id="summary" class="summary"></div>
-<div class="mode-actions">
-  <button id="viewBtn">View Selected Pages</button>
-  <button id="goggleBtn" class="secondary">Generate Goggle</button>
-</div>
-<div id="gogglePanel" class="goggle-panel">
-  <div class="facet-title">Goggle for current selection</div>
-  <p class="note" style="margin:6px 0 0">
-    Copy these rules into a Brave Goggle, or download them as a <code>.goggle</code> file.
-    Exact pages stay exact; site-section entries preserve their configured scope.
-  </p>
-  <div class="goggle-actions">
-    <button id="copyGoggle" class="secondary small" type="button">Copy Goggle</button>
-    <button id="downloadGoggle" class="secondary small" type="button">Download .goggle</button>
-  </div>
-  <div id="goggleMeta" class="note" style="margin-bottom:8px"></div>
-  <textarea id="goggleText" class="goggle-text" readonly></textarea>
-</div>
-<details id="diag" style="display:none"><summary id="diagTitle">Data diagnostics</summary><div id="diagBody" class="note"></div></details>
-</div>
-</section>
-<section id="results" class="panel results">
-<div class="toolbar"><input id="filter" type="search" placeholder="Filter displayed links by domain, URL, or page type"><button id="close" class="secondary">Close</button></div>
-<div id="resultMeta" class="note" style="margin-bottom:12px"></div><div id="grid" class="grid"></div>
-</section>
-</main>
-<script>
-const SHEET_ID="1b1yxtBRgMwIRZuvyXQPIHN1d7NqYmNcg8xW444sSjw0";
-const ORGS_SHEET="Orgs List", SEARCH_CONFIG="Search Config";
-const PAGE_CONFIGS=["Page Tags Config","Page Tag Config","Page Tags"];
-const FACETS=["Regions","Issues","Types"], NOT_FOUND=new Set(["not found","not_found","notfound","n/a - not found"]);
-const $=s=>document.querySelector(s); let DATA=null;
+  <main>
+    <header class="site-header">
+      <h1>Search the Movement</h1>
+      <p class="lead">Find webpages from around the movement.</p>
+      <p class="disclaimer">Many sites only have their homepage indexed.</p>
+    </header>
 
-let GVIZ_CALLBACK_COUNTER=0;
+    <section class="panel">
+      <div id="loading" class="status">Loading public spreadsheet…</div>
+      <div id="error" class="error"></div>
 
-function loadSheet(name,required=true){
- return new Promise((resolve,reject)=>{
-  const s=document.createElement("script");
-  const callback=`__gviz_callback_${++GVIZ_CALLBACK_COUNTER}_${Date.now()}`;
-  let done=false;
+      <div id="controls" hidden>
+        <div id="facets"></div>
 
-  const cleanup=()=>{
-    s.remove();
-    try{delete window[callback]}catch{}
-  };
+        <section class="control-section">
+          <div class="section-heading-row">
+            <h2>Specific Page Lists</h2>
+            <div class="button-row">
+              <button class="secondary small" type="button" data-page-action="exact-all">All</button>
+              <button class="secondary small" type="button" data-page-action="exact-none">None</button>
+            </div>
+          </div>
+          <div id="exactLists" class="check-grid"></div>
+        </section>
 
-  window[callback]=(response)=>{
-    if(done)return;
-    done=true;
+        <section class="control-section">
+          <div class="section-heading-row">
+            <h2>Site Sections</h2>
+            <div class="button-row">
+              <button class="secondary small" type="button" data-page-action="scope-all">All</button>
+              <button class="secondary small" type="button" data-page-action="scope-none">None</button>
+            </div>
+          </div>
+          <div id="scopeLists" class="check-grid"></div>
+          <p class="note">
+            Site Sections are used when generating a Goggle, but are not shown in the page browser.
+          </p>
+        </section>
 
-    try{
-      if(!response || response.status==="error" || !response.table){
-        cleanup();
-        if(required)reject(new Error(`Could not read "${name}".`));
-        else resolve(null);
-        return;
-      }
+        <div id="selectionSummary" class="selection-summary"></div>
 
-      const cols=(response.table.cols||[]).map((c,i)=>
-        String(c.label||c.id||`Column ${i+1}`).trim()
-      );
+        <div class="primary-actions">
+          <button id="viewPagesButton" type="button">View Selected Pages</button>
+          <button id="goggleButton" class="secondary" type="button">Generate Goggle</button>
+        </div>
 
-      const rows=(response.table.rows||[]).map(row=>{
-        const obj={};
-        cols.forEach((col,i)=>{
-          const cell=row.c?.[i];
-          obj[col]=cell?.v==null ? "" : String(cell.v).trim();
-        });
-        return obj;
-      }).filter(obj=>Object.values(obj).some(Boolean));
+        <section id="gogglePanel" class="goggle-panel" hidden>
+          <h2>Goggle for Current Selection</h2>
+          <p class="note">
+            Copy these rules into a Brave Goggle, or download them as a <code>.goggle</code> file.
+          </p>
+          <div class="button-row goggle-actions">
+            <button id="copyGoggleButton" class="secondary small" type="button">Copy Goggle</button>
+            <button id="downloadGoggleButton" class="secondary small" type="button">Download .goggle</button>
+          </div>
+          <div id="goggleMeta" class="note"></div>
+          <textarea id="goggleText" class="goggle-text" readonly></textarea>
+        </section>
 
-      cleanup();
-      resolve(rows);
-    }catch(err){
-      cleanup();
-      reject(err);
-    }
-  };
+        <details class="info-details">
+          <summary>Configuration behavior</summary>
+          <div class="note details-body">
+            <p><strong>Search Config:</strong> <code>Searchable = N</code> hides that tag itself. Aliases expand what matches that tag, but do not rename, merge, or hide the alias tag.</p>
+            <p><strong>Page Tags Config:</strong> <code>Searchable = N</code> hides that page tag itself. Aliases expand what pages match the configured page tag, while the alias remains its own page tag unless separately disabled.</p>
+          </div>
+        </details>
 
-  s.onerror=()=>{
-    if(done)return;
-    done=true;
-    cleanup();
-    if(required)reject(new Error(`Could not load "${name}".`));
-    else resolve(null);
-  };
+        <details id="diagnosticsBox" class="info-details" hidden>
+          <summary id="diagnosticsSummary">Data diagnostics</summary>
+          <div id="diagnosticsBody" class="note details-body"></div>
+        </details>
+      </div>
+    </section>
 
-  const tqx=encodeURIComponent(`out:json;responseHandler:${callback}`);
-  s.src=
-    `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?`+
-    `tqx=${tqx}&headers=1&sheet=${encodeURIComponent(name)}`;
+    <section id="resultsPanel" class="panel results-panel" hidden>
+      <div class="results-toolbar">
+        <input id="localFilter" type="search" placeholder="Filter displayed pages by domain, URL, page type, or tag">
+        <button id="closeResultsButton" class="secondary" type="button">Close</button>
+      </div>
+      <div id="resultsMeta" class="note results-meta"></div>
+      <div id="resultGrid" class="result-grid"></div>
+    </section>
+  </main>
 
-  document.head.appendChild(s);
- })
-}
-
-function yes(v,d=true){v=String(v||"").trim().toLowerCase();if(!v)return d;if(["y","yes","true","1","on"].includes(v))return true;if(["n","no","false","0","off"].includes(v))return false;return d}
-function split(v){return String(v||"").split(/[,;|\n]+/).map(x=>x.trim()).filter(Boolean)}
-function scope(v){return ["subdomain","domain","site","scope","directory","path","section"].includes(String(v||"").trim().toLowerCase())?"scope":"exact"}
-function host(v){try{const c=/^https?:\/\//i.test(v)?v:`https://${v}`;const h=new URL(c).hostname.toLowerCase();return h.includes(".")?h:""}catch{return ""}}
-function norm(v){try{const u=new URL(v);u.hash="";return u.toString().replace(/\/$/,"")}catch{return String(v||"").replace(/\/$/,"")}}
-
-async function configs(){
- const sr=await loadSheet(SEARCH_CONFIG,false)||[]; let pr=null;
- for(const n of PAGE_CONFIGS){pr=await loadSheet(n,false);if(pr!==null)break}
- const tags=sr.map(r=>({tag:String(r.Tag||r.Value||r.Name||"").trim(),searchable:yes(r.Searchable,true),aliases:split(r.Aliases)})).filter(x=>x.tag);
- const pages=(pr||[]).map(r=>{const tag=String(r["Page Tag"]||r.Tag||r["Page Type"]||r.Type||"").trim();return{tag,label:String(r.Label||tag).trim()||tag,searchable:yes(r.Searchable,true),scope:scope(r.Scope),aliases:split(r.Aliases),default:yes(r.Default,true)}}).filter(x=>x.tag);
- return{tags,pages}
-}
-function rowTag(raw,cfg){const v=String(raw||"").trim();if(!v)return null;const l=v.toLowerCase();for(const r of cfg){if([r.tag,...r.aliases].map(x=>x.toLowerCase()).includes(l))return r.searchable?{value:r.tag,label:r.tag}:null}return{value:v,label:v}}
-function pageTag(raw,cfg){const v=String(raw||"").trim()||"Other",l=v.toLowerCase();for(const r of cfg){if([r.tag,...r.aliases].map(x=>x.toLowerCase()).includes(l))return{...r}}return{tag:v,label:v,searchable:true,scope:"exact",default:true}}
-function parsePages(v,cfg){
- return String(v||"").split(/\n+/).map(x=>x.trim()).filter(Boolean).map(line=>{
-  let u=line,t="Other";if(line.includes(";")){const i=line.lastIndexOf(";");u=line.slice(0,i).trim();t=line.slice(i+1).trim()||"Other"}
-  const c=pageTag(t,cfg),nf=NOT_FOUND.has(u.toLowerCase()),valid=/^https?:\/\//i.test(u);
-  return{url:nf?"":u,pageTag:c.tag,label:c.label,scope:c.scope,searchable:c.searchable,default:c.default,notFound:nf,invalid:!nf&&!valid}
- })
-}
-async function build(){
- const [rows,c]=await Promise.all([loadSheet(ORGS_SHEET,true),configs()]);
- const counts={},labels={},lists=new Map(),diag=[],orgs=[];FACETS.forEach(f=>{counts[f]=new Map();labels[f]=new Map()});
- rows.forEach((r,idx)=>{
-  const website=String(r.Website||"").trim();if(website&&!/^https?:\/\//i.test(website))diag.push({row:idx+2,field:"Website",value:website,msg:"Website should begin with http:// or https://."});
-  const tags={};FACETS.forEach(f=>{const seen=new Set();tags[f]=[];split(r[f]).forEach(raw=>{const x=rowTag(raw,c.tags);if(!x||seen.has(x.value))return;seen.add(x.value);tags[f].push(x);labels[f].set(x.value,x.label);counts[f].set(x.value,(counts[f].get(x.value)||0)+1)})});
-  const pages=parsePages(r.Pages,c.pages);pages.forEach(p=>{if(!lists.has(p.pageTag))lists.set(p.pageTag,{tag:p.pageTag,label:p.label,scope:p.scope,searchable:p.searchable,default:p.default});if(p.invalid)diag.push({row:idx+2,field:`Pages / ${p.pageTag}`,value:p.url,msg:"Invalid URL"})});
-  orgs.push({website,websiteHost:host(website),tags,pages})
- });
- const facets=FACETS.map(f=>({category:f,label:f,values:[{value:"__NOT_GIVEN__",label:"Not Given",count:orgs.filter(o=>!o.tags[f]?.length).length},...[...counts[f]].sort((a,b)=>(labels[f].get(a[0])||a[0]).localeCompare(labels[f].get(b[0])||b[0])).map(([v,c])=>({value:v,label:labels[f].get(v)||v,count:c}))]}));
- const pageLists=[{tag:"__HOMEPAGES__",label:"Homepages",scope:"exact",default:true},{tag:"__WEBSITES__",label:"Websites",scope:"scope",default:true},...[...lists.values()].filter(x=>x.searchable).sort((a,b)=>a.label.localeCompare(b.label))];
- return{orgs,facets,pageLists,diag}
-}
-function rules(){const o={};document.querySelectorAll("input[data-facet]:checked").forEach(i=>(o[i.dataset.facet]??=new Set()).add(i.dataset.value));return o}
-function vals(o,f){return(o.tags?.[f]||[]).map(x=>x.value)}
-function match(o,rs,ignore=null){for(const[f,s]of Object.entries(rs)){if(f===ignore||!s.size)continue;const v=new Set(vals(o,f)),ng=!v.size;if(![...s].some(x=>(x==="__NOT_GIVEN__"&&ng)||v.has(x)))return false}return true}
-function selectedLists(){return[...document.querySelectorAll('input[name="pageList"]:checked')].map(x=>x.value)}
-function list(tag){return DATA.pageLists.find(x=>x.tag===tag)}
-function orgContext(o){return FACETS.flatMap(f=>(o.tags?.[f]||[]).map(x=>x.label||x.value))}
-function contrib(o,tag){
- const l=list(tag);if(!l)return[];
- const context=orgContext(o);
- if(tag==="__HOMEPAGES__")return /^https?:\/\//i.test(o.website||"")?[{key:`exact:${norm(o.website)}`,url:o.website,label:l.label,kind:"exact",scopeMode:"exact",context}]:[];
- if(tag==="__WEBSITES__")return o.websiteHost&&o.website?[{key:`site:${o.websiteHost}`,url:o.website,label:l.label,kind:"scope",scopeMode:"host",context}]:[];
- return(o.pages||[]).filter(p=>p.pageTag===tag&&!p.notFound&&!p.invalid&&p.searchable&&p.url).map(p=>({
-   key:`${l.scope}:${norm(p.url)}`,url:p.url,label:l.label,
-   kind:l.scope==="exact"?"exact":"scope",
-   scopeMode:l.scope==="exact"?"exact":"auto",
-   context
- }))
-}
-function countFacet(f,v){
- const rs=rules(),ls=selectedLists().length?selectedLists():DATA.pageLists.map(x=>x.tag);let c=0;
- DATA.orgs.forEach(o=>{if(!match(o,rs,f)||!ls.some(t=>contrib(o,t).length))return;const set=new Set(vals(o,f));if(v==="__NOT_GIVEN__"?!set.size:set.has(v))c++});return c
-}
-function countList(tag){const rs=rules(),u=new Set();DATA.orgs.forEach(o=>{if(match(o,rs))contrib(o,tag).forEach(x=>u.add(x.key))});return u.size}
-function items(){
- const rs=rules(),ls=selectedLists(),m=new Map();
- DATA.orgs.forEach(o=>{
-  if(!match(o,rs))return;
-  ls.forEach(t=>contrib(o,t).forEach(x=>{
-   if(!m.has(x.key))m.set(x.key,{...x,labels:new Set(),contexts:new Set()});
-   const stored=m.get(x.key);
-   stored.labels.add(x.label);
-   (x.context||[]).forEach(v=>stored.contexts.add(v));
-  }))
- });
- return[...m.values()].map(x=>({...x,labels:[...x.labels],contexts:[...x.contexts]}))
-}
-function esc(s=""){return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
-function update(){
- document.querySelectorAll("input[data-facet]").forEach(i=>i.closest(".tag-control").querySelector(".tag-count").textContent=`(${countFacet(i.dataset.facet,i.dataset.value)})`);
- document.querySelectorAll('input[name="pageList"]').forEach(i=>{const c=countList(i.value);i.closest(".check").querySelector(".meta").textContent=`${c} ${list(i.value).scope==="scope"?"link":"page"}${c===1?"":"s"}`});
- const fc=document.querySelectorAll("input[data-facet]:checked").length,lc=selectedLists().length,ic=items().length;
- $("#summary").textContent=`${lc} page list${lc===1?"":"s"} selected${fc?` · ${fc} filter${fc===1?"":"s"} selected`:""} · ${ic} stored link${ic===1?"":"s"}`
-}
-function render(){
- DATA.facets.forEach(f=>{const b=document.createElement("div");b.className="facet";b.innerHTML=`<div class="facet-head"><div class="facet-title">${esc(f.label)}</div><div class="actions"><button class="secondary small" data-facet-action="all">All</button><button class="secondary small" data-facet-action="none">None</button></div></div><div class="tag-values">${f.values.map(v=>`<label class="tag-control"><input type="checkbox" data-facet="${esc(f.category)}" data-value="${esc(v.value)}"><span class="tag-name">${esc(v.label)}</span><span class="tag-count">(${v.count})</span></label>`).join("")}</div>`;$("#facets").append(b)});
- DATA.pageLists.forEach(l=>{const lab=document.createElement("label");lab.className="check";lab.innerHTML=`<input type="checkbox" name="pageList" value="${esc(l.tag)}" data-scope="${l.scope}" ${l.default?"checked":""}><span><strong>${esc(l.label)}</strong><span class="meta"></span></span>`;(l.scope==="exact"?$("#exactLists"):$("#scopeLists")).append(lab)});
- document.querySelectorAll("input").forEach(i=>i.addEventListener("change",()=>{
-   update();
-   if($("#results").classList.contains("open"))show();
-   if($("#gogglePanel").classList.contains("open"))refreshGoggle();
- }));
- document.querySelectorAll("[data-facet-action]").forEach(b=>b.onclick=()=>{b.closest(".facet").querySelectorAll("input").forEach(i=>i.checked=b.dataset.facetAction==="all");update();if($("#results").classList.contains("open"))show();if($("#gogglePanel").classList.contains("open"))refreshGoggle()});
- document.querySelectorAll("[data-page]").forEach(b=>b.onclick=()=>{const[a,z]=b.dataset.page.split("-");document.querySelectorAll(`input[name="pageList"][data-scope="${a}"]`).forEach(i=>i.checked=z==="all");update();if($("#results").classList.contains("open"))show();if($("#gogglePanel").classList.contains("open"))refreshGoggle()});
- update()
-}
-function displayTitle(x,h){
- const nonHome=x.labels.find(l=>!["Homepages","Websites"].includes(l));
- if(nonHome)return nonHome;
- if(x.labels.includes("Homepages"))return h||"Homepage";
- if(x.labels.includes("Websites"))return h||"Website";
- try{
-  const u=new URL(x.url);
-  const last=decodeURIComponent(u.pathname.split("/").filter(Boolean).pop()||"").replace(/[-_]+/g," ").trim();
-  return last?last.replace(/\b\w/g,c=>c.toUpperCase()):(h||x.url);
- }catch{return h||x.url}
-}
-function screenshotUrl(url){
- return `https://image.thum.io/get/width/640/crop/360/maxAge/168/noanimate/${url}`;
-}
-function faviconUrl(h){
- return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(h)}&sz=64`;
-}
-function card(x){
- let h="";try{h=new URL(x.url).hostname}catch{}
- const search=[h,x.url,x.kind,...x.labels,...(x.contexts||[])].join(" ").toLowerCase();
- const context=(x.contexts||[]).slice(0,5);
- return`<a class="card" href="${esc(x.url)}" target="_blank" rel="noopener" data-search="${esc(search)}">
-   <div class="preview-media">
-     <img class="shot" src="${esc(screenshotUrl(x.url))}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'">
-     <img class="favicon" src="${esc(faviconUrl(h))}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'">
-   </div>
-   <div class="card-body">
-     <div class="domain">${esc(h)}</div>
-     <div class="card-title">${esc(displayTitle(x,h))}</div>
-     <div class="url">${esc(x.url)}</div>
-     ${x.kind==="scope"?'<div class="note">Site / section scope</div>':""}
-     <div class="chips">
-       ${x.labels.map(l=>`<span class="chip">${esc(l)}</span>`).join("")}
-       ${context.map(l=>`<span class="chip context-chip">${esc(l)}</span>`).join("")}
-     </div>
-   </div>
- </a>`}
-function exactGoggleRules(url){
- try{
-  const u=new URL(url);u.hash="";
-  const versions=new Set([u.toString()]);
-  if(!u.search){
-   const s=u.toString();
-   versions.add(s.endsWith("/")?s.slice(0,-1):s+"/");
-  }
-  return[...versions].filter(Boolean).map(v=>`|${v}|$boost=10`);
- }catch{return[]}
-}
-function scopeGoggleRules(item){
- try{
-  const u=new URL(item.url);u.hash="";u.search="";
-  const h=u.hostname.toLowerCase();
-  if(item.scopeMode==="host" || !u.pathname || u.pathname==="/"){
-   return h?[`$boost=10,site=${h}`]:[];
-  }
-  const path=u.pathname.replace(/\/+$/,"");
-  return[`|${u.protocol}//${u.host}${path}^$boost=10`];
- }catch{return[]}
-}
-function buildGoggle(){
- const selected=items();
- const rules=["$discard"];
- selected.forEach(item=>{
-  if(item.kind==="exact")rules.push(...exactGoggleRules(item.url));
-  else rules.push(...scopeGoggleRules(item));
- });
- return[...new Set(rules)].join("\n");
-}
-function refreshGoggle(){
- const txt=buildGoggle();
- $("#goggleText").value=txt;
- const n=Math.max(0,txt.split("\n").filter(Boolean).length-1);
- $("#goggleMeta").textContent=`${n} allow rule${n===1?"":"s"} generated from the current selection.`;
-}
-async function copyGoggle(){
- refreshGoggle();
- const txt=$("#goggleText").value;
- try{
-  await navigator.clipboard.writeText(txt);
-  $("#copyGoggle").textContent="Copied";
-  setTimeout(()=>$("#copyGoggle").textContent="Copy Goggle",1200);
- }catch{
-  $("#goggleText").focus();
-  $("#goggleText").select();
-  document.execCommand("copy");
- }
-}
-function downloadGoggle(){
- refreshGoggle();
- const blob=new Blob([$("#goggleText").value+"\n"],{type:"text/plain;charset=utf-8"});
- const a=document.createElement("a");
- a.href=URL.createObjectURL(blob);
- a.download="curated-selection.goggle";
- document.body.appendChild(a);a.click();a.remove();
- setTimeout(()=>URL.revokeObjectURL(a.href),1000);
-}
-function filter(){const q=$("#filter").value.trim().toLowerCase();let n=0;$("#grid").querySelectorAll(".card").forEach(c=>{const v=!q||c.dataset.search.includes(q);c.style.display=v?"":"none";if(v)n++});$("#resultMeta").textContent=`${n} displayed link${n===1?"":"s"}${q?` matching "${$("#filter").value.trim()}"`:""}`}
-function show(){const a=items();$("#grid").innerHTML=a.length?a.map(card).join(""):'<div class="empty">No pages match the current selections.</div>';$("#results").classList.add("open");$("#filter").value="";filter()}
-$("#viewBtn").onclick=show;
-$("#goggleBtn").onclick=()=>{
-  const panel=$("#gogglePanel");
-  panel.classList.toggle("open");
-  if(panel.classList.contains("open"))refreshGoggle();
-};
-$("#copyGoggle").onclick=copyGoggle;
-$("#downloadGoggle").onclick=downloadGoggle;
-$("#close").onclick=()=>$("#results").classList.remove("open");
-$("#filter").oninput=filter;
-
-(async()=>{
- try{
-  DATA=await build();
-  $("#loading").textContent=`Loaded ${DATA.orgs.length} organizations from the public spreadsheet.`;
-  $("#controls").style.display="";
-  render();
-  if(DATA.diag.length){$("#diag").style.display="block";$("#diagTitle").textContent=`Data diagnostics (${DATA.diag.length})`;$("#diagBody").innerHTML=DATA.diag.slice(0,100).map(d=>`<div style="margin:8px 0"><strong>Row ${d.row} · ${esc(d.field)}</strong><br>${esc(d.value)}<br>${esc(d.msg)}</div>`).join("")}
- }catch(e){$("#loading").style.display="none";$("#error").textContent=`Could not load the public spreadsheet. ${e.message}`}
-})();
-</script>
-</body></html>
+  <script src="app.js"></script>
+</body>
+</html>
