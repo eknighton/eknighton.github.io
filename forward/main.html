@@ -10,9 +10,19 @@
 <body>
   <main>
     <header class="site-header">
-      <h1>Search the Movement</h1>
-      <p class="lead">Find webpages from around the movement.</p>
-      <p class="disclaimer">Many sites only have their homepage indexed.</p>
+<div class="hero-row">
+        <div class="hero-copy">
+          <h1>Search the Movement</h1>
+          <p class="lead">Find webpages from around the movement.</p>
+          <p class="disclaimer">Many sites only have their homepage indexed.</p>
+        </div>
+        <a
+          class="recommend-link"
+          href="https://docs.google.com/forms/d/e/1FAIpQLScpz9UVHnB1I3bYEtu4hgvUasfOc3h5uM8jtZtMzyZ5-8sLnQ/viewform?usp=dialog"
+          target="_blank"
+          rel="noopener"
+        >Recommend a Website</a>
+      </div>
     </header>
 
     <section class="panel">
@@ -33,20 +43,6 @@
           <div id="exactLists" class="check-grid"></div>
         </section>
 
-        <section class="control-section">
-          <div class="section-heading-row">
-            <h2>Site Sections</h2>
-            <div class="button-row">
-              <button class="secondary small" type="button" data-page-action="scope-all">All</button>
-              <button class="secondary small" type="button" data-page-action="scope-none">None</button>
-            </div>
-          </div>
-          <div id="scopeLists" class="check-grid"></div>
-          <p class="note">
-            Site Sections are used when generating a Goggle, but are not shown in the page browser.
-          </p>
-        </section>
-
         <div id="selectionSummary" class="selection-summary"></div>
 
         <div class="primary-actions">
@@ -57,7 +53,8 @@
         <section id="gogglePanel" class="goggle-panel" hidden>
           <h2>Goggle for Current Selection</h2>
           <p class="note">
-            Copy these rules into a Brave Goggle, or download them as a <code>.goggle</code> file.
+            The Goggle uses the website domains of organizations that match your current filters
+            and have a page in any selected page list.
           </p>
           <div class="button-row goggle-actions">
             <button id="copyGoggleButton" class="secondary small" type="button">Copy Goggle</button>
@@ -67,13 +64,7 @@
           <textarea id="goggleText" class="goggle-text" readonly></textarea>
         </section>
 
-        <details class="info-details">
-          <summary>Configuration behavior</summary>
-          <div class="note details-body">
-            <p><strong>Search Config:</strong> <code>Searchable = N</code> hides that tag itself. Aliases expand what matches that tag, but do not rename, merge, or hide the alias tag.</p>
-            <p><strong>Page Tags Config:</strong> <code>Searchable = N</code> hides that page tag itself. Aliases expand what pages match the configured page tag, while the alias remains its own page tag unless separately disabled.</p>
-          </div>
-        </details>
+        
 
         <details id="diagnosticsBox" class="info-details" hidden>
           <summary id="diagnosticsSummary">Data diagnostics</summary>

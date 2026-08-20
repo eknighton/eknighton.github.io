@@ -1,146 +1,45 @@
-# Search the Movement — static GitHub Pages version
+# Search the Movement — GitHub Pages v7
 
-A static directory backed by a public Google Sheet.
+Static GitHub Pages app backed by the public Google Sheet.
 
-No Python server, Brave API key, build system, or package installation is required.
+## v7 changes
 
-## Page text
+- Added an **Add an organization** link to the Google Form.
+- Removed the public **Site Sections** interface.
+- Goggle generation now works from organization homepages:
+  - active facets filter organizations;
+  - selected page lists determine whether an organization qualifies;
+  - if an organization has at least one matching page, its homepage hostname
+    is included as a whole-site Goggle rule (`site=hostname`).
+- Page browsing still displays only exact/specific pages.
+- Everything remains unselected by default except **Homepages**.
+- Zero-result tags/page lists remain red.
+- Background changed to a subtle Forward-inspired lavender/purple.
 
-- Title: **Search the Movement**
-- Description: **Find webpages from around the movement.**
-- Disclaimer: **Many sites only have their homepage indexed.**
+## Google Form
 
-## Default selections
+The responder link points to:
 
-Everything starts unselected **except Homepages**.
+https://docs.google.com/forms/d/e/1FAIpQLScpz9UVHnB1I3bYEtu4hgvUasfOc3h5uM8jtZtMzyZ5-8sLnQ/viewform?usp=dialog
 
-That includes:
-
-- Regions: none selected
-- Issues: none selected
-- Types: none selected
-- Page tags: none selected
-- Site Sections: none selected
-- Homepages: selected
-
-With no facet values selected, that facet does not restrict the results.
-
-## Data sheet
-
-Public Google Sheet ID:
-
-`1b1yxtBRgMwIRZuvyXQPIHN1d7NqYmNcg8xW444sSjw0`
-
-Required tab:
-
-`Orgs List`
-
-Expected columns:
-
-`Website | Regions | Issues | Types | Pages`
-
-Pages are one entry per line:
-
-```text
-https://example.org/resources; Resources
-https://example.org/events; Events
-Not Found; People
-```
-
-## Website column
-
-Every Website contributes to two built-in lists:
-
-- **Homepages** — exact pages; shown in the page browser
-- **Websites** — whole-site scopes; used for Goggle generation only
-
-## Alias behavior
-
-Aliases expand matching. They do **not** rename or merge tags.
-
-Example Search Config:
-
-```text
-Tag | Searchable | Aliases
-A   | Y          | B
-B   | Y          |
-```
-
-The UI still shows both **A** and **B**.
-
-- Selecting A matches organizations tagged A **or B**.
-- Selecting B matches organizations tagged B (plus aliases configured on B).
-- B disappears only if B itself has `Searchable = N`.
-
-The same rule applies to page tags.
-
-## Search Config
-
-Supported columns:
-
-`Tag | Searchable | Aliases | Label | Category`
-
-Only `Tag` is required.
-
-- `Searchable = N` hides that tag itself.
-- `Aliases` expands matching for that tag.
-- `Label` optionally changes the displayed label for that tag.
-- `Category` optionally limits the config row to one facet, such as `Regions`, `Issues`, or `Types`.
-
-Unconfigured tags remain visible by default.
-
-## Page Tags Config
-
-Recognized tab names:
-
-- `Page Tags Config`
-- `Page Tag Config`
-- `Page Tags`
-
-Supported columns:
-
-`Page Tag | Searchable | Scope | Aliases | Label`
-
-- `Searchable = N` hides that page tag itself.
-- `Aliases` expands matching for that page tag.
-- `Label` changes its display label.
-- `Scope` defaults to exact.
-- Scope values such as `subdomain`, `site`, `directory`, `path`, or `section` make it a Site Section.
-
-Unconfigured page tags default to exact pages.
-
-## Site Sections
-
-Site Sections are **not shown in the page-card browser**.
-
-They are included when generating a Goggle.
-
-- Root site URL -> hostname rule
-- URL containing a path -> path-prefix rule
-
-## Rich previews
-
-The static site cannot reliably scrape arbitrary websites' OpenGraph metadata because of browser cross-origin restrictions.
-
-The cards therefore use:
-
-- screenshot thumbnails from `image.thum.io`
-- site favicons from Google's favicon service
-- the stored URL and spreadsheet tags for labeling/searching
-
-## Publish on GitHub Pages
-
-Upload these three files to the root of your GitHub Pages repository:
+## Files
 
 - `index.html`
-- `styles.css`
 - `app.js`
+- `styles.css`
 
-Then commit and push.
+Upload all three to the same GitHub Pages directory.
 
 
-## v6 change
+## v8 change
 
-Facet tags and page-list options whose current live count is `0` remain visible
-and selectable, but are highlighted in red. Counts update with the existing
-facet-aware filtering logic.
+The public-facing `Configuration behavior` section was removed from the webpage.
+Configuration remains supported and documented in the code/README.
+
+
+## v9 changes
+
+- Removed the public `Configuration behavior` section completely.
+- Renamed the Google Form CTA to **Recommend a Website**.
+- Moved the CTA into the page hero/header, aligned opposite the title and description
+  on desktop and full-width below them on mobile.

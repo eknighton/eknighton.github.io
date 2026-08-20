@@ -8,7 +8,9 @@
  * - Page tags work the same way: an alias remains a page-list option unless
  *   that alias tag itself is disabled with Searchable = N.
  * - Everything starts unselected except Homepages.
- * - Site Sections affect Goggle generation but never appear in page cards.
+ * - Site-section controls are intentionally hidden from the public interface.
+ * - Goggle generation uses the homepage domains of organizations that have at
+ *   least one page in any currently selected page list.
  */
 
 const SHEET_ID = "1b1yxtBRgMwIRZuvyXQPIHN1d7NqYmNcg8xW444sSjw0";
@@ -37,7 +39,6 @@ const elements = {
   controls: document.querySelector("#controls"),
   facets: document.querySelector("#facets"),
   exactLists: document.querySelector("#exactLists"),
-  scopeLists: document.querySelector("#scopeLists"),
   selectionSummary: document.querySelector("#selectionSummary"),
   viewPagesButton: document.querySelector("#viewPagesButton"),
   goggleButton: document.querySelector("#goggleButton"),
@@ -718,9 +719,7 @@ function refreshCountsAndSummary() {
     control.classList.toggle("zero-results", count === 0);
   });
 
-  const selected = selectedItems();
-  const exactCount = selected.filter((item) => item.kind === "exact").length;
-  const scopeCount = selected.filter((item) => item.kind === "scope").length;
+  const exactCount = selectedItems().filter((item) => item.kind === "exact").length;
   const selectedFacetCount = document.querySelectorAll(
     "input[data-facet-category]:checked",
   ).length;
@@ -729,8 +728,7 @@ function refreshCountsAndSummary() {
   elements.selectionSummary.textContent =
     `${selectedPageListCount} page list${selectedPageListCount === 1 ? "" : "s"} selected` +
     `${selectedFacetCount ? ` · ${selectedFacetCount} filter${selectedFacetCount === 1 ? "" : "s"} selected` : ""}` +
-    ` · ${exactCount} specific page${exactCount === 1 ? "" : "s"}` +
-    ` + ${scopeCount} site section${scopeCount === 1 ? "" : "s"}`;
+    ` · ${exactCount} specific page${exactCount === 1 ? "" : "s"}`;
 }
 
 // ---------------------------------------------------------------------------
@@ -784,10 +782,14 @@ function renderFacets() {
 
 function renderPageLists() {
   elements.exactLists.innerHTML = "";
-  elements.scopeLists.innerHTML = "";
 
-  for (const pageList of data.pageLists) {
-    const container = pageList.scope === "exact" ? elements.exactLists : elements.scopeLists;
+  // Site-section page lists still exist in the data model/config, but the
+  // public interface intentionally shows only specific-page lists.
+  const visiblePageLists = data.pageLists.filter(
+    (pageList) => pageList.scope === "exact",
+  );
+
+  for (const pageList of visiblePageLists) {
     const control = document.createElement("label");
     control.className = "page-list-control";
 
@@ -799,7 +801,7 @@ function renderPageLists() {
         type="checkbox"
         name="pageList"
         value="${escapeHtml(pageList.tag)}"
-        data-page-scope="${escapeHtml(pageList.scope)}"
+        data-page-scope="exact"
         ${checked ? "checked" : ""}
       >
       <span>
@@ -808,7 +810,7 @@ function renderPageLists() {
       </span>
     `;
 
-    container.appendChild(control);
+    elements.exactLists.appendChild(control);
   }
 }
 
@@ -834,14 +836,11 @@ function attachControlListeners() {
 
   document.querySelectorAll("button[data-page-action]").forEach((button) => {
     button.addEventListener("click", () => {
-      const [scope, action] = button.dataset.pageAction.split("-");
-      const checked = action === "all";
+      const checked = button.dataset.pageAction === "exact-all";
 
-      document
-        .querySelectorAll(`input[name="pageList"][data-page-scope="${scope}"]`)
-        .forEach((input) => {
-          input.checked = checked;
-        });
+      document.querySelectorAll('input[name="pageList"]').forEach((input) => {
+        input.checked = checked;
+      });
 
       handleSelectionChanged();
     });
@@ -983,64 +982,64 @@ function applyLocalFilter() {
 // Goggle generation
 // ---------------------------------------------------------------------------
 
-function exactGoggleRules(rawUrl) {
-  try {
-    const url = new URL(rawUrl);
-    url.hash = "";
+/*
+ * The page-list selection decides WHICH ORGANIZATIONS enter the Goggle.
+ *
+ * Example:
+ *   - User selects "Resources".
+ *   - An organization qualifies if it matches the active facets and has at
+ *     least one Resources page (including aliases configured for Resources).
+ *   - The generated Goggle then searches that organization's whole website,
+ *     using the homepage hostname from the Website column.
+ *
+ * This keeps the Goggle broad enough to search the selected organizations
+ * without exposing the hidden Site Sections UI.
+ */
+function organizationsForGoggle() {
+  const selectedFacets = selectedFacetValues();
+  const selectedPageLists = selectedPageListTags();
 
-    const versions = new Set([url.toString()]);
+  if (selectedPageLists.length === 0) return [];
 
-    if (!url.search) {
-      const serialized = url.toString();
-      versions.add(serialized.endsWith("/") ? serialized.slice(0, -1) : `${serialized}/`);
+  return data.organizations.filter((organization) => {
+    if (!organizationMatchesFacetSelection(organization, selectedFacets)) {
+      return false;
     }
 
-    return [...versions].filter(Boolean).map((version) => `|${version}|$boost=10`);
-  } catch {
-    return [];
-  }
-}
+    if (!organization.websiteHost) return false;
 
-function scopeGoggleRules(item) {
-  try {
-    const url = new URL(item.url);
-    url.hash = "";
-    url.search = "";
-
-    const hostname = url.hostname.toLowerCase();
-
-    if (item.scopeMode === "host" || !url.pathname || url.pathname === "/") {
-      return hostname ? [`$boost=10,site=${hostname}`] : [];
-    }
-
-    const path = url.pathname.replace(/\/+$/, "");
-    return [`|${url.protocol}//${url.host}${path}^$boost=10`];
-  } catch {
-    return [];
-  }
+    return selectedPageLists.some(
+      (pageListTag) =>
+        contributionsForPageList(organization, pageListTag).length > 0,
+    );
+  });
 }
 
 function buildGoggleText() {
   const rules = ["$discard"];
+  const websiteHosts = new Set(
+    organizationsForGoggle()
+      .map((organization) => organization.websiteHost)
+      .filter(Boolean),
+  );
 
-  for (const item of selectedItems()) {
-    if (item.kind === "exact") {
-      rules.push(...exactGoggleRules(item.url));
-    } else {
-      rules.push(...scopeGoggleRules(item));
-    }
+  for (const hostname of websiteHosts) {
+    rules.push(`$boost=10,site=${hostname}`);
   }
 
-  return [...new Set(rules)].join("\n");
+  return rules.join("\n");
 }
 
 function refreshGogglePanel() {
-  const text = buildGoggleText();
-  elements.goggleText.value = text;
+  const organizations = organizationsForGoggle();
+  const uniqueHosts = new Set(
+    organizations.map((organization) => organization.websiteHost).filter(Boolean),
+  );
 
-  const ruleCount = Math.max(0, text.split("\n").filter(Boolean).length - 1);
+  elements.goggleText.value = buildGoggleText();
   elements.goggleMeta.textContent =
-    `${ruleCount} allow rule${ruleCount === 1 ? "" : "s"} generated from the current selection.`;
+    `${uniqueHosts.size} website${uniqueHosts.size === 1 ? "" : "s"} included ` +
+    `from ${organizations.length} qualifying organization${organizations.length === 1 ? "" : "s"}.`;
 }
 
 async function copyGoggle() {
