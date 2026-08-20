@@ -43,3 +43,36 @@ Configuration remains supported and documented in the code/README.
 - Renamed the Google Form CTA to **Recommend a Website**.
 - Moved the CTA into the page hero/header, aligned opposite the title and description
   on desktop and full-width below them on mobile.
+
+
+## v10 change — config-defined page lists
+
+`Page Tags Config` now creates page-list options directly.
+
+For example:
+
+| Page Tag | Aliases | Searchable | Label |
+| --- | --- | --- | --- |
+| Civic Reform | Electoral Reform; Election Reform; Ballot Reform | | Civic Reform |
+
+will display **Civic Reform** even if no page in `Orgs List` is literally tagged
+`Civic Reform`.
+
+Selecting it matches pages tagged any of:
+
+- Civic Reform
+- Electoral Reform
+- Election Reform
+- Ballot Reform
+
+Alias tags remain independent page-list options when they appear in the data,
+unless their own config row explicitly sets `Searchable = N`.
+
+
+## v11 change
+
+Updated the Goggle helper text to:
+
+> Use these instructions with Brave Goggles to filter a web search to within the websites of the selected pages.
+
+`Brave Goggles` links to the official Brave Goggles creation page.

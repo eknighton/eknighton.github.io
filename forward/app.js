@@ -447,7 +447,7 @@ function buildPageListDefinitions(organizations, pageTagConfig) {
     }
   }
 
-  const pageLists = [
+  const builtInLists = [
     {
       tag: "__HOMEPAGES__",
       label: "Homepages",
@@ -462,20 +462,54 @@ function buildPageListDefinitions(organizations, pageTagConfig) {
     },
   ];
 
-  const configuredLists = [...discoveredTags]
+  /*
+   * Page Tags Config is a true definition source.
+   *
+   * A configured Page Tag appears as its own page-list option even if that
+   * canonical tag never occurs literally in Orgs List. Its aliases determine
+   * what raw page tags it can match when selected.
+   *
+   * Example:
+   *   Civic Reform | Electoral Reform; Election Reform
+   *
+   * creates a Civic Reform option even if every actual page is tagged only
+   * Electoral Reform or Election Reform.
+   */
+  const configuredDefinitions = pageTagConfig
+    .filter((rule) => rule.searchable)
+    .map((rule) => ({
+      tag: rule.tag,
+      label: rule.label || rule.tag,
+      scope: rule.scope || "exact",
+      builtIn: false,
+    }));
+
+  const configuredCanonicalTags = new Set(
+    pageTagConfig.map((rule) => rule.tag.toLowerCase()),
+  );
+
+  /*
+   * Raw tags discovered in Orgs List still remain independent options.
+   * Merely being listed as another tag's alias does NOT merge or suppress
+   * them. A raw tag disappears only if its own config row says Searchable=N.
+   *
+   * If a discovered tag already has its own config row, its configured
+   * definition above is used instead of creating a duplicate here.
+   */
+  const discoveredDefinitions = [...discoveredTags]
+    .filter((tag) => !configuredCanonicalTags.has(tag.toLowerCase()))
     .filter((tag) => pageTagIsVisible(pageTagConfig, tag))
-    .map((tag) => {
-      const rule = findPageTagConfigRule(pageTagConfig, tag);
-      return {
-        tag,
-        label: pageTagDisplayLabel(pageTagConfig, tag),
-        scope: rule?.scope || "exact",
-        builtIn: false,
-      };
-    })
+    .map((tag) => ({
+      tag,
+      label: tag,
+      scope: "exact",
+      builtIn: false,
+    }));
+
+  const userPageLists = [...configuredDefinitions, ...discoveredDefinitions]
     .sort((a, b) => a.label.localeCompare(b.label));
 
-  return [...pageLists, ...configuredLists];
+  return [...builtInLists, ...userPageLists];
 }
 
 // ---------------------------------------------------------------------------
