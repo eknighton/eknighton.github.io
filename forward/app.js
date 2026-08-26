@@ -43,10 +43,16 @@ const elements = {
   viewPagesButton: document.querySelector("#viewPagesButton"),
   goggleButton: document.querySelector("#goggleButton"),
   gogglePanel: document.querySelector("#gogglePanel"),
-  copyGoggleButton: document.querySelector("#copyGoggleButton"),
   downloadGoggleButton: document.querySelector("#downloadGoggleButton"),
   goggleMeta: document.querySelector("#goggleMeta"),
   goggleText: document.querySelector("#goggleText"),
+  copyListButton: document.querySelector("#copyListButton"),
+  shareButton: document.querySelector("#shareButton"),
+  aiButton: document.querySelector("#aiButton"),
+  aiPanel: document.querySelector("#aiPanel"),
+  downloadSearchAppButton: document.querySelector("#downloadSearchAppButton"),
+  toolStatus: document.querySelector("#toolStatus"),
+  homeLink: document.querySelector("#homeLink"),
   diagnosticsBox: document.querySelector("#diagnosticsBox"),
   diagnosticsSummary: document.querySelector("#diagnosticsSummary"),
   diagnosticsBody: document.querySelector("#diagnosticsBody"),
@@ -425,9 +431,13 @@ function buildFacetDefinitions(organizations, searchConfig) {
       .map((tag) => ({
         value: tag,
         label: tagDisplayLabel(searchConfig, facetName, tag),
-      }))
-      .sort((a, b) => a.label.localeCompare(b.label));
+      }));
 
+    options.sort((a, b) =>
+      a.label.localeCompare(b.label, undefined, { sensitivity: "base" }),
+    );
+
+    // "Not Given" is always the first option in each facet.
     options.unshift({ value: "__NOT_GIVEN__", label: "Not Given" });
 
     return {
@@ -738,18 +748,14 @@ function refreshCountsAndSummary() {
     );
 
     const control = input.closest(".tag-control");
-    control.querySelector(".tag-count").textContent = `(${count})`;
+    control.querySelector(".tag-count").textContent = `${count}`;
     control.classList.toggle("zero-results", count === 0);
   });
 
   document.querySelectorAll('input[name="pageList"]').forEach((input) => {
     const count = countPageList(input.value);
-    const definition = pageListDefinition(input.value);
-    const noun = definition.scope === "scope" ? "section" : "page";
-
     const control = input.closest(".page-list-control");
-    control.querySelector(".page-list-meta").textContent =
-      `${count} ${noun}${count === 1 ? "" : "s"}`;
+    control.querySelector(".page-list-meta").textContent = `${count}`;
     control.classList.toggle("zero-results", count === 0);
   });
 
@@ -793,7 +799,7 @@ function renderFacets() {
               data-facet-value="${escapeHtml(option.value)}"
             >
             <span class="tag-name">${escapeHtml(option.label)}</span>
-            <span class="tag-count">(0)</span>
+            <span class="tag-count">0</span>
           </label>
         `,
       )
@@ -883,6 +889,7 @@ function attachControlListeners() {
 
 function handleSelectionChanged() {
   refreshCountsAndSummary();
+  updateUrlFromSelections({ replace: true });
 
   if (!elements.resultsPanel.hidden) {
     renderSelectedPages();
@@ -972,6 +979,11 @@ function pageCardHtml(item) {
         <div class="card-domain">${escapeHtml(hostname)}</div>
         <div class="card-title">${escapeHtml(humanizeUrl(item.url, hostname))}</div>
         <div class="card-url">${escapeHtml(item.url)}</div>
+        <div
+          class="card-excerpt"
+          data-preview-url="${escapeHtml(item.url)}"
+          aria-live="polite"
+        ></div>
         <div class="chips">
           ${item.pageListLabels
             .map((label) => `<span class="chip">${escapeHtml(label)}</span>`)
@@ -995,6 +1007,7 @@ function renderSelectedPages() {
 
   elements.localFilter.value = "";
   applyLocalFilter();
+  attachPagePreviewObserver();
 }
 
 function applyLocalFilter() {
@@ -1010,6 +1023,127 @@ function applyLocalFilter() {
   elements.resultsMeta.textContent =
     `${visibleCount} displayed page${visibleCount === 1 ? "" : "s"}` +
     (query ? ` matching "${elements.localFilter.value.trim()}"` : "");
+}
+
+
+// ---------------------------------------------------------------------------
+// Text previews
+// ---------------------------------------------------------------------------
+
+/*
+ * Static GitHub Pages cannot reliably fetch arbitrary websites directly
+ * because most sites do not permit cross-origin browser requests.
+ *
+ * For a best-effort text preview, we lazily request a readable version through
+ * Jina Reader only when a card approaches the viewport. If the request fails,
+ * the card simply keeps its existing screenshot/title/URL presentation.
+ *
+ * Results are cached in memory for the current visit so scrolling or
+ * re-rendering does not repeatedly request the same page.
+ */
+const pagePreviewCache = new Map();
+
+function jinaReaderUrl(url) {
+  return `https://r.jina.ai/${url}`;
+}
+
+function cleanReaderExcerpt(text) {
+  if (!text) return "";
+
+  let content = text;
+
+  // Reader responses commonly contain a metadata preamble followed by the
+  // main page text. Prefer content after this marker when it is present.
+  const marker = "Markdown Content:";
+  const markerIndex = content.indexOf(marker);
+  if (markerIndex !== -1) {
+    content = content.slice(markerIndex + marker.length);
+  }
+
+  const lines = content
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .filter((line) => !/^#{1,6}\s/.test(line))
+    .filter((line) => !/^(Title|URL Source|Published Time|Markdown Content):/i.test(line))
+    .filter((line) => !/^!\[/.test(line))
+    .filter((line) => !/^\[.*\]\(.*\)$/.test(line));
+
+  let excerpt = lines.join(" ")
+    .replace(/\s+/g, " ")
+    .replace(/\[(.*?)\]\([^)]+\)/g, "$1")
+    .replace(/[*_`>#]/g, "")
+    .trim();
+
+  if (excerpt.length > 320) {
+    excerpt = excerpt.slice(0, 317).trimEnd() + "…";
+  }
+
+  return excerpt;
+}
+
+async function loadPageExcerpt(url) {
+  if (pagePreviewCache.has(url)) {
+    return pagePreviewCache.get(url);
+  }
+
+  const promise = fetch(jinaReaderUrl(url), {
+    headers: {
+      Accept: "text/plain",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Preview request failed: ${response.status}`);
+      }
+      return response.text();
+    })
+    .then(cleanReaderExcerpt)
+    .catch(() => "");
+
+  pagePreviewCache.set(url, promise);
+  return promise;
+}
+
+function attachPagePreviewObserver() {
+  const excerpts = [...elements.resultGrid.querySelectorAll(".card-excerpt")];
+  if (!excerpts.length) return;
+
+  const populateExcerpt = async (element) => {
+    if (element.dataset.previewLoaded === "true") return;
+    element.dataset.previewLoaded = "true";
+
+    const excerpt = await loadPageExcerpt(element.dataset.previewUrl);
+    if (!excerpt || !element.isConnected) return;
+
+    element.textContent = excerpt;
+
+    // Include the excerpt in the card's local-search metadata too.
+    const card = element.closest(".page-card");
+    if (card) {
+      card.dataset.search = `${card.dataset.search} ${excerpt.toLowerCase()}`;
+    }
+  };
+
+  if (!("IntersectionObserver" in window)) {
+    excerpts.slice(0, 12).forEach(populateExcerpt);
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        observer.unobserve(entry.target);
+        populateExcerpt(entry.target);
+      });
+    },
+    {
+      rootMargin: "500px 0px",
+    },
+  );
+
+  excerpts.forEach((element) => observer.observe(element));
 }
 
 // ---------------------------------------------------------------------------
@@ -1076,15 +1210,16 @@ function refreshGogglePanel() {
     `from ${organizations.length} qualifying organization${organizations.length === 1 ? "" : "s"}.`;
 }
 
-async function copyGoggle() {
+async function copyGoggle({ openPanel = false } = {}) {
   refreshGogglePanel();
+  if (openPanel) {
+    elements.gogglePanel.hidden = false;
+  }
 
   try {
     await navigator.clipboard.writeText(elements.goggleText.value);
-    elements.copyGoggleButton.textContent = "Copied";
-    setTimeout(() => {
-      elements.copyGoggleButton.textContent = "Copy Goggle";
-    }, 1200);
+    setToolStatus("Goggle copied.");
+
   } catch {
     elements.goggleText.focus();
     elements.goggleText.select();
@@ -1108,6 +1243,226 @@ function downloadGoggle() {
   link.remove();
 
   setTimeout(() => URL.revokeObjectURL(downloadUrl), 1000);
+}
+
+
+
+// ---------------------------------------------------------------------------
+// Facet column layout
+// ---------------------------------------------------------------------------
+
+/*
+ * Keep the tag sections in genuine columns while avoiding the two problems
+ * from earlier attempts:
+ *
+ * - no horizontal scrollbar
+ * - no equal-width columns stretching sparse sections apart
+ *
+ * The number of columns adapts to the available width. Once the column count
+ * is chosen, the number of rows is calculated so CSS Grid can fill
+ * top-to-bottom before moving to the next column.
+ */
+function layoutFacetColumns() {
+  /*
+   * Every selectable section uses the SAME number of columns.
+   *
+   * Determine that shared count from:
+   * - the narrowest available section width
+   * - the widest selectable item anywhere on the page
+   *
+   * Then each individual section calculates only how many ROWS it needs.
+   * This keeps Regions / Issues / Types / Specific Page Lists visually aligned.
+   */
+  const containers = [
+    ...document.querySelectorAll(".tag-values"),
+    elements.exactLists,
+  ].filter(Boolean);
+
+  const allControls = containers.flatMap((container) => [
+    ...container.querySelectorAll(".tag-control, .page-list-control"),
+  ]);
+
+  if (!containers.length || !allControls.length) return;
+
+  const availableWidth = Math.min(
+    ...containers.map(
+      (container) =>
+        container.clientWidth ||
+        container.parentElement?.clientWidth ||
+        800,
+    ),
+  );
+
+  const widestItem = Math.max(
+    ...allControls.map((control) =>
+      Math.ceil(control.getBoundingClientRect().width),
+    ),
+    120,
+  );
+
+  const columnGap = 28;
+  const columnWidth = Math.max(140, widestItem);
+
+  let sharedColumns = Math.floor(
+    (availableWidth + columnGap) / (columnWidth + columnGap),
+  );
+
+  sharedColumns = Math.max(1, sharedColumns);
+
+  containers.forEach((container) => {
+    const count = container.querySelectorAll(
+      ".tag-control, .page-list-control",
+    ).length;
+
+    if (!count) return;
+
+    const rows = Math.ceil(count / sharedColumns);
+
+    container.style.setProperty("--shared-columns", sharedColumns);
+    container.style.setProperty("--section-rows", rows);
+    container.style.setProperty("--shared-column-width", `${columnWidth}px`);
+  });
+}
+
+let facetLayoutResizeTimer;
+
+window.addEventListener("resize", () => {
+  clearTimeout(facetLayoutResizeTimer);
+  facetLayoutResizeTimer = setTimeout(layoutFacetColumns, 80);
+});
+
+// ---------------------------------------------------------------------------
+// Shareable URL state + utility actions
+// ---------------------------------------------------------------------------
+
+function currentSelectionState() {
+  const facets = {};
+
+  document.querySelectorAll("input[data-facet-category]:checked").forEach((input) => {
+    const category = input.dataset.facetCategory;
+    if (!facets[category]) facets[category] = [];
+    facets[category].push(input.dataset.facetValue);
+  });
+
+  return { facets, pageLists: selectedPageListTags() };
+}
+
+function encodeSelectionState(state) {
+  const bytes = new TextEncoder().encode(JSON.stringify(state));
+  let binary = "";
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+
+  return btoa(binary)
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+}
+
+function decodeSelectionState(encoded) {
+  try {
+    const padded =
+      encoded.replace(/-/g, "+").replace(/_/g, "/") +
+      "=".repeat((4 - (encoded.length % 4)) % 4);
+
+    const binary = atob(padded);
+    const bytes = Uint8Array.from(binary, (character) => character.charCodeAt(0));
+    return JSON.parse(new TextDecoder().decode(bytes));
+  } catch {
+    return null;
+  }
+}
+
+function updateUrlFromSelections({ replace = true } = {}) {
+  const state = currentSelectionState();
+  const params = new URLSearchParams(window.location.search);
+
+  const isDefault =
+    Object.values(state.facets).every((values) => values.length === 0) &&
+    state.pageLists.length === 1 &&
+    state.pageLists[0] === "__HOMEPAGES__";
+
+  if (isDefault) params.delete("s");
+  else params.set("s", encodeSelectionState(state));
+
+  const nextUrl =
+    window.location.pathname +
+    (params.toString() ? `?${params.toString()}` : "") +
+    window.location.hash;
+
+  history[replace ? "replaceState" : "pushState"]({}, "", nextUrl);
+}
+
+function applySelectionStateFromUrl() {
+  const encoded = new URLSearchParams(window.location.search).get("s");
+  if (!encoded) return;
+
+  const state = decodeSelectionState(encoded);
+  if (!state) return;
+
+  document.querySelectorAll("input[data-facet-category]").forEach((input) => {
+    const selected = state.facets?.[input.dataset.facetCategory] || [];
+    input.checked = selected.includes(input.dataset.facetValue);
+  });
+
+  document.querySelectorAll('input[name="pageList"]').forEach((input) => {
+    input.checked = (state.pageLists || []).includes(input.value);
+  });
+}
+
+function resetToDefaultSelection() {
+  document.querySelectorAll("input[data-facet-category]").forEach((input) => {
+    input.checked = false;
+  });
+
+  document.querySelectorAll('input[name="pageList"]').forEach((input) => {
+    input.checked = input.value === "__HOMEPAGES__";
+  });
+
+  updateUrlFromSelections({ replace: false });
+  handleSelectionChanged();
+}
+
+function setToolStatus(message) {
+  elements.toolStatus.textContent = message;
+  clearTimeout(setToolStatus.timeout);
+  setToolStatus.timeout = setTimeout(() => {
+    elements.toolStatus.textContent = "";
+  }, 1800);
+}
+
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.style.position = "fixed";
+    textarea.style.opacity = "0";
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    textarea.remove();
+  }
+}
+
+async function copySelectedList() {
+  const urls = selectedItems()
+    .filter((item) => item.kind === "exact")
+    .map((item) => item.url);
+
+  if (!urls.length) {
+    setToolStatus("No selected pages to copy.");
+    return;
+  }
+
+  await copyText(urls.join("\n"));
+  setToolStatus(`Copied ${urls.length} page${urls.length === 1 ? "" : "s"}.`);
+}
+
+async function copyShareLink() {
+  updateUrlFromSelections({ replace: true });
+  await copyText(window.location.href);
+  setToolStatus("Share link copied.");
 }
 
 // ---------------------------------------------------------------------------
@@ -1143,18 +1498,46 @@ elements.viewPagesButton.addEventListener("click", () => {
   elements.resultsPanel.scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
+elements.copyListButton.addEventListener("click", copySelectedList);
+elements.shareButton.addEventListener("click", copyShareLink);
+elements.aiButton.addEventListener("click", () => {
+  const wasOpen = !elements.aiPanel.hidden;
+
+  elements.gogglePanel.hidden = true;
+
+  if (wasOpen) {
+    elements.aiPanel.hidden = true;
+    return;
+  }
+
+  elements.aiPanel.hidden = false;
+  elements.aiPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+elements.homeLink.addEventListener("click", (event) => {
+  event.preventDefault();
+  resetToDefaultSelection();
+});
+
 elements.closeResultsButton.addEventListener("click", () => {
   elements.resultsPanel.hidden = true;
 });
 
 elements.localFilter.addEventListener("input", applyLocalFilter);
 
-elements.goggleButton.addEventListener("click", () => {
-  elements.gogglePanel.hidden = !elements.gogglePanel.hidden;
-  if (!elements.gogglePanel.hidden) refreshGogglePanel();
-});
+elements.goggleButton.addEventListener("click", async () => {
+  const wasOpen = !elements.gogglePanel.hidden;
 
-elements.copyGoggleButton.addEventListener("click", copyGoggle);
+  elements.aiPanel.hidden = true;
+
+  if (wasOpen) {
+    elements.gogglePanel.hidden = true;
+    return;
+  }
+
+  await copyGoggle({ openPanel: true });
+  elements.gogglePanel.scrollIntoView({ behavior: "smooth", block: "start" });
+});
 elements.downloadGoggleButton.addEventListener("click", downloadGoggle);
 
 async function initialize() {
@@ -1166,6 +1549,9 @@ async function initialize() {
     elements.controls.hidden = false;
 
     renderControls();
+    layoutFacetColumns();
+    applySelectionStateFromUrl();
+    refreshCountsAndSummary();
     renderDiagnostics();
   } catch (error) {
     elements.loading.hidden = true;
@@ -1176,3 +1562,22 @@ async function initialize() {
 }
 
 initialize();
+
+
+window.addEventListener("popstate", () => {
+  if (!data) return;
+
+  document.querySelectorAll("input[data-facet-category]").forEach((input) => {
+    input.checked = false;
+  });
+
+  document.querySelectorAll('input[name="pageList"]').forEach((input) => {
+    input.checked = input.value === "__HOMEPAGES__";
+  });
+
+  applySelectionStateFromUrl();
+  refreshCountsAndSummary();
+
+  if (!elements.resultsPanel.hidden) renderSelectedPages();
+  if (!elements.gogglePanel.hidden) refreshGogglePanel();
+});

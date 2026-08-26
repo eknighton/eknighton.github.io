@@ -498,3 +498,695 @@ code {
     width: 100%;
   }
 }
+
+
+/* v12 — spacing-led visual cleanup */
+body { background: #f3eef9; }
+
+.panel {
+  border: 0 !important;
+  box-shadow: 0 10px 30px rgba(61,37,89,.05) !important;
+  padding: 28px !important;
+}
+
+.control-section,
+.facet {
+  border: 0 !important;
+  padding-top: 0 !important;
+  margin-top: 34px !important;
+}
+
+.facet:first-child { margin-top: 0 !important; }
+
+.section-heading-row,
+.facet-heading {
+  border: 0 !important;
+  padding-bottom: 0 !important;
+  margin-bottom: 14px !important;
+}
+
+/* Keep section headers left-aligned. */
+.section-heading-row h2,
+.facet-title,
+.tools-section h2,
+.goggle-panel h2 {
+  text-align: left;
+}
+
+.tag-values { gap: 8px 18px; }
+
+.tag-control,
+.page-list-control {
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 4px 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.tag-control:hover,
+.page-list-control:hover { background: transparent !important; }
+
+.tag-count,
+.page-list-meta { font-style: italic; }
+
+/* For zero results, only the checkbox is red. */
+.tag-control.zero-results,
+.page-list-control.zero-results { border: 0 !important; }
+
+.tag-control.zero-results .tag-name,
+.tag-control.zero-results .tag-count,
+.page-list-control.zero-results .page-list-label,
+.page-list-control.zero-results .page-list-meta {
+  color: inherit !important;
+}
+
+.tag-control.zero-results input,
+.page-list-control.zero-results input {
+  accent-color: var(--danger);
+  outline: 1px solid var(--danger);
+  outline-offset: 1px;
+}
+
+.home-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.home-link:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.hero-row {
+  align-items: center !important;
+  gap: 44px !important;
+  margin-bottom: 36px !important;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.header-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 10px 15px;
+  border: 0;
+  border-radius: 11px;
+  background: rgba(255,255,255,.78);
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 3px 12px rgba(68,41,105,.05);
+}
+
+.header-action:hover { background: white; }
+
+.tools-section { margin-top: 38px; }
+
+.tools-grid {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.tool-status {
+  min-height: 20px;
+  margin-top: 10px;
+}
+
+@media (max-width: 700px) {
+  .hero-row { align-items: stretch !important; }
+  .hero-actions { justify-content: stretch; }
+  .header-action { flex: 1 1 100%; }
+  .tools-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* --------------------------------------------------------------------------
+   v13 readability pass
+   -------------------------------------------------------------------------- */
+
+/* Bigger labels and controls. */
+.tag-control,
+.page-list-control {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  font-size: 16px !important;
+  line-height: 1.35 !important;
+  white-space: nowrap;
+}
+
+.tag-control input,
+.page-list-control input {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  margin: 0;
+}
+
+/* The count now reads like the other facets: label + italic number. */
+.tag-count,
+.page-list-meta {
+  display: inline !important;
+  margin-left: 2px;
+  font-size: 15px !important;
+  line-height: 1;
+  font-style: italic;
+  color: var(--muted);
+}
+
+.page-list-control > span {
+  display: inline-flex !important;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.page-list-label {
+  display: inline !important;
+  font-size: 16px !important;
+  line-height: 1.35;
+}
+
+/*
+ * More separation BETWEEN choices than WITHIN each checkbox/label pair.
+ * This makes the visual grouping much clearer now that borders are gone.
+ */
+.tag-values,
+.check-grid {
+  column-gap: 28px !important;
+  row-gap: 15px !important;
+}
+
+/* Zero-result checkbox: red X INSIDE the box, no red outline. */
+.tag-control.zero-results input,
+.page-list-control.zero-results input {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 1.5px solid #9da3aa;
+  border-radius: 3px;
+  outline: 0 !important;
+  background: transparent;
+}
+
+.tag-control.zero-results input::before,
+.page-list-control.zero-results input::before {
+  content: "×";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--danger);
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 16px;
+  transform: translateY(-1px);
+}
+
+/*
+ * If the user explicitly checks a zero-result option, preserve the X motif
+ * instead of replacing it with the browser's normal checkmark.
+ */
+.tag-control.zero-results input:checked,
+.page-list-control.zero-results input:checked {
+  background: transparent;
+  border-color: #9da3aa;
+}
+
+/* Normal checked controls stay native and readable. */
+.tag-control:not(.zero-results) input,
+.page-list-control:not(.zero-results) input {
+  accent-color: var(--accent);
+}
+
+
+/* --------------------------------------------------------------------------
+   v14 — columns + softer zero state + textual previews
+   -------------------------------------------------------------------------- */
+
+/*
+ * All tag facets now use the same column system as Specific Page Lists.
+ * This gives Regions / Issues / Types a much more regular scan pattern.
+ */
+.tag-values {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  column-gap: 30px !important;
+  row-gap: 15px !important;
+  align-items: start;
+}
+
+/* Keep controls aligned naturally inside their grid cells. */
+.tag-control {
+  justify-self: start;
+}
+
+/*
+ * Tone down the zero-result X. It should read as unavailable, not as an error.
+ */
+.tag-control.zero-results input::before,
+.page-list-control.zero-results input::before {
+  color: #b56f78 !important;
+  font-size: 18px !important;
+  font-weight: 650 !important;
+  opacity: 0.82;
+}
+
+/*
+ * Short text excerpts underneath the URL/title information.
+ */
+.card-excerpt {
+  margin-top: 9px;
+  color: #565b63;
+  font-size: 13px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-excerpt:empty {
+  display: none;
+}
+
+
+/* --------------------------------------------------------------------------
+   v15 — stronger facet labels + column-major reading order
+   -------------------------------------------------------------------------- */
+
+/*
+ * CSS multi-column layout fills top-to-bottom before moving to the next
+ * column. This gives the facets a true column-major reading order rather than
+ * CSS Grid's left-to-right row order.
+ */
+.tag-values {
+  display: block !important;
+  column-width: 205px;
+  column-gap: 24px !important;
+}
+
+/*
+ * Make the entire width of each column entry part of the label hit area.
+ * Clicking the whitespace after the text now toggles the checkbox too.
+ */
+.tag-control {
+  display: flex !important;
+  width: 100% !important;
+  box-sizing: border-box;
+  break-inside: avoid;
+  align-items: center !important;
+  gap: 7px !important;
+  margin: 0 0 10px 0 !important;
+  padding: 4px 2px !important;
+  cursor: pointer;
+}
+
+/* Slightly stronger tag hierarchy now that the border boxes are gone. */
+.tag-name {
+  font-size: 16.5px !important;
+  font-weight: 650;
+  line-height: 1.3;
+}
+
+.tag-count {
+  font-size: 14.5px !important;
+  margin-left: 1px !important;
+}
+
+/*
+ * Keep the checkbox/text relationship tight, while reducing the oversized
+ * visual gaps that were present in the grid layout.
+ */
+.tag-control input {
+  margin-right: 0 !important;
+}
+
+@media (max-width: 700px) {
+  .tag-values {
+    column-width: 175px;
+    column-gap: 18px !important;
+  }
+}
+
+
+/* --------------------------------------------------------------------------
+   v16 — calmer, compact facet layout
+   -------------------------------------------------------------------------- */
+
+/*
+ * Undo the v15 newspaper-style columns. Use a grid again, but explicitly lay
+ * items out down each column first. The grid keeps rows visually aligned and
+ * prevents awkwardly tall columns.
+ */
+.tag-values {
+  display: grid !important;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(4, auto);
+  grid-auto-columns: minmax(170px, 1fr);
+  column-gap: 24px !important;
+  row-gap: 11px !important;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+/*
+ * Normal-weight text reads better here; size carries the hierarchy.
+ */
+.tag-name {
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  line-height: 1.3;
+}
+
+.tag-count {
+  font-size: 14.5px !important;
+  margin-left: 2px !important;
+}
+
+/*
+ * Keep the whole item clickable, but don't make it visually occupy an
+ * exaggerated horizontal strip.
+ */
+.tag-control {
+  width: auto !important;
+  min-width: 0;
+  margin: 0 !important;
+  padding: 3px 0 !important;
+  justify-self: start;
+}
+
+/*
+ * Responsive row count:
+ * - wide screens: four rows per column
+ * - medium screens: five rows per column
+ * - narrow screens: six rows per column
+ *
+ * This keeps the block compact while preserving top-to-bottom column fill.
+ */
+@media (max-width: 980px) {
+  .tag-values {
+    grid-template-rows: repeat(5, auto);
+    grid-auto-columns: minmax(165px, 1fr);
+    column-gap: 20px !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .tag-values {
+    grid-template-rows: repeat(6, auto);
+    grid-auto-columns: minmax(150px, 1fr);
+    column-gap: 18px !important;
+    row-gap: 10px !important;
+  }
+
+  .tag-name {
+    font-size: 15.5px !important;
+  }
+}
+
+
+/* --------------------------------------------------------------------------
+   v17 — simplify facets to the layout that already works
+   -------------------------------------------------------------------------- */
+
+/*
+ * Remove the forced column-major grid from v16.
+ * Let items wrap naturally into compact rows/columns, like the sections that
+ * already look good. No horizontal scrolling and no stretched empty columns.
+ */
+.tag-values {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center;
+  gap: 11px 24px !important;
+  overflow: visible !important;
+  padding-bottom: 0 !important;
+}
+
+/*
+ * Keep facet items compact. The label itself remains the clickable unit, with
+ * a modest amount of comfortable whitespace rather than a full column strip.
+ */
+.tag-control {
+  display: inline-flex !important;
+  width: auto !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 3px 0 !important;
+  justify-self: auto !important;
+}
+
+/* Normal-weight labels throughout. */
+.tag-name,
+.page-list-label {
+  font-weight: 400 !important;
+}
+
+/*
+ * Specific Page Lists already had the right overall motif; just remove any
+ * inherited bold treatment from earlier passes.
+ */
+.page-list-control > span {
+  font-weight: 400 !important;
+}
+
+/* Regions should not create huge artificial gaps between sparse columns. */
+.facet[data-facet="Regions"] .tag-values,
+.facet[data-facet-category="Regions"] .tag-values {
+  justify-content: flex-start !important;
+}
+
+
+/* --------------------------------------------------------------------------
+   v18 — real columns, without scrollbars or stretched gaps
+   -------------------------------------------------------------------------- */
+
+/*
+ * JavaScript sets --facet-rows and --facet-columns for each facet.
+ * Grid then fills downward through each column before moving right.
+ *
+ * Columns use max-content rather than 1fr, so sparse sections like Regions
+ * do not get enormous empty gaps.
+ */
+.tag-values {
+  display: grid !important;
+  grid-auto-flow: column !important;
+  grid-template-rows: repeat(var(--facet-rows, 1), auto) !important;
+  grid-template-columns: repeat(var(--facet-columns, 1), max-content) !important;
+  justify-content: start !important;
+  align-items: start !important;
+  column-gap: 28px !important;
+  row-gap: 11px !important;
+  overflow: visible !important;
+  padding-bottom: 0 !important;
+}
+
+/*
+ * Each option stays compact, but the label has a little breathing room so the
+ * clickable area does not feel restricted to the glyphs alone.
+ */
+.tag-control {
+  display: inline-flex !important;
+  width: auto !important;
+  min-width: 0 !important;
+  padding: 3px 8px 3px 0 !important;
+  margin: 0 !important;
+  justify-self: start !important;
+  cursor: pointer;
+}
+
+.tag-name,
+.page-list-label {
+  font-weight: 400 !important;
+}
+
+.page-list-control > span {
+  font-weight: 400 !important;
+}
+
+@media (max-width: 700px) {
+  .tag-values {
+    column-gap: 20px !important;
+    row-gap: 10px !important;
+  }
+}
+
+
+/* --------------------------------------------------------------------------
+   v19 — use every column that genuinely fits
+   -------------------------------------------------------------------------- */
+
+.tag-values {
+  grid-template-columns:
+    repeat(var(--facet-columns, 1), var(--facet-column-width, max-content))
+    !important;
+}
+
+
+/* --------------------------------------------------------------------------
+   v20 — one shared column count across every selectable section
+   -------------------------------------------------------------------------- */
+
+.tag-values,
+#exactLists {
+  display: grid !important;
+  grid-auto-flow: column !important;
+  grid-template-rows: repeat(var(--section-rows, 1), auto) !important;
+  grid-template-columns:
+    repeat(var(--shared-columns, 1), var(--shared-column-width, max-content))
+    !important;
+  justify-content: start !important;
+  align-items: start !important;
+  column-gap: 28px !important;
+  row-gap: 11px !important;
+  overflow: visible !important;
+}
+
+/* Keep both tag and page-list entries visually light and consistent. */
+.tag-control,
+.page-list-control {
+  justify-self: start !important;
+  width: auto !important;
+  min-width: 0 !important;
+  font-weight: 400 !important;
+}
+
+.tag-name,
+.page-list-label {
+  font-weight: 400 !important;
+}
+
+@media (max-width: 700px) {
+  .tag-values,
+  #exactLists {
+    column-gap: 20px !important;
+    row-gap: 10px !important;
+  }
+}
+
+
+/* --------------------------------------------------------------------------
+   v21 — heading consistency and tool panels
+   -------------------------------------------------------------------------- */
+
+.control-section h2,
+.facet h2,
+.tools-section h2,
+.ai-panel h2,
+.goggle-panel h2 {
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+}
+
+.button-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 9px 14px;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.button-link.secondary {
+  background: transparent;
+  color: var(--accent);
+}
+
+.ai-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ai-panel {
+  margin-top: 22px;
+}
+
+
+/* --------------------------------------------------------------------------
+   v22 — Use AI panel mirrors the Goggle panel
+   -------------------------------------------------------------------------- */
+
+.ai-panel {
+  margin-top: 22px;
+}
+
+.ai-panel .section-heading-row {
+  margin-bottom: 14px !important;
+}
+
+.ai-panel .section-heading-row > div {
+  width: 100%;
+}
+
+.ai-panel .section-heading-row h2 {
+  margin-bottom: 6px;
+}
+
+.ai-panel .note {
+  margin: 0;
+  max-width: 760px;
+}
+
+.ai-action-row {
+  margin-top: 16px;
+  justify-content: flex-start;
+}
+
+.ai-action-row .button-link {
+  min-height: 40px;
+}
+
+/*
+ * Keep the AI panel action visually in the same family as Goggle controls,
+ * rather than making it look like a separate standalone card.
+ */
+.ai-panel .button-link {
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+
+/* --------------------------------------------------------------------------
+   v23 — AI and Goggle panels share the same visual language
+   -------------------------------------------------------------------------- */
+
+.ai-panel {
+  margin-top: 22px;
+}
+
+.ai-panel .button-link.secondary,
+.goggle-panel .button-link.secondary {
+  background: transparent !important;
+  color: var(--accent) !important;
+  border: 1px solid var(--line) !important;
+  box-shadow: none !important;
+  font-weight: 600 !important;
+}
+
+.ai-panel .button-link.secondary:hover,
+.goggle-panel .button-link.secondary:hover {
+  background: var(--accent-soft) !important;
+  border-color: rgba(103, 65, 165, 0.28) !important;
+}
