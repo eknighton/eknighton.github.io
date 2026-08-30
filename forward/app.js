@@ -14,6 +14,11 @@
  */
 
 const SHEET_ID = "1b1yxtBRgMwIRZuvyXQPIHN1d7NqYmNcg8xW444sSjw0";
+
+const UPCOMING_EVENTS_PROMPT = "You are an Upcoming Events Research Assistant.\n\nAsk me to provide:\n\n1. A list of webpages containing event listings.\n2. Any special instructions, such as topics, locations, audiences, prices, dates, or types of events to highlight.\n\nAfter I provide them:\n\n- Visit and review every webpage.\n- Use today’s date to exclude events that have already happened.\n- Check embedded calendars, expandable sections, and pagination when accessible.\n- Remove duplicate events.\n- Do not guess missing details.\n- Clearly identify uncertain, inaccessible, broken, or outdated listings.\n- Organize upcoming events chronologically.\n\nFor every event, include:\n\n- Date and day of the week\n- Start and end time, including time zone\n- Event title\n- Location or online status\n- Organizer\n- Price, when available\n- A concise plain-language summary\n- A direct source or registration link\n- A note explaining why it matches any special highlighting instructions\n\nConclude with:\n\n- Pages that contained no upcoming events\n- Pages that could not be fully accessed\n- Any ongoing or anytime opportunities listed separately\n\nMake the final result polished and easy to share.\n\nBegin by asking me for my webpages and special instructions.";
+const RECENT_NEWS_PROMPT = "You are a Recent News Research Assistant.\n\nBegin by asking me for:\n\n1. A list of news, press-release, blog, newsletter, or updates pages.\n2. The timeframe to review, such as “the last seven days,” “since August 1,” or a specific start and end date.\n3. Topics I want specially highlighted.\n4. Topics, people, locations, or types of content I want ignored.\n5. Any optional geographic focus or preferred output format.\n\nIf I omit the timeframe, ask for it rather than choosing one silently. Treat date boundaries as inclusive unless I say otherwise.\n\nAfter I answer:\n\n- State the exact date range you will use.\n- Visit and review every supplied page.\n- Look beyond pinned or featured material and identify each item’s actual publication date.\n- Check pagination, “load more” controls, newsletter archives, and relevant category sections when accessible.\n- Include only items published within the requested date range.\n- Remove duplicate or substantially identical items.\n- Apply my exclusions before preparing the final report.\n- Clearly mark items matching my highlighted topics.\n- Do not infer that an undated item is recent.\n- Do not invent missing dates, authors, details, or conclusions.\n- Identify inaccessible, broken, outdated, or ambiguous pages.\n\nOpen qualifying articles when possible rather than summarizing them from headlines alone.\n\nFor every included update, provide:\n\n- Publication date\n- Headline\n- Publishing organization\n- Content type, such as news report, press release, organizational update, opinion, campaign advocacy, newsletter, research, event announcement, or job posting\n- A concise, neutral summary of the substantive development\n- The people, organizations, legislation, ballot measures, places, or policies involved\n- A direct link to the article\n- A clearly visible highlight marker when it matches one of my requested topics\n\nMaintain source awareness:\n\n- Attribute claims, predictions, accusations, endorsements, and interpretations to the organization or author making them.\n- Do not present a political organization’s claims as independently verified facts.\n- Distinguish factual announcements from opinion and advocacy.\n- Note when an article mainly republishes or links to another source.\n- Preserve meaningful differences between sources covering the same development.\n- Avoid commentary about whether a political viewpoint is good or bad unless I explicitly request analysis.\n\nOrganize the result with:\n\n1. A short overview of the most important developments.\n2. A chronological or topic-based list of qualifying updates.\n3. A separate section for specially highlighted items, if useful.\n4. A “No qualifying updates” section naming pages that had nothing within the timeframe.\n5. A “Could not fully verify” section for access or date problems.\n6. A brief methodology note stating when the review was performed and what date range was used.\n\nMake the report polished, skimmable, neutral, and easy to share.\n\nBegin by asking me for the webpages, timeframe, highlighted topics, and exclusions.";
+const GENERAL_PURPOSE_PROMPT = "You are a research assistant.\n\nUsers will give you lists of links and make research requests relating to them.\n\nTo fulfill the requests, you are to open the pages in a browser; viewing them in the way a human would. This ensures that javascript elements function properly, and makes sure the user does not have to open them in a browser themself to correct your results.\n\nUsers might not anticipate that they might have to grant permission for each access, so please let them know before hand and be sure to ask for permission right away after a request, so they can then be free to step away. If their device does not support this kind of viewing, let them know and explain why it will be a problem.\n\nThese requests may involve a lot of work, but it is very important that you do a good job. These users may have a very low tolerance for poor performance. Oh, one last tip! Don’t let yourself get carried away copying down dozens of items from one unusually rich page- it’s ok to move on as long you note that you did so.\n\nSend a message once you believe you are ready!";
+
 const ORGS_SHEET_NAME = "Orgs List";
 const SEARCH_CONFIG_SHEET_NAME = "Search Config";
 const PAGE_TAG_CONFIG_SHEET_NAMES = [
@@ -50,6 +55,9 @@ const elements = {
   shareButton: document.querySelector("#shareButton"),
   aiButton: document.querySelector("#aiButton"),
   aiPanel: document.querySelector("#aiPanel"),
+  copyEventsPromptButton: document.querySelector("#copyEventsPromptButton"),
+  copyNewsPromptButton: document.querySelector("#copyNewsPromptButton"),
+  copyGeneralPromptButton: document.querySelector("#copyGeneralPromptButton"),
   downloadSearchAppButton: document.querySelector("#downloadSearchAppButton"),
   toolStatus: document.querySelector("#toolStatus"),
   homeLink: document.querySelector("#homeLink"),
@@ -331,24 +339,27 @@ function parsePagesCell(value, pageTagConfig) {
     .map((line) => line.trim())
     .filter(Boolean)
     .map((line) => {
-      let rawUrl = line;
-      let rawPageTag = "Other";
+      const parts = line.split(";").map((part) => part.trim());
+      const rawUrl = parts.shift() || "";
 
-      if (line.includes(";")) {
-        const separatorIndex = line.lastIndexOf(";");
-        rawUrl = line.slice(0, separatorIndex).trim();
-        rawPageTag = line.slice(separatorIndex + 1).trim() || "Other";
+      // Every value after the URL is an independent page tag.
+      // Example: "https://example.org/news; News; Updates"
+      const rawPageTags = parts.filter(Boolean);
+      if (rawPageTags.length === 0) {
+        rawPageTags.push("Other");
       }
 
-      const configRule = findPageTagConfigRule(pageTagConfig, rawPageTag);
       const notFound = NOT_FOUND_VALUES.has(rawUrl.toLowerCase());
       const validUrl = /^https?:\/\//i.test(rawUrl);
 
       return {
         url: notFound ? "" : rawUrl,
-        rawPageTag,
-        displayLabel: pageTagDisplayLabel(pageTagConfig, rawPageTag),
-        scope: configRule?.scope || "exact",
+        rawPageTags,
+
+        // Keep the first-tag fields for backward readability/debugging.
+        rawPageTag: rawPageTags[0],
+        displayLabel: pageTagDisplayLabel(pageTagConfig, rawPageTags[0]),
+
         notFound,
         invalid: !notFound && !validUrl,
       };
@@ -366,6 +377,17 @@ async function buildDataset() {
   const diagnostics = [];
 
   for (const [index, row] of organizationRows.entries()) {
+    /*
+     * An Exclude value of Y/Yes/True/1 removes the entire row from the public
+     * dataset. Because the row never enters `organizations`, it contributes
+     * to no counts, page lists, previews, copies, or Goggle rules.
+     */
+    const excluded = parseBoolean(
+      row.Exclude ?? row.exclude ?? row.EXCLUDE,
+      false,
+    );
+    if (excluded) continue;
+
     const website = String(row.Website || "").trim();
 
     if (website && !/^https?:\/\//i.test(website)) {
@@ -387,7 +409,7 @@ async function buildDataset() {
       if (page.invalid) {
         diagnostics.push({
           row: index + 2,
-          field: `Pages / ${page.rawPageTag}`,
+          field: `Pages / ${page.rawPageTags.join("; ")}`,
           value: page.url,
           message: "This page entry is not a valid http:// or https:// URL.",
         });
@@ -453,7 +475,9 @@ function buildPageListDefinitions(organizations, pageTagConfig) {
 
   for (const organization of organizations) {
     for (const page of organization.pages) {
-      discoveredTags.add(page.rawPageTag);
+      for (const rawPageTag of page.rawPageTags) {
+        discoveredTags.add(rawPageTag);
+      }
     }
   }
 
@@ -630,7 +654,11 @@ function contributionsForPageList(organization, pageListTag) {
 
   for (const page of organization.pages) {
     if (page.notFound || page.invalid || !page.url) continue;
-    if (!acceptedPageTags.has(page.rawPageTag.toLowerCase())) continue;
+
+    const pageMatches = page.rawPageTags.some((rawPageTag) =>
+      acceptedPageTags.has(rawPageTag.toLowerCase()),
+    );
+    if (!pageMatches) continue;
 
     contributions.push({
       key: `${definition.scope}:${normalizeUrlForDeduplication(page.url)}`,
@@ -1512,6 +1540,11 @@ elements.aiButton.addEventListener("click", () => {
 
   elements.aiPanel.hidden = false;
   elements.aiPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+elements.copyGeneralPromptButton.addEventListener("click", async () => {
+  await copyText(GENERAL_PURPOSE_PROMPT);
+  setToolStatus("General-purpose prompt copied.");
 });
 
 elements.homeLink.addEventListener("click", (event) => {

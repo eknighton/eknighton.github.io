@@ -14,7 +14,7 @@
         <div class="hero-copy">
           <h1><a id="homeLink" class="home-link" href="./">Search the Movement</a></h1>
           <p class="lead">Find webpages from around the movement.</p>
-          <p class="disclaimer">Many sites only have their homepage indexed.</p>
+          <p class="disclaimer">Many sites only have their homepage indexed. Some sites are not yet labeled at all.</p>
         </div>
         <div class="hero-actions">
           <a class="header-action" href="https://docs.google.com/spreadsheets/d/1b1yxtBRgMwIRZuvyXQPIHN1d7NqYmNcg8xW444sSjw0/edit?usp=sharing" target="_blank" rel="noopener">View Spreadsheet</a>
@@ -49,7 +49,7 @@
             <button id="viewPagesButton" type="button">View Selected Pages</button>
             <button id="copyListButton" class="secondary" type="button">Copy List</button>
             <button id="shareButton" class="secondary" type="button">Copy Share Link</button>
-            <button id="aiButton" class="secondary" type="button">Use AI</button>
+            <button id="aiButton" class="secondary" type="button">Copy AI Prompts</button>
             <button id="goggleButton" class="secondary" type="button">Copy Goggle</button>
           </div>
           <div id="toolStatus" class="note tool-status" aria-live="polite"></div>
@@ -57,24 +57,12 @@
 
         
         <section id="aiPanel" class="goggle-panel ai-panel" hidden>
-          <h2>Use AI</h2>
+          <h2>Copy AI Prompts</h2>
           <p class="note">
-            These tools are designed to work on copied lists of pages.
+            These tools are designed to work with copied lists of pages.
           </p>
           <div class="button-row goggle-actions">
-            <a
-              class="secondary small button-link"
-              href="https://chatgpt.com/s/cx_6a8e9b5865fc81918c27a88fd4186887"
-              target="_blank"
-              rel="noopener"
-            >Find Upcoming Events using ChatGPT Plus</a>
-
-            <a
-              class="secondary small button-link"
-              href="https://chatgpt.com/s/cx_6a8ea01c2ebc8191b3f5efc498aab97d"
-              target="_blank"
-              rel="noopener"
-            >Check for News Updates with ChatGPT Plus</a>
+                        <button id="copyGeneralPromptButton" class="secondary small" type="button">General Purpose Assistant Prompt (ChatGPT Plus)</button>
           </div>
         </section>
 
@@ -86,6 +74,7 @@
             to filter a web search to within the websites that have any of their pages included in your selection.
           </p>
           <div class="button-row goggle-actions">
+            <a class="button-link secondary" href="https://github.com/eknighton/tinygoggles/releases/tag/TinyGoggles-Alpha" target="_blank" rel="noopener">Download a Mac App for using Goggles</a>
             <a class="button-link secondary" href="https://api-dashboard.search.brave.com/register" target="_blank" rel="noopener">Get an API Key</a>
             <button id="downloadGoggleButton" class="secondary small" type="button">Download instructions as file</button>
           </div>

@@ -226,3 +226,34 @@ Updated the Goggle helper text to:
 - Added:
   `Check for News Updates with ChatGPT Plus`
   → https://chatgpt.com/s/cx_6a8ea01c2ebc8191b3f5efc498aab97d
+
+
+## v27
+
+- Renamed `Use AI` to `AI Prompts`.
+- The two AI actions now copy their full prompt text to the clipboard.
+- The ChatGPT shared links are no longer opened.
+- Copy confirmation uses the site's existing tool-status message.
+
+
+## v29
+
+- `AI Prompts` → `Copy AI Prompts`.
+- Added `General Purpose Assistant Prompt (ChatGPT Plus)`.
+- Pages now support multiple tags on one line:
+  `URL; Tag; Tag; Tag`
+  - all tags are parsed independently;
+  - the page is included when any applicable tag/alias matches;
+  - the URL is still deduplicated in selected results.
+- Added support for an `Exclude` column in `Orgs List`.
+  - rows marked `Y` (also Yes/True/1) are removed before the public dataset is built;
+  - excluded rows contribute to no counts, displays, copied lists, previews, or Goggles.
+- Expanded disclaimer:
+  `Many sites only have their homepage indexed. Some sites are not yet labeled at all.`
+
+
+## v30
+
+- Hidden the two older AI prompt buttons; only the General Purpose Assistant Prompt remains visible.
+- Added `Download a Mac App for using Goggles` linking to TinyGoggles Alpha.
+- Changed loaded-status wording from `organizations` to `sites`.
