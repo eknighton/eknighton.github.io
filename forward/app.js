@@ -3,8 +3,8 @@
  * Static GitHub Pages app backed by a public Google Sheet.
  *
  * Key behavior:
- * - Every selected filter is combined with AND logic, including multiple
- *   selections within the same section.
+ * - Organization filters use AND logic, including multiple selections within
+ *   the same section. Specific Page Lists use OR logic.
  * - Aliases EXPAND matches; they do not merge or suppress the alias tag.
  * - Page tags work the same way: an alias remains a page-list option unless
  *   that alias tag itself is disabled with Searchable = N.
@@ -674,7 +674,7 @@ function contributionsForPageList(organization, pageListTag) {
 }
 
 function organizationMatchesPageListSelection(organization, selectedPageLists) {
-  return selectedPageLists.every(
+  return selectedPageLists.some(
     (pageListTag) =>
       contributionsForPageList(organization, pageListTag).length > 0,
   );
@@ -722,7 +722,8 @@ function selectedItems() {
 // ---------------------------------------------------------------------------
 
 function pageListsForCounting() {
-  return selectedPageListTags();
+  const selected = selectedPageListTags();
+  return selected.length > 0 ? selected : data.pageLists.map((pageList) => pageList.tag);
 }
 
 function organizationHasContribution(organization, pageListTags) {
@@ -1175,9 +1176,9 @@ function attachPagePreviewObserver() {
  * The page-list selection decides WHICH ORGANIZATIONS enter the Goggle.
  *
  * Example:
- *   - User selects "Resources" and "Research".
+ *   - User selects "Resources" or "Research".
  *   - An organization qualifies if it matches the active facets and has at
- *     least one page from every selected list (including configured aliases).
+ *     least one page from any selected list (including configured aliases).
  *   - The generated Goggle then searches that organization's whole website,
  *     using the homepage hostname from the Website column.
  *
