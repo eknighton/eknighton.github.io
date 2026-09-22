@@ -3,7 +3,8 @@
  * Static GitHub Pages app backed by a public Google Sheet.
  *
  * Key behavior:
- * - Regions / Issues / Types are independent facets.
+ * - Every selected filter is combined with AND logic, including multiple
+ *   selections within the same section.
  * - Aliases EXPAND matches; they do not merge or suppress the alias tag.
  * - Page tags work the same way: an alias remains a page-list option unless
  *   that alias tag itself is disabled with Searchable = N.
@@ -580,26 +581,25 @@ function organizationMatchesFacetSelection(
     const normalizedRawTags = new Set(rawTags.map((tag) => tag.toLowerCase()));
     const isNotGiven = rawTags.length === 0;
 
-    let optionMatched = false;
-
     for (const selectedOption of selectedOptions) {
+      let optionMatched = false;
+
       if (selectedOption === "__NOT_GIVEN__") {
         if (isNotGiven) optionMatched = true;
-        continue;
+      } else {
+        const expandedMatches = expandedTagMatchSet(
+          data.searchConfig,
+          category,
+          selectedOption,
+        );
+
+        if ([...expandedMatches].some((tag) => normalizedRawTags.has(tag))) {
+          optionMatched = true;
+        }
       }
 
-      const expandedMatches = expandedTagMatchSet(
-        data.searchConfig,
-        category,
-        selectedOption,
-      );
-
-      if ([...expandedMatches].some((tag) => normalizedRawTags.has(tag))) {
-        optionMatched = true;
-      }
+      if (!optionMatched) return false;
     }
-
-    if (!optionMatched) return false;
   }
 
   return true;
@@ -673,6 +673,13 @@ function contributionsForPageList(organization, pageListTag) {
   return contributions;
 }
 
+function organizationMatchesPageListSelection(organization, selectedPageLists) {
+  return selectedPageLists.every(
+    (pageListTag) =>
+      contributionsForPageList(organization, pageListTag).length > 0,
+  );
+}
+
 function selectedItems() {
   const selectedFacets = selectedFacetValues();
   const selectedPageLists = selectedPageListTags();
@@ -680,6 +687,9 @@ function selectedItems() {
 
   for (const organization of data.organizations) {
     if (!organizationMatchesFacetSelection(organization, selectedFacets)) continue;
+    if (!organizationMatchesPageListSelection(organization, selectedPageLists)) {
+      continue;
+    }
 
     for (const pageListTag of selectedPageLists) {
       for (const item of contributionsForPageList(organization, pageListTag)) {
@@ -712,42 +722,24 @@ function selectedItems() {
 // ---------------------------------------------------------------------------
 
 function pageListsForCounting() {
-  const selected = selectedPageListTags();
-  return selected.length > 0 ? selected : data.pageLists.map((pageList) => pageList.tag);
+  return selectedPageListTags();
 }
 
 function organizationHasContribution(organization, pageListTags) {
-  return pageListTags.some(
-    (pageListTag) => contributionsForPageList(organization, pageListTag).length > 0,
-  );
+  return organizationMatchesPageListSelection(organization, pageListTags);
 }
 
 function countFacetOption(category, optionValue) {
   const selectedFacets = selectedFacetValues();
+  selectedFacets[category] ||= new Set();
+  selectedFacets[category].add(optionValue);
   const relevantPageLists = pageListsForCounting();
   let count = 0;
 
   for (const organization of data.organizations) {
-    if (!organizationMatchesFacetSelection(organization, selectedFacets, category)) continue;
+    if (!organizationMatchesFacetSelection(organization, selectedFacets)) continue;
     if (!organizationHasContribution(organization, relevantPageLists)) continue;
-
-    const rawTags = organization.tags[category] || [];
-
-    if (optionValue === "__NOT_GIVEN__") {
-      if (rawTags.length === 0) count += 1;
-      continue;
-    }
-
-    const expandedMatches = expandedTagMatchSet(
-      data.searchConfig,
-      category,
-      optionValue,
-    );
-    const normalizedRawTags = new Set(rawTags.map((tag) => tag.toLowerCase()));
-
-    if ([...expandedMatches].some((tag) => normalizedRawTags.has(tag))) {
-      count += 1;
-    }
+    count += 1;
   }
 
   return count;
@@ -755,10 +747,12 @@ function countFacetOption(category, optionValue) {
 
 function countPageList(pageListTag) {
   const selectedFacets = selectedFacetValues();
+  const pageListTags = [...new Set([...selectedPageListTags(), pageListTag])];
   const uniqueItems = new Set();
 
   for (const organization of data.organizations) {
     if (!organizationMatchesFacetSelection(organization, selectedFacets)) continue;
+    if (!organizationMatchesPageListSelection(organization, pageListTags)) continue;
 
     for (const item of contributionsForPageList(organization, pageListTag)) {
       uniqueItems.add(item.key);
@@ -917,7 +911,6 @@ function attachControlListeners() {
 
 function handleSelectionChanged() {
   refreshCountsAndSummary();
-  updateUrlFromSelections({ replace: true });
 
   if (!elements.resultsPanel.hidden) {
     renderSelectedPages();
@@ -1182,9 +1175,9 @@ function attachPagePreviewObserver() {
  * The page-list selection decides WHICH ORGANIZATIONS enter the Goggle.
  *
  * Example:
- *   - User selects "Resources".
+ *   - User selects "Resources" and "Research".
  *   - An organization qualifies if it matches the active facets and has at
- *     least one Resources page (including aliases configured for Resources).
+ *     least one page from every selected list (including configured aliases).
  *   - The generated Goggle then searches that organization's whole website,
  *     using the homepage hostname from the Website column.
  *
@@ -1204,9 +1197,9 @@ function organizationsForGoggle() {
 
     if (!organization.websiteHost) return false;
 
-    return selectedPageLists.some(
-      (pageListTag) =>
-        contributionsForPageList(organization, pageListTag).length > 0,
+    return organizationMatchesPageListSelection(
+      organization,
+      selectedPageLists,
     );
   });
 }
@@ -1400,24 +1393,26 @@ function decodeSelectionState(encoded) {
   }
 }
 
-function updateUrlFromSelections({ replace = true } = {}) {
+function cleanPageUrl() {
+  const url = new URL(window.location.href);
+  url.searchParams.delete("s");
+  return url;
+}
+
+function shareUrlFromSelections() {
   const state = currentSelectionState();
-  const params = new URLSearchParams(window.location.search);
+  const url = cleanPageUrl();
 
   const isDefault =
     Object.values(state.facets).every((values) => values.length === 0) &&
     state.pageLists.length === 1 &&
     state.pageLists[0] === "__HOMEPAGES__";
 
-  if (isDefault) params.delete("s");
-  else params.set("s", encodeSelectionState(state));
+  if (!isDefault) {
+    url.searchParams.set("s", encodeSelectionState(state));
+  }
 
-  const nextUrl =
-    window.location.pathname +
-    (params.toString() ? `?${params.toString()}` : "") +
-    window.location.hash;
-
-  history[replace ? "replaceState" : "pushState"]({}, "", nextUrl);
+  return url.href;
 }
 
 function applySelectionStateFromUrl() {
@@ -1425,16 +1420,20 @@ function applySelectionStateFromUrl() {
   if (!encoded) return;
 
   const state = decodeSelectionState(encoded);
-  if (!state) return;
+  if (state) {
+    document.querySelectorAll("input[data-facet-category]").forEach((input) => {
+      const selected = state.facets?.[input.dataset.facetCategory] || [];
+      input.checked = selected.includes(input.dataset.facetValue);
+    });
 
-  document.querySelectorAll("input[data-facet-category]").forEach((input) => {
-    const selected = state.facets?.[input.dataset.facetCategory] || [];
-    input.checked = selected.includes(input.dataset.facetValue);
-  });
+    document.querySelectorAll('input[name="pageList"]').forEach((input) => {
+      input.checked = (state.pageLists || []).includes(input.value);
+    });
+  }
 
-  document.querySelectorAll('input[name="pageList"]').forEach((input) => {
-    input.checked = (state.pageLists || []).includes(input.value);
-  });
+  // A share link transports selection state once. After loading that state,
+  // keep the normal page address visible so refreshes reopen cleanly.
+  history.replaceState({}, "", cleanPageUrl());
 }
 
 function resetToDefaultSelection() {
@@ -1446,7 +1445,6 @@ function resetToDefaultSelection() {
     input.checked = input.value === "__HOMEPAGES__";
   });
 
-  updateUrlFromSelections({ replace: false });
   handleSelectionChanged();
 }
 
@@ -1488,8 +1486,7 @@ async function copySelectedList() {
 }
 
 async function copyShareLink() {
-  updateUrlFromSelections({ replace: true });
-  await copyText(window.location.href);
+  await copyText(shareUrlFromSelections());
   setToolStatus("Share link copied.");
 }
 
